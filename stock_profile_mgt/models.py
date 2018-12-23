@@ -17,7 +17,7 @@ class UserProfileManager(BaseUserManager):
         email = self.normalize_email(email)
         # validate if email exists.
         user = self.model(email=email, first_name=first_name,
-                          last_name=last_name, is_active=true)
+                          last_name=last_name, is_active=True)
         user.set_password(password)
 
         user.save(using=self._db)
@@ -27,7 +27,7 @@ class UserProfileManager(BaseUserManager):
         """ Creates and saves a new super user with given details. """
         user = self.create_user(email, first_name, last_name, password)
         user.is_staff = True
-        # user.is_superuser = True
+        user.is_superuser = True
         user.save(using=self._db)
 
         return user
