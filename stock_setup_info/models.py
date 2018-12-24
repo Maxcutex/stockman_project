@@ -13,7 +13,7 @@ class Industry(models.Model):
 
 class StructureType(models.Model):
     structure_type_name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(max_length=100)
     structure_types = models.ManyToManyField(
         'self', through='StructureTypeRelationship', symmetrical=False)
@@ -34,12 +34,12 @@ class StructureTypeRelationship(models.Model):
 
 class Structure(models.Model):
     structure_name = models.CharField(max_length=100)
-    structure_code = models.CharField(max_length=50)
-    parent_id = models.CharField(max_length=100)
-    structure_type = models.ForeignKey(StructureType, on_delete=models.CASCADE)
+    structure_code = models.CharField(max_length=50, null=True, blank=True)
+    structure_type = models.ForeignKey(
+        StructureType, on_delete=models.CASCADE, related_name='structures')
     structures = models.ManyToManyField(
         'self', through='StructureRelationship', symmetrical=False)
-    is_active = models.BooleanField(max_length=100)
+    is_active = models.BooleanField()
     comment = models.CharField(max_length=200)
 
     def __str__(self):
@@ -84,8 +84,11 @@ class Stock(models.Model):
     shares_in_issue = models.BigIntegerField()
     capitalization = models.BigIntegerField()
     view_count = models.BigIntegerField()
-    industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
-    structure_type = models.ForeignKey(Structure, on_delete=models.CASCADE)
+    industry = models.ForeignKey(
+        Industry, on_delete=models.CASCADE, related_name='stocks')
+    structure = models.ForeignKey(
+        Structure, on_delete=models.CASCADE, related_name='stock_structure')
+    is_active = models.BooleanField()
 
     def __str__(self):
         return self.name

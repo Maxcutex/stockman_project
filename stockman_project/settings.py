@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'stock_setup_info', 'stock_profile_mgt'
+    'stock_setup_info',
+    'stock_profile_mgt'
 ]
 
 MIDDLEWARE = [
@@ -126,5 +127,5 @@ AUTH_USER_MODEL = 'stock_profile_mgt.UserProfile'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',)
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',)
 }

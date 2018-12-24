@@ -7,6 +7,7 @@ router = routers.DefaultRouter()
 router.register('api/v1/industries', views.IndustryView)
 router.register('api/v1/structures', views.StructureView)
 router.register('api/v1/structuretypes', views.StructureTypeView)
+router.register('api/v1/stocks', views.StockView)
 router.registry.extend(profile_router.registry)
 
 urlpatterns = [

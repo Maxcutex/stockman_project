@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
-from .models import Industry, Structure, StructureType
-from .serializers import IndustrySerializer, StructureSerializer, StructureTypeSerializer
+from .models import (Industry, Structure, StructureType, Stock)
+from .serializers import (
+    IndustrySerializer, StructureSerializer, StructureTypeSerializer, StockSerializer)
 
 
 from rest_framework.views import APIView
@@ -21,6 +22,11 @@ class StructureView(viewsets.ModelViewSet):
 class StructureTypeView(viewsets.ModelViewSet):
     queryset = StructureType.objects.all()
     serializer_class = StructureTypeSerializer
+
+
+class StockView(viewsets.ModelViewSet):
+    queryset = Stock.objects.all()
+    serializer_class = StockSerializer
 
 
 class StockApiView(APIView):
