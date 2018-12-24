@@ -16,8 +16,8 @@ class UserProfileView(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
 
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.UpdateOwnProfile,)
+    #authentication_classes = (TokenAuthentication,)
+    # permission_classes = (permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('first_name', 'last_name', 'email')
 
