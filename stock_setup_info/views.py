@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import Industry, Structure, StructureType
 from .serializers import IndustrySerializer, StructureSerializer, StructureTypeSerializer
 
