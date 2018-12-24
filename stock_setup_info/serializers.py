@@ -2,21 +2,21 @@ from rest_framework import serializers
 from .models import Industry, Structure, StructureType
 
 
-class IndustrySerializer(serializers.ModelSerializer):
+class IndustrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Industry
-        fields = ('name', 'exchange_code', 'sync_flag', 'logo')
+        fields = ('name', 'exchange_code', 'sync_flag', 'logo', 'url')
 
 
-class StructureTypeSerializer(serializers.ModelSerializer):
+class StructureTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = StructureType
-        fields = ('structure_type_name', 'parent_id',
-                  'is_active', 'description')
+        fields = ('id', 'structure_type_name',
+                  'is_active', 'description', 'url', 'structure_types')
 
 
-class StructureSerializer(serializers.ModelSerializer):
+class StructureSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Structure
-        fields = ('structure_name', 'structure_type_id',
-                  'parent_id', 'is_active')
+        fields = ('id', 'structure_name', 'structure_code',
+                  'is_active', 'structure_type', 'url', 'structures')

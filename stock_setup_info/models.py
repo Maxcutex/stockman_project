@@ -23,12 +23,10 @@ class StructureType(models.Model):
 
 
 class StructureTypeRelationship(models.Model):
-    types = models.ManyToManyField('RelationshipType', blank=True,
-                                   related_name='structure_type_relationships')
     from_structure_type = models.ForeignKey(
-        'Structure', related_name='from_structure_types')
+        'StructureType', related_name='from_structure_types', on_delete=models.CASCADE)
     to_structure_type = models.ForeignKey(
-        'Structure', related_name='to_structure_types')
+        'StructureType', related_name='to_structure_types', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('from_structure_type', 'to_structure_type')
@@ -49,11 +47,45 @@ class Structure(models.Model):
 
 
 class StructureRelationship(models.Model):
-    types = models.ManyToManyField('RelationshipType', blank=True,
-                                   related_name='structure_relationships')
     from_structure = models.ForeignKey(
-        'Structure', related_name='from_structures')
-    to_structure = models.ForeignKey('Structure', related_name='to_structures')
+        'Structure', related_name='from_structures', on_delete=models.CASCADE)
+    to_structure = models.ForeignKey(
+        'Structure', related_name='to_structures', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('from_structure', 'to_structure')
+
+
+class Stock(models.Model):
+    stock_code = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    exchange_code = models.CharField(max_length=50)
+    asset_class_code = models.CharField(max_length=50)
+    contact = models.CharField(max_length=50)
+    description = models.CharField(max_length=50)
+    tier_code = models.CharField(max_length=50)
+    par_value = models.CharField(max_length=50)
+    list_date = models.DateField(max_length=50)
+    outstanding_shares = models.CharField(max_length=50)
+    grp_code = models.CharField(max_length=50)
+    registrar = models.CharField(max_length=50)
+    address_1 = models.CharField(max_length=50)
+    address_2 = models.CharField(max_length=50)
+    address_3 = models.CharField(max_length=50)
+    state_code = models.CharField(max_length=50)
+    website = models.CharField(max_length=250)
+    email = models.CharField(max_length=250)
+    gsm = models.CharField(max_length=150)
+    land_tel = models.CharField(max_length=50)
+    fax_no = models.CharField(max_length=50)
+    regis_close = models.DateField(max_length=50)
+    year_end = models.CharField(max_length=50)
+    logo = models.CharField(max_length=50)
+    shares_in_issue = models.BigIntegerField()
+    capitalization = models.BigIntegerField()
+    view_count = models.BigIntegerField()
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
+    structure_type = models.ForeignKey(Structure, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
