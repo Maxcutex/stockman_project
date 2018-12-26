@@ -19,6 +19,8 @@ class StructureSerializer(serializers.HyperlinkedModelSerializer):
     structure_type_id = serializers.PrimaryKeyRelatedField(read_only=True)
     structure_type = serializers.PrimaryKeyRelatedField(
         source='structure_type.structure_type_name', read_only=True)
+    parent_id = serializers.PrimaryKeyRelatedField(
+        source='structure.id', read_only=True)
 
     class Meta:
         model = Structure

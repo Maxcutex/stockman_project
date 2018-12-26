@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'stock_setup_info',
-    'stock_profile_mgt'
+    'stock_profile_mgt', 'stock_maintain'
 ]
 
 MIDDLEWARE = [

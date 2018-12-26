@@ -15,21 +15,20 @@ class StructureType(models.Model):
     structure_type_name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(max_length=100)
-    structure_types = models.ManyToManyField(
-        'self', through='StructureTypeRelationship', symmetrical=False)
+    parent_id = models.ForeignKey('self', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.structure_type_name
 
 
-class StructureTypeRelationship(models.Model):
-    from_structure_type = models.ForeignKey(
-        'StructureType', related_name='from_structure_types', on_delete=models.CASCADE)
-    to_structure_type = models.ForeignKey(
-        'StructureType', related_name='to_structure_types', on_delete=models.CASCADE)
+# class StructureTypeRelationship(models.Model):
+#     from_structure_type = models.ForeignKey(
+#         'StructureType', related_name='from_structure_types', on_delete=models.CASCADE)
+#     to_structure_type = models.ForeignKey(
+#         'StructureType', related_name='to_structure_types', on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = ('from_structure_type', 'to_structure_type')
+#     class Meta:
+#         unique_together = ('from_structure_type', 'to_structure_type')
 
 
 class Structure(models.Model):
@@ -37,8 +36,7 @@ class Structure(models.Model):
     structure_code = models.CharField(max_length=50, null=True, blank=True)
     structure_type = models.ForeignKey(
         StructureType, on_delete=models.CASCADE, related_name='structures')
-    structures = models.ManyToManyField(
-        'self', through='StructureRelationship', symmetrical=False)
+    parent_id = models.ForeignKey('self', on_delete=models.CASCADE)
     is_active = models.BooleanField()
     comment = models.CharField(max_length=200)
 
@@ -46,14 +44,14 @@ class Structure(models.Model):
         return self.structure_name
 
 
-class StructureRelationship(models.Model):
-    from_structure = models.ForeignKey(
-        'Structure', related_name='from_structures', on_delete=models.CASCADE)
-    to_structure = models.ForeignKey(
-        'Structure', related_name='to_structures', on_delete=models.CASCADE)
+# class StructureRelationship(models.Model):
+#     from_structure = models.ForeignKey(
+#         'Structure', related_name='from_structures', on_delete=models.CASCADE)
+#     to_structure = models.ForeignKey(
+#         'Structure', related_name='to_structures', on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = ('from_structure', 'to_structure')
+#     class Meta:
+#         unique_together = ('from_structure', 'to_structure')
 
 
 class Stock(models.Model):
