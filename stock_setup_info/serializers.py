@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import Industry, Structure, StructureType, Stock
+from enumchoicefield import ChoiceEnum, EnumChoiceField
+from .models import (Industry, Structure, StructureType,
+                     Stock, StockManagement, ManagementType)
 
 
 class IndustrySerializer(serializers.HyperlinkedModelSerializer):
@@ -12,20 +14,25 @@ class StructureTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = StructureType
         fields = ('id', 'structure_type_name',
-                  'is_active', 'description', 'url', 'structure_types')
+                  'is_active', 'description', 'url', 'parent_id')
 
 
 class StructureSerializer(serializers.HyperlinkedModelSerializer):
-    structure_type_id = serializers.PrimaryKeyRelatedField(read_only=True)
-    structure_type = serializers.PrimaryKeyRelatedField(
+    structure_type_name = serializers.PrimaryKeyRelatedField(
         source='structure_type.structure_type_name', read_only=True)
-    parent_id = serializers.PrimaryKeyRelatedField(
-        source='structure.id', read_only=True)
 
     class Meta:
         model = Structure
         fields = ('id', 'structure_name', 'structure_code',
-                  'is_active', 'structure_type_id', 'structure_type', 'url', 'structures')
+                  'is_active', 'structure_type_id', 'structure_type', 'structure_type_name', 'url', 'parent_id')
+
+
+class StockManagementSerializer(serializers.ModelSerializer):
+    management_type = EnumChoiceField(enum_class=ManagementType)
+
+    class Meta:
+        model = StockManagement
+        fields = ('id', 'name', 'position', 'management_type')
 
 
 class StockSerializer(serializers.ModelSerializer):

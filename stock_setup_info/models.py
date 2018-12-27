@@ -1,4 +1,5 @@
 from django.db import models
+from enumchoicefield import ChoiceEnum, EnumChoiceField
 
 
 class Industry(models.Model):
@@ -15,7 +16,7 @@ class StructureType(models.Model):
     structure_type_name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(max_length=100)
-    parent_id = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent_id = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.structure_type_name
@@ -36,7 +37,7 @@ class Structure(models.Model):
     structure_code = models.CharField(max_length=50, null=True, blank=True)
     structure_type = models.ForeignKey(
         StructureType, on_delete=models.CASCADE, related_name='structures')
-    parent_id = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent_id = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
     is_active = models.BooleanField()
     comment = models.CharField(max_length=200)
 
@@ -86,6 +87,22 @@ class Stock(models.Model):
         Industry, on_delete=models.CASCADE, related_name='stocks')
     structure = models.ForeignKey(
         Structure, on_delete=models.CASCADE, related_name='stock_structure')
+    is_active = models.BooleanField()
+
+    def __str__(self):
+        return self.name
+
+
+class ManagementType(ChoiceEnum):
+    management = "management"
+    director = "director"
+
+
+class StockManagement(models.Model):
+    name = models.CharField(max_length=250)
+    position = models.CharField(max_length=250)
+    management_type = EnumChoiceField(
+        enum_class=ManagementType, default=ManagementType.management)
     is_active = models.BooleanField()
 
     def __str__(self):
