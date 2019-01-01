@@ -16,43 +16,27 @@ class StructureType(models.Model):
     structure_type_name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(max_length=100)
-    parent_id = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+    parent_id = models.ForeignKey(
+        'self', null=True, on_delete=models.CASCADE,
+        related_name='child_structure_type'
+    )
 
     def __str__(self):
         return self.structure_type_name
-
-
-# class StructureTypeRelationship(models.Model):
-#     from_structure_type = models.ForeignKey(
-#         'StructureType', related_name='from_structure_types', on_delete=models.CASCADE)
-#     to_structure_type = models.ForeignKey(
-#         'StructureType', related_name='to_structure_types', on_delete=models.CASCADE)
-
-#     class Meta:
-#         unique_together = ('from_structure_type', 'to_structure_type')
 
 
 class Structure(models.Model):
     structure_name = models.CharField(max_length=100)
     structure_code = models.CharField(max_length=50, null=True, blank=True)
     structure_type = models.ForeignKey(
-        StructureType, on_delete=models.CASCADE, related_name='structures')
-    parent_id = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+        StructureType, on_delete=models.CASCADE, related_name='child_structures')
+    parent_id = models.ForeignKey(
+        'self', null=True, on_delete=models.CASCADE, related_name='structures')
     is_active = models.BooleanField()
     comment = models.CharField(max_length=200)
 
     def __str__(self):
         return self.structure_name
-
-
-# class StructureRelationship(models.Model):
-#     from_structure = models.ForeignKey(
-#         'Structure', related_name='from_structures', on_delete=models.CASCADE)
-#     to_structure = models.ForeignKey(
-#         'Structure', related_name='to_structures', on_delete=models.CASCADE)
-
-#     class Meta:
-#         unique_together = ('from_structure', 'to_structure')
 
 
 class Stock(models.Model):
@@ -64,7 +48,7 @@ class Stock(models.Model):
     description = models.CharField(max_length=50)
     tier_code = models.CharField(max_length=50)
     par_value = models.CharField(max_length=50)
-    list_date = models.DateField(max_length=50)
+    list_date = models.DateField(blank=True, null=True)
     outstanding_shares = models.CharField(max_length=50)
     grp_code = models.CharField(max_length=50)
     registrar = models.CharField(max_length=50)
@@ -77,12 +61,12 @@ class Stock(models.Model):
     gsm = models.CharField(max_length=150)
     land_tel = models.CharField(max_length=50)
     fax_no = models.CharField(max_length=50)
-    regis_close = models.DateField(max_length=50)
+    regis_close = models.DateField(blank=True, null=True)
     year_end = models.CharField(max_length=50)
     logo = models.CharField(max_length=50)
     shares_in_issue = models.BigIntegerField()
     capitalization = models.BigIntegerField()
-    view_count = models.BigIntegerField()
+    view_count = models.BigIntegerField(default=0)
     industry = models.ForeignKey(
         Industry, on_delete=models.CASCADE, related_name='stocks')
     structure = models.ForeignKey(

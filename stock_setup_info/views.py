@@ -4,12 +4,16 @@ from .models import (Industry, Structure, StructureType, Stock)
 from .serializers import (
     IndustrySerializer, StructureSerializer, StructureTypeSerializer, StockSerializer)
 
-
+from rest_framework import mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-class IndustryView(viewsets.ModelViewSet):
+# class IndustryView(viewsets.ModelViewSet):
+class IndustryView(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                   viewsets.GenericViewSet
+                   ):
     queryset = Industry.objects.all()
     serializer_class = IndustrySerializer
 

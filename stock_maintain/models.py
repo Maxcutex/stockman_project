@@ -28,10 +28,10 @@ class PriceList(models.Model):
         Stock, on_delete=models.CASCADE, related_name='price_stock', null=True)
 
     def __str__(self):
-        return self.name
+        return self.sec_code
 
 
-class Quotes(models.Model):
+class Quote(models.Model):
     stock_id = models.ForeignKey(
         Stock, on_delete=models.CASCADE, related_name='quotes_stock', null=True)
     sec_code = models.CharField(max_length=100)
@@ -39,6 +39,9 @@ class Quotes(models.Model):
     contact = models.CharField(max_length=100)
     fax = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.sec_code
 
 
 class AsiIndex(models.Model):
@@ -50,6 +53,9 @@ class AsiIndex(models.Model):
     price_close = models.FloatField()
     price_current = models.FloatField(null=True)
 
+    def __str__(self):
+        return self.date
+
 
 class BonusTracker(models.Model):
     stock_id = models.ForeignKey(
@@ -59,6 +65,9 @@ class BonusTracker(models.Model):
     bonus_aggregate = models.SmallIntegerField()
     date_declared = models.DateField()
 
+    def __str__(self):
+        return self.sec_code
+
 
 class DailyMarketIndex(models.Model):
     date = models.DateField()
@@ -67,6 +76,9 @@ class DailyMarketIndex(models.Model):
     volume = models.FloatField()
     value = models.FloatField()
     capital = models.FloatField()
+
+    def __str__(self):
+        return self.date
 
 
 class QuarterType(ChoiceEnum):
@@ -85,6 +97,9 @@ class Dividend(models.Model):
     interim = models.FloatField()
     bonus = models.FloatField()
 
+    def __str__(self):
+        return self.name
+
 
 class News(models.Model):
     title = models.CharField(max_length=300)
@@ -99,13 +114,19 @@ class News(models.Model):
     is_featured = models.BooleanField()
     author = models.CharField(max_length=100, null=True)
 
+    def __str__(self):
+        return self.title
 
-class NewsImages(models.Model):
+
+class NewsImage(models.Model):
     news_id = models.ForeignKey(
-        Stock, on_delete=models.CASCADE, related_name='visual_news', null=True)
+        News, on_delete=models.CASCADE, related_name='visual_news', null=True)
     is_main = models.BooleanField()
-    image_file = models.FileField(blank=True, upload_to="images/news_image")
+    image_file = models.ImageField(blank=True, upload_to="images/news_image")
     name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 class OfferType(ChoiceEnum):
@@ -136,3 +157,8 @@ class OfferIpo(models.Model):
     extended_date = models.DateField(null=True)
     proposed_listing_date = models.DateField(null=True)
     actual_listing_date = models.DateField(null=True)
+
+    def __str__(self):
+        return self.company_name
+
+    

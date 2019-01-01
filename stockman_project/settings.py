@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'stock_setup_info',
-    'stock_profile_mgt', 'stock_maintain'
+    'stock_profile_mgt', 'stock_maintain', 'django_filters',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -123,9 +124,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIR = (
+    os.path.join(BASE_DIR, "static"),
+    '/static/',
+)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 AUTH_USER_MODEL = 'stock_profile_mgt.UserProfile'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
+    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',),
     # 'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',)
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
+IMPORT_EXPORT_USE_TRANSACTIONS = True
