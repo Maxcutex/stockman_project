@@ -87,6 +87,10 @@ class QuarterType(ChoiceEnum):
     third_quarter = "third_quarter"
     fourth_quarter = "fourth_quarter"
 
+class ImageSizeType(ChoiceEnum):
+    size930x620 = "size930x620"
+    size450x330 = "size450x330"
+
 
 class Dividend(models.Model):
     stock_id = models.ForeignKey(
@@ -124,6 +128,8 @@ class NewsImage(models.Model):
     is_main = models.BooleanField()
     image_file = models.ImageField(blank=True, upload_to="images/news_image")
     name = models.CharField(max_length=100)
+    image_type = EnumChoiceField(
+        ImageSizeType, default=ImageSizeType.size930x620)
 
     def __str__(self):
         return self.name
