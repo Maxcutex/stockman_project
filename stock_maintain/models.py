@@ -1,6 +1,7 @@
 from django.db import models
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 from stock_setup_info.models import Stock, Structure
+from model_utils import Choices
 # Create your models here.
 
 
@@ -107,7 +108,7 @@ class Dividend(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length=300)
-    content = models.CharField(max_length=10)
+    content = models.CharField(max_length=5000)
     news_section = models.ForeignKey(
         Structure, on_delete=models.CASCADE, related_name='news_structure')
     date = models.DateField()
@@ -116,6 +117,7 @@ class News(models.Model):
         Stock, on_delete=models.CASCADE, related_name='news_stock', null=True)
     sec_code = models.CharField(max_length=10)
     is_featured = models.BooleanField()
+    is_main = models.BooleanField(default=False)
     author = models.CharField(max_length=100, null=True)
 
     def __str__(self):
@@ -123,13 +125,14 @@ class News(models.Model):
 
 
 class NewsImage(models.Model):
+    image_choice = Choices('size930x620','size450x330','size300x200')
     news_id = models.ForeignKey(
         News, on_delete=models.CASCADE, related_name='visual_news', null=True)
     is_main = models.BooleanField()
     image_file = models.ImageField(blank=True, upload_to="images/news_image")
     name = models.CharField(max_length=100)
-    image_type = EnumChoiceField(
-        ImageSizeType, default=ImageSizeType.size930x620)
+    image_type = models.CharField(
+        choices=image_choice, default=image_choice.size930x620, max_length=30)
 
     def __str__(self):
         return self.name

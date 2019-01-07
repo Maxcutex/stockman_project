@@ -9,6 +9,7 @@ router.register('api/v1/industries', views.IndustryView)
 router.register('api/v1/structures', views.StructureView)
 router.register('api/v1/structuretypes', views.StructureTypeView)
 router.register('api/v1/stocks', views.StockView)
+router.register('api/v1/stock-management', views.StockManagementView)
 router.registry.extend(profile_router.registry)
 router.registry.extend(maintain_router.registry)
 

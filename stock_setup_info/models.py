@@ -1,5 +1,6 @@
 from django.db import models
 from enumchoicefield import ChoiceEnum, EnumChoiceField
+from model_utils import Choices
 
 
 class Industry(models.Model):
@@ -83,10 +84,11 @@ class ManagementType(ChoiceEnum):
 
 
 class StockManagement(models.Model):
+    management_choice = Choices('management', 'director')
     name = models.CharField(max_length=250)
     position = models.CharField(max_length=250)
-    management_type = EnumChoiceField(
-        enum_class=ManagementType, default=ManagementType.management)
+    management_type = models.CharField(
+        choices=management_choice, default=management_choice.management, max_length=30)
     is_active = models.BooleanField()
 
     def __str__(self):

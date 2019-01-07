@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
-from .models import (Industry, Structure, StructureType, Stock)
+from .models import (Industry, Structure, StructureType, Stock, StockManagement)
 from .serializers import (
-    IndustrySerializer, StructureSerializer, StructureTypeSerializer, StockSerializer)
+    IndustrySerializer, StructureSerializer, StructureTypeSerializer,
+    StockManagementSerializer, StockSerializer)
 
 from rest_framework import mixins
 from rest_framework.views import APIView
@@ -32,6 +33,9 @@ class StockView(viewsets.ModelViewSet):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
 
+class StockManagementView(viewsets.ModelViewSet):
+    queryset = StockManagement.objects.all()
+    serializer_class = StockManagementSerializer
 
 class StockApiView(APIView):
     """ Stock View using Api View """

@@ -1,17 +1,42 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import NewsSerializer, NewsImageSerializer
-from .models import News, NewsImage
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer
+from .models import News, NewsImage, PriceList
 # Create your views here.
 from tablib import Dataset
 
 class NewsView(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
+    filter_fields = ('is_featured', 'stock_id','news_section', 'date', 'sec_code')
 
 class NewsImageView(viewsets.ModelViewSet):
     queryset = NewsImage.objects.all()
     serializer_class = NewsImageSerializer
+
+class PriceListView(viewsets.ModelViewSet):
+    queryset = PriceList.objects.all()
+    serializer_class = PriceListSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('price_date', 'stock_id','sec_code')
+
+
+    @list_route(methods=['get'], url_path='view-by-date')
+    def view_by_date(self, request,  *args, **kwargs):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+            
+        serializer = PriceListSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
 
 
 def simple_upload(request):

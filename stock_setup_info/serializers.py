@@ -34,7 +34,6 @@ class StructureTypeSerializer(serializers.ModelSerializer):
 
 
 class StockManagementSerializer(serializers.ModelSerializer):
-    management_type = EnumChoiceField(enum_class=ManagementType)
 
     class Meta:
         model = StockManagement
