@@ -1,12 +1,13 @@
 from faker.providers import internet
-
+import factory
 from stock_setup_info.models import Industry, StockManagement, StructureType, Structure, Stock
 from faker import Faker, Factory
 
 faker = Factory.create()
 faker.add_provider(internet)
 
-class IndustryFactory(Factory):
+
+class IndustryFactory(factory.DjangoModelFactory):
 	name = faker.name()
 	exchange_code = faker.text(10)
 	sync_flag = faker.text(10)
