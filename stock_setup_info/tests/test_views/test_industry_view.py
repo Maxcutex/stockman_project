@@ -1,12 +1,14 @@
 # from django.test import TestCase
 # from django.urls import reverse
+import pdb
+
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
 
 from stock_setup_info.factories.factory import IndustryFactory
-from ..models import Industry, Structure, StructureType, Stock, StockManagement
-from ..serializers import IndustrySerializer
+from stock_setup_info.models import Industry, Structure, StructureType, Stock, StockManagement
+from stock_setup_info.serializers import IndustrySerializer
 
 
 # Create your tests here.
@@ -18,7 +20,8 @@ class BaseViewTest(APITestCase):
 	@staticmethod
 	def test_generate_industries():
 		for i in range(100):
-			IndustryFactory()
+			IndustryFactory.create()
+
 
 	@staticmethod
 	def create_industry(name="", exchange_code="", sync_flag="", logo=""):
@@ -28,7 +31,8 @@ class BaseViewTest(APITestCase):
 			)
 
 	def setUp(self):
-		self.test_generate_industries
+		IndustryFactory.create_batch(10)
+		#pdb.set_trace()
 
 
 class GetAllViewsTest(BaseViewTest):
@@ -47,3 +51,4 @@ class GetAllViewsTest(BaseViewTest):
 		# serialized = IndustrySerializer(expected, many=True)
 		# self.assertEqual(response.data, serialized.data)
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(int(response.data['count']), 10)

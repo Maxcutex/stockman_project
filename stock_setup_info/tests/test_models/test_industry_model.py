@@ -2,8 +2,8 @@ from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
 
 from stock_setup_info.factories.factory import IndustryFactory
-from ..models import Industry, Structure, StructureType, Stock, StockManagement
-from ..serializers import IndustrySerializer
+from stock_setup_info.models import Industry, Structure, StructureType, Stock, StockManagement
+from stock_setup_info.serializers import IndustrySerializer
 # Create your tests here.
 
 
