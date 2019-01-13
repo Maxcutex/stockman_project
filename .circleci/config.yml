@@ -63,7 +63,7 @@ jobs:
           name: run coverage
           command: |
             . venv/bin/activate
-            coverage run manage.py test && coverage report && coveralls
+            coverage run manage.py test && coverage report
       - store_artifacts:
           path: test-reports
           destination: test-reports
