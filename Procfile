@@ -1,0 +1,1 @@
+web: gunicorn stockman_project.wsgi —-log-file -
