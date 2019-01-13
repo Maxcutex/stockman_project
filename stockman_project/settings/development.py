@@ -14,13 +14,13 @@ NOSE_ARGS = [
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql',
-		'NAME': os.environ.get('DATABASE_NAME', 'marketsmith_db'),
-        'USER': os.environ.get('DATABASE_USER', 'marketsmith_user'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'olubanke@1'),
-        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-        'PORT': os.environ.get('DATABASE_PORT', '5432'),
+		'NAME': os.environ.get('DATABASE_NAME', ''),
+        'USER': os.environ.get('DATABASE_USER', ''),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+        'HOST': os.environ.get('DATABASE_HOST', ''),
+        'PORT': os.environ.get('DATABASE_PORT', ''),
 		'TEST': {
-			'NAME': os.environ.get('DATABASE_NAME_TEST', 'marketsmith_db_test'),
+			'NAME': os.environ.get('DATABASE_NAME_TEST', ''),
 		},
 	}
 }
