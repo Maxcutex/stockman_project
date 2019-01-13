@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 # class IndustryView(viewsets.ModelViewSet):
 class IndustryView(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                   mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin,
                    viewsets.GenericViewSet
                    ):
     queryset = Industry.objects.all()
