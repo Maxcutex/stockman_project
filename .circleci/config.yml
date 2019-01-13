@@ -7,6 +7,7 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: circleci/python:3.6.1
         environment:
+          CIRCLE_CI: true
           REDIS_HOST: localhost
           REDIS_PORT: 6379
           REDIS_DB: 0
@@ -62,7 +63,7 @@ jobs:
           name: run coverage
           command: |
             . venv/bin/activate
-            coverage run manage.py test && coverage report && coveralls
+            coverage run manage.py test && coverage report
       - store_artifacts:
           path: test-reports
           destination: test-reports

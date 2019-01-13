@@ -8,6 +8,7 @@ INSTALLED_APPS += ()
 
 NOSE_ARGS = [
 	'--with-coverage',
+	'--cover-package=stockman_project, stock_setup_info, stock_profile_mgt',
 ]
 
 # configure your database
@@ -15,10 +16,10 @@ DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql',
 		'NAME': os.environ.get('DATABASE_NAME', ''),
-        'USER': os.environ.get('DATABASE_USER', ''),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
-        'HOST': os.environ.get('DATABASE_HOST', ''),
-        'PORT': os.environ.get('DATABASE_PORT', ''),
+		'USER': os.environ.get('DATABASE_USER', ''),
+		'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+		'HOST': os.environ.get('DATABASE_HOST', ''),
+		'PORT': os.environ.get('DATABASE_PORT', ''),
 		'TEST': {
 			'NAME': os.environ.get('DATABASE_NAME_TEST', ''),
 		},
