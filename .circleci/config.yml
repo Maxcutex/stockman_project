@@ -7,6 +7,12 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: circleci/python:3.6.1
         environment:
+          DATABASE_NAME: marketsmith_db
+          DATABASE_NAME_TEST: marketsmith_db
+          DATABASE_USER: marketsmith_user
+          DATABASE_PASSWORD: olubanke@1
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
           REDIS_HOST: localhost
           REDIS_PORT: 6379
           REDIS_DB: 0
@@ -58,7 +64,11 @@ jobs:
           command: |
             . venv/bin/activate
             python manage.py test
-
+      - run:
+          name: run coverage
+          command: |
+            . venv/bin/activate
+            coverage run manage.py test && coverage report && coveralls
       - store_artifacts:
           path: test-reports
           destination: test-reports
