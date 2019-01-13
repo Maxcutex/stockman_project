@@ -8,6 +8,7 @@ INSTALLED_APPS += ()
 
 NOSE_ARGS = [
 	'--with-coverage',
+	'--cover-package=stockman_project, stock_setup_info, stock_profile_mgt',
 ]
 
 # configure your database
