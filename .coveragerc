@@ -1,0 +1,8 @@
+[run]
+source=
+    stockman_project
+    stock_setup_info
+    stock_maintain
+    stock_profile_mgt
+omit=
+    ~/venv/
