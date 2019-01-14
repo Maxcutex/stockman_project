@@ -1,6 +1,7 @@
 certifi==2018.11.29
 chardet==3.0.4
 coverage==4.0.3
+coveralls==1.5.1
 defusedxml==0.5.0
 diff-match-patch==20181111
 Django==2.1.4
@@ -14,6 +15,7 @@ django-model-utils==3.1.2
 django-nose==1.4.6
 djangorestframework==3.9.0
 djangorestframework-simplejwt==3.3
+docopt==0.6.2
 et-xmlfile==1.0.1
 factory-boy==2.11.1
 Faker==1.0.1
@@ -26,7 +28,6 @@ openpyxl==2.5.12
 Pillow==5.3.0
 psycopg2==2.7.6.1
 PyJWT==1.7.1
-python-coveralls==2.9.1
 python-dateutil==2.7.5
 pytz==2018.7
 PyYAML==3.13
