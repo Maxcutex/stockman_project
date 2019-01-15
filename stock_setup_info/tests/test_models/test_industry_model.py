@@ -1,5 +1,4 @@
 from rest_framework.test import APITestCase, APIClient
-from rest_framework.views import status
 
 from stock_setup_info.factories.factory import IndustryFactory
 from stock_setup_info.models import Industry, Structure, StructureType, Stock, StockManagement
