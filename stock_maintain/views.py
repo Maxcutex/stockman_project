@@ -31,6 +31,7 @@ class PriceListView(viewsets.ModelViewSet):
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('price_date', 'stock_id', 'sec_code')
 
+
 	@list_route(methods=['get'], url_path='view-by-date')
 	def view_by_date(self, request, *args, **kwargs):
 		queryset = self.get_queryset()

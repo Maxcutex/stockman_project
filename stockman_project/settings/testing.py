@@ -3,14 +3,14 @@ from .base import *
 
 DEBUG = True
 
-INSTALLED_APPS += ('django_nose',)
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-NOSE_ARGS = [
-	'--with-coverage',
-	'--cover-package=stockman_project, stock_setup_info, stock_profile_mgt',
-]
+# INSTALLED_APPS += ('django_nose',)
+#
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+#
+# NOSE_ARGS = [
+# 	'--with-coverage',
+# 	'--cover-package=stockman_project, stock_setup_info, stock_profile_mgt',
+# ]
 
 ALLOWED_HOSTS = ['*']
 

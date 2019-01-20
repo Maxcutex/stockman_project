@@ -22,11 +22,15 @@ class NewsModelCreatedTest(BaseViewTest):
 		self.assertIsInstance(self.stock, Stock)
 		self.assertIsInstance(self.news, News)
 		assert self.stock.pk >= 1, 'Should create an Stock Instance'
+		assert self.news.pk >= 1, 'Should create an News Instance'
 
 	def test_news_name(self):
 		expected_stock_name = self.stock.name
 		self.assertEqual(expected_stock_name, self.stock.name)
 
 	def test_news_get_excerpt(self):
+		pass
+
+	def test_news_get_summary(self):
 		pass
 

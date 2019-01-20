@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
+from rest_framework.permissions import AllowAny
+
 from .models import (Industry, Structure, StructureType, Stock, StockManagement)
 from .serializers import (
     IndustrySerializer, StructureSerializer, StructureTypeSerializer,
@@ -17,6 +19,8 @@ class IndustryView(mixins.CreateModelMixin,
                    ):
     queryset = Industry.objects.all()
     serializer_class = IndustrySerializer
+    authentication_classes = ()
+    #permission_classes = (AllowAny,)
 
 
 class StructureView(viewsets.ModelViewSet):

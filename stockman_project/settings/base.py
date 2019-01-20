@@ -156,9 +156,10 @@ AUTH_USER_MODEL = 'stock_profile_mgt.UserProfile'
 REST_FRAMEWORK = {
 	'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],
 	'DEFAULT_PERMISSION_CLASSES': (
-		'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+		'stockman_project.permissions.IsGetOrIsAuthenticated',
 	),
 	'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+	# 'DEFAULT_PERMISSION_CLASSES': [], set to null to enable view based permissions per views
 	'DEFAULT_FILTER_BACKENDS': (
 		'django_filters.rest_framework.DjangoFilterBackend',),
 	'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
