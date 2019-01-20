@@ -1,14 +1,12 @@
 # from django.test import TestCase
 # from django.urls import reverse
-import pdb
 
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
 
-from stock_setup_info.factories.factory import IndustryFactory
-from stock_setup_info.models import Industry, Structure, StructureType, Stock, StockManagement
-from stock_setup_info.serializers import IndustrySerializer
+from stock_setup_info.factory import IndustryFactory
+from stock_setup_info.models import Industry
 
 
 # Create your tests here.
