@@ -123,14 +123,13 @@ class TestUsersValid(APITestCase):
 	def _signup(self):
 		data = {
 			'email': 'tester@ya.com',
-			'password1': 'testerA123#',
-			'password2': 'testerA123#',
+			'password': 'testerA123#',
 			'first_name': 'test',
 			'last_name': 'user'
 		}
 		response = self.client.post(
 			reverse(
-				'account_signup',
+				'user_profile',
 			),
 			data=data,
 		)
