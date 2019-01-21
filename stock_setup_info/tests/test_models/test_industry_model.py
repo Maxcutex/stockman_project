@@ -1,9 +1,10 @@
+from mixer.auto import mixer
 from rest_framework.test import APITestCase, APIClient
-from rest_framework.views import status
 
-from stock_setup_info.factories.factory import IndustryFactory
-from stock_setup_info.models import Industry, Structure, StructureType, Stock, StockManagement
-from stock_setup_info.serializers import IndustrySerializer
+from stock_setup_info.factory import IndustryFactory
+from stock_setup_info.models import Industry
+
+
 # Create your tests here.
 
 
@@ -31,3 +32,7 @@ class AllModelCreatedTest(BaseViewTest):
         """
         new_count = Industry.objects.count()
         self.assertNotEqual(0, new_count)
+
+    def test_model_via_mixer(self):
+        obj = mixer.blend('stock_setup_info.models.Industry')
+        assert obj.pk > 1, 'Should create an Industry Instance'

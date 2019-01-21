@@ -24,7 +24,7 @@ urlpatterns = [
     re_path('', include('stock_setup_info.urls')),
     # path('', include('stock_profile_mgt.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/token/', TokenObtainPairView.as_view()),
-    path('api/token/refresh/', TokenRefreshView.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(), name='auth_user'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='auth_refresh'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

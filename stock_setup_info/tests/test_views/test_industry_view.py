@@ -6,12 +6,12 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
 
-from stock_setup_info.factories.factory import IndustryFactory
-from stock_setup_info.models import Industry, Structure, StructureType, Stock, StockManagement
-from stock_setup_info.serializers import IndustrySerializer
+from stock_setup_info.factory import IndustryFactory
+from stock_setup_info.models import Industry
 
 
 # Create your tests here.
+from stock_setup_info.serializers import IndustrySerializer
 
 
 class BaseViewTest(APITestCase):
@@ -48,7 +48,7 @@ class GetAllViewsTest(BaseViewTest):
 
 		# fetch the data from the db
 		expected = Industry.objects.all()
-		# serialized = IndustrySerializer(expected, many=True)
-		# self.assertEqual(response.data, serialized.data)
+		serialized = IndustrySerializer(expected, many=True)
+		self.assertEqual(response.data['results'], serialized.data)
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(int(response.data['count']), 10)

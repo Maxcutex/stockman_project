@@ -6,3 +6,9 @@ source=
     stock_profile_mgt
 omit=
     ~/venv/
+    *migrations/*,
+    *settings/*,
+    *tests/*,
+    *urls.py,
+    *wsgi.py,
+    manage.py

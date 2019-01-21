@@ -6,10 +6,10 @@ from .models import (Industry, Structure, StructureType,
 from stockman_project import settings
 
 
-class IndustrySerializer(serializers.HyperlinkedModelSerializer):
+class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Industry
-        fields = ('name', 'exchange_code', 'sync_flag', 'logo', 'url')
+        fields = ('name', 'exchange_code', 'sync_flag', 'logo')
 
 
 class StructureSerializer(serializers.ModelSerializer):
