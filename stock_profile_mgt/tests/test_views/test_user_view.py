@@ -35,91 +35,90 @@ class TestUsersValid(APITestCase):
 		self.invalid_token = 'Bearer Eyhbfhebjwkfbhjbuw3hiuhufhnffjjfjk'
 		self.uploader = user_factory._create_user(self, email='testadmin@gmail.com')
 
-	def _create_login_user_with_verified_email(self, email='user@example.com', password='$testeR1234',
+	def _create_login_user(self, email='user@example.com', password='$testeR1234',
 											   user_status=False):
 		"""Tests login """
 		user = get_user_model().objects.create(email=email, password=password)
 		user.set_password(password)
 		user.is_staff = user_status
 		user.save()
-		EmailAddress.objects.create(user=user,
-									email=email,
-									primary=True,
-									verified=True)
-		response = self.client.post(reverse('account_login'),
-									{'email': email,
-									 'password': password})
+
+		response = self.client.post(
+			reverse('auth_user'), {
+				'email': email, 'password': password
+			}
+		)
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(response.data['user']['email'], email)
 		return response
 
-	def _upload_media_file(self, user):
-		file_upload = SimpleUploadedFile('file3.jpeg', b'content')
-		data = {
-			"picture": file_upload
-		}
-		response = self.client.post(
-			reverse(
-				'apiv1_profileupload-list',
-			),
-			data=data,
-			HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
-			format='multipart'
-		)
-		self.assertEqual(response.status_code, 200)
-		return response.data
+	# def _upload_media_file(self, user):
+	# 	file_upload = SimpleUploadedFile('file3.jpeg', b'content')
+	# 	data = {
+	# 		"picture": file_upload
+	# 	}
+	# 	response = self.client.post(
+	# 		reverse(
+	# 			'apiv1_profileupload-list',
+	# 		),
+	# 		data=data,
+	# 		HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
+	# 		format='multipart'
+	# 	)
+	# 	self.assertEqual(response.status_code, 200)
+	# 	return response.data
 
-	def test_upload_picture(self):
-		user = self._create_login_user_with_verified_email(user_status=True)
-		file_upload = SimpleUploadedFile('file.jpeg', b'content')
-		data = {
-			"picture": file_upload
-		}
-		response = self.client.post(
-			reverse(
-				'apiv1_profileupload-list',
-			),
-			data=data,
-			HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
-			format='multipart'
-		)
-		self.assertEqual(response.status_code, 200)
-		file_name = response.data['payload']['profile_picture_name']
-		self.assertEqual(file_name, 'file.jpeg')
-		self.assertEqual(response.data['payload']['profile']['id'], 2)
-
-	def test_update_upload_picture(self):
-		user = self._create_login_user_with_verified_email(user_status=True)
-		self._upload_media_file(user)
-		file_upload = SimpleUploadedFile('file.jpeg', b'content')
-		data = {
-			"picture": file_upload
-		}
-		response = self.client.put(
-			reverse(
-				'apiv1_profileupload-detail', args=[1]
-			),
-			data=data,
-			HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
-			format='multipart'
-		)
-		self.assertEqual(response.status_code, 200)
-		file_name = response.data['payload']['profile_picture_name']
-		self.assertEqual(file_name, 'file.jpeg')
-		self.assertEqual(response.data['payload']['profile']['id'], 2)
-
-	def test_delete_upload_picture(self):
-		user = self._create_login_user_with_verified_email(user_status=True)
-		self._upload_media_file(user)
-		response = self.client.delete(
-			reverse(
-				'apiv1_profileupload-detail', args=[1]
-			),
-			data={},
-			HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
-			format='multipart'
-		)
-		self.assertEqual(response.status_code, 200)
+	# def test_upload_picture(self):
+	# 	user = self._create_login_user_with_verified_email(user_status=True)
+	# 	file_upload = SimpleUploadedFile('file.jpeg', b'content')
+	# 	data = {
+	# 		"picture": file_upload
+	# 	}
+	# 	response = self.client.post(
+	# 		reverse(
+	# 			'apiv1_profileupload-list',
+	# 		),
+	# 		data=data,
+	# 		HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
+	# 		format='multipart'
+	# 	)
+	# 	self.assertEqual(response.status_code, 200)
+	# 	file_name = response.data['payload']['profile_picture_name']
+	# 	self.assertEqual(file_name, 'file.jpeg')
+	# 	self.assertEqual(response.data['payload']['profile']['id'], 2)
+	#
+	# def test_update_upload_picture(self):
+	# 	user = self._create_login_user_with_verified_email(user_status=True)
+	# 	self._upload_media_file(user)
+	# 	file_upload = SimpleUploadedFile('file.jpeg', b'content')
+	# 	data = {
+	# 		"picture": file_upload
+	# 	}
+	# 	response = self.client.put(
+	# 		reverse(
+	# 			'apiv1_profileupload-detail', args=[1]
+	# 		),
+	# 		data=data,
+	# 		HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
+	# 		format='multipart'
+	# 	)
+	# 	self.assertEqual(response.status_code, 200)
+	# 	file_name = response.data['payload']['profile_picture_name']
+	# 	self.assertEqual(file_name, 'file.jpeg')
+	# 	self.assertEqual(response.data['payload']['profile']['id'], 2)
+	#
+	# def test_delete_upload_picture(self):
+	# 	user = self._create_login_user_with_verified_email(user_status=True)
+	# 	self._upload_media_file(user)
+	# 	response = self.client.delete(
+	# 		reverse(
+	# 			'apiv1_profileupload-detail', args=[1]
+	# 		),
+	# 		data={},
+	# 		HTTP_AUTHORIZATION='Bearer {}'.format(user.data['token']),
+	# 		format='multipart'
+	# 	)
+	# 	self.assertEqual(response.status_code, 200)
 
 	def _signup(self):
 		data = {

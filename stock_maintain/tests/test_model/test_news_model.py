@@ -13,7 +13,7 @@ class BaseViewTest(APITestCase):
 		self.structure_type = StructureTypeFactory(child_depth=2)
 		self.structure = StructureFactory(child_depth=2, structure_type=self.structure_type)
 		self.stock = mixer.blend('stock_setup_info.models.Stock', structure=self.structure)
-		self.news = mixer.blend('stock_maintain.models.News', news_section=self.structure, stock_id= self.stock)
+		self.news = mixer.blend('stock_maintain.models.News', content='Hello this is the main news', news_section=self.structure, stock_id= self.stock)
 
 
 class NewsModelCreatedTest(BaseViewTest):
@@ -29,7 +29,8 @@ class NewsModelCreatedTest(BaseViewTest):
 		self.assertEqual(expected_stock_name, self.stock.name)
 
 	def test_news_get_excerpt(self):
-		pass
+		result = self.news.get_summary(5)
+		assert result == 'Hello', 'Should return first few characters of content'
 
 	def test_news_get_summary(self):
 		pass

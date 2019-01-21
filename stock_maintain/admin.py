@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from stock_maintain import models
 from .resources import PriceListResource
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, )
@@ -39,7 +41,11 @@ class DividendAdmin(ImportExportModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(ImportExportModelAdmin):
-    pass
+    model = models.News
+    list_display = ('excerpt',)
+
+    def excerpt(self, obj):
+        return obj.get_summary(5)
 
 
 @admin.register(NewsImage)

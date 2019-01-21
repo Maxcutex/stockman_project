@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, decorators
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
@@ -31,8 +31,7 @@ class PriceListView(viewsets.ModelViewSet):
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('price_date', 'stock_id', 'sec_code')
 
-
-	@list_route(methods=['get'], url_path='view-by-date')
+	@decorators.action(methods=['get'], detail=False, url_path='view-by-date')
 	def view_by_date(self, request, *args, **kwargs):
 		queryset = self.get_queryset()
 		queryset = self.filter_queryset(queryset)

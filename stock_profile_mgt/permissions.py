@@ -14,3 +14,13 @@ class UpdateOwnProfile(permissions.BasePermission):
             return True
 
         return obj.id == request.user.id
+
+
+class IsPostOrIsAuthenticated(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        # allow all POST requests
+        if request.method == 'POST':
+            return True
+
+        return request.user and request.user.is_authenticated

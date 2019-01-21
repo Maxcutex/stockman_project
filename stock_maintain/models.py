@@ -32,6 +32,8 @@ class PriceList(models.Model):
 	stock_id = models.ForeignKey(
 		Stock, on_delete=models.CASCADE, related_name='price_stock', null=True)
 
+
+
 	def __str__(self):
 		return self.sec_code
 
@@ -125,6 +127,9 @@ class News(models.Model):
 	has_downloadable = models.BooleanField(default=False)
 	is_main = models.BooleanField(default=False)
 	author = models.CharField(max_length=100, null=True)
+
+	def get_summary(self, char):
+		return self.content[:char]
 
 	def __str__(self):
 		return self.title
