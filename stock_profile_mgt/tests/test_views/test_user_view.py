@@ -134,26 +134,25 @@ class TestUsersValid(APITestCase):
 			data=data,
 		)
 		self.assertEqual(response.status_code, 201)
-		message = 'Verification e-mail sent.'
-		self.assertEqual(response.data['detail'], message)
+		#message = 'Verification e-mail sent.'
+		#self.assertEqual(response.data['detail'], message)
 
 	def test_user_registration(self):
 		data = {
 			'email': 'tester@ya.com',
-			'password1': 'testerA123#',
-			'password2': 'testerA123#',
+			'password': 'testerA123#',
 			'first_name': 'test',
 			'last_name': 'user'
 		}
 		response = self.client.post(
 			reverse(
-				'account_signup',
+				'user_profile',
 			),
 			data=data,
 		)
 		self.assertEqual(response.status_code, 201)
-		message = 'Verification e-mail sent.'
-		self.assertEqual(response.data['detail'], message)
+		#message = 'Verification e-mail sent.'
+		#self.assertEqual(response.data['detail'], message)
 
 	def test_login_user_with_verified_email(self):
 		"""Tests login """
