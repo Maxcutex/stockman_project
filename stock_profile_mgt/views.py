@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status, filters, mixins
-from rest_framework_simplejwt.authentication import JWTAuthentication
+#from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from .models import UserProfile
@@ -19,7 +19,7 @@ class UserProfileView(mixins.CreateModelMixin,
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
 
-    authentication_classes = (JWTAuthentication,)
+    #authentication_classes = (JWTAuthentication,)
     permission_classes = (permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('first_name', 'last_name', 'email')

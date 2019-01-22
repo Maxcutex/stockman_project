@@ -4,7 +4,7 @@ DEBUG = True
 
 INSTALLED_APPS += ()
 
-# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
 	'--with-coverage',
@@ -25,3 +25,5 @@ DATABASES = {
 		},
 	}
 }
+LOGIN_URL='http://127.0.0.1/api/v1/login/'
+SITE_ID=2
