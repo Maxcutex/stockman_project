@@ -17,3 +17,5 @@ ALLOWED_HOSTS = ['*']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+SITE_ID = 1

@@ -9,7 +9,8 @@ from stockman_project import settings
 class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Industry
-        fields = ('name', 'exchange_code', 'sync_flag', 'logo')
+        fields = ('id','name', 'exchange_code', 'sync_flag', 'logo')
+        ordering = ('id',)
 
 
 class StructureSerializer(serializers.ModelSerializer):
@@ -21,6 +22,7 @@ class StructureSerializer(serializers.ModelSerializer):
         fields = ('id', 'structure_name', 'structure_code',
                   'is_active', 'structure_type_id', 'structure_type',  # 'structure_type_name',
                   'url', 'parent_id')
+        ordering = ('id',)
 
 
 class StructureTypeSerializer(serializers.ModelSerializer):
@@ -31,6 +33,7 @@ class StructureTypeSerializer(serializers.ModelSerializer):
         model = StructureType
         fields = ('id', 'structure_type_name',
                   'is_active', 'description', 'url', 'parent_id', 'child_structures')
+        ordering = ('id',)
 
 
 class StockManagementSerializer(serializers.ModelSerializer):
@@ -38,6 +41,7 @@ class StockManagementSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockManagement
         fields = ('id', 'name', 'position', 'management_type')
+        ordering = ('id',)
 
 
 class StockSerializer(serializers.ModelSerializer):
@@ -56,3 +60,4 @@ class StockSerializer(serializers.ModelSerializer):
                   'year_end', 'logo', 'shares_in_issue',
                   'capitalization', 'industry', 'structure'
                   )
+        ordering = ('id',)
