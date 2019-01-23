@@ -14,8 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
-
-from dj_database_url import config
+from decouple import config
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -252,9 +252,9 @@ AUTH_USER_MODEL = 'stock_profile_mgt.UserProfile'
 
 REST_FRAMEWORK = {
 	'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%d'],
-	'DEFAULT_PERMISSION_CLASSES': (
-		'stockman_project.permissions.IsGetOrIsAuthenticated',
-	),
+	# 'DEFAULT_PERMISSION_CLASSES': (
+	# 	'stockman_project.permissions.IsGetOrIsAuthenticated',
+	# ),
 	# 'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
 	'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_jwt.authentication.JSONWebTokenAuthentication',),
 	# 'DEFAULT_PERMISSION_CLASSES': [], set to null to enable view based permissions per views
@@ -268,16 +268,28 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_USE_TLS = True
+# EMAIL_HOST = config('EMAIL_HOST')
+# EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = config('EMAIL_PORT')
+# EMAIL_USE_TLS = True
+
+# EMAIL_HOST = 'server96.web-hosting.com'
+# EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = 'customercare@marketsmithonline.com'
+# EMAIL_HOST_PASSWORD ='Olubanke@1'
+# EMAIL_PORT = 25
+# EMAIL_USE_TLS = False
+
+EMAIL_HOST = '127.0.0.1'
+EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = ''
+EMAIL_HOST_PASSWORD =''
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
 
 # rest-auth
 # ACCOUNT_ADAPTER = 'api.adapter.DefaultAccountAdapterCustom'
 URL_FRONT = 'http://localhost:8000/'
-LOGIN_URL='/api/v1/login/'
+LOGIN_URL='/login/'
 # LOGIN_URL = 'http://stockman-api.herokuapp.com/api/v1/login/'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -286,6 +298,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = LOGIN_URL
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_URL
 ACCOUNT_PASSWORD_RESET_CONFIRM = LOGIN_URL + 'password-reset/confirm/'

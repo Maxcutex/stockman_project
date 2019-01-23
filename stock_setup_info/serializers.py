@@ -21,7 +21,7 @@ class StructureSerializer(serializers.ModelSerializer):
         model = Structure
         fields = ('id', 'structure_name', 'structure_code',
                   'is_active', 'structure_type_id', 'structure_type',  # 'structure_type_name',
-                  'url', 'parent_id')
+                    'parent_id')
         ordering = ('id',)
 
 
@@ -32,7 +32,7 @@ class StructureTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = StructureType
         fields = ('id', 'structure_type_name',
-                  'is_active', 'description', 'url', 'parent_id', 'child_structures')
+                  'is_active', 'description',   'parent_id', 'child_structures')
         ordering = ('id',)
 
 
@@ -47,6 +47,7 @@ class StockManagementSerializer(serializers.ModelSerializer):
 class StockSerializer(serializers.ModelSerializer):
     list_date = serializers.DateField(input_formats=[('%mm-%dd-%yyyy', 'iso-8601')])
     regis_close = serializers.DateField(input_formats=[('%Y-%m-%d', 'iso-8601')])
+
     class Meta:
         model = Stock
         fields = ('id', 'name', 'stock_code',

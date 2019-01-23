@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from rest_framework.permissions import AllowAny

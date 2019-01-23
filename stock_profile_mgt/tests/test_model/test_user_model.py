@@ -2,6 +2,7 @@ from rest_framework.test import APITestCase
 from faker import Faker
 
 from stock_profile_mgt.factory import UserProfileFactory
+from stock_profile_mgt.models import UserProfile
 
 
 class BaseViewTest(APITestCase):
@@ -10,7 +11,7 @@ class BaseViewTest(APITestCase):
         self.user = UserProfileFactory()
 
     def test_user_creation(self):
-        self.assertIsInstance(self.user, UserProfileFactory)
+        assert isinstance(self.user, UserProfile)
 
     def test_user_name(self):
         first_name = self.user.first_name

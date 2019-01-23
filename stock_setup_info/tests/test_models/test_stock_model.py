@@ -1,4 +1,3 @@
-import pdb
 
 from mixer.auto import mixer
 from rest_framework.test import APITestCase

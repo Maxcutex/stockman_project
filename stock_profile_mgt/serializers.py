@@ -1,3 +1,5 @@
+import re
+
 from allauth.account.adapter import get_adapter
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.utils import setup_user_email
