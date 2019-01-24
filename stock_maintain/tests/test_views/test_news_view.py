@@ -25,7 +25,7 @@ class TestNewsApi(APITestCase):
 		"""
 		# hit the api endpoint
 		response = self.client.get(
-			reverse("news-list")
+			reverse("news-list"),{'is_featured': True}
 		)
 		featured_news_count = News.objects.filter(is_featured=True).count()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)

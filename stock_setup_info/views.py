@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from rest_framework.permissions import AllowAny
@@ -21,6 +22,7 @@ class IndustryView(mixins.CreateModelMixin,
     serializer_class = IndustrySerializer
     authentication_classes = ()
     #permission_classes = (AllowAny,)
+    #pagination_class = None
 
 
 class StructureView(viewsets.ModelViewSet):

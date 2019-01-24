@@ -6,6 +6,7 @@ from stock_setup_info.factory import StructureTypeFactory, RecursiveFactory
 
 
 # Create your tests here.
+from stock_setup_info.models import StructureType
 
 
 class BaseViewTest(APITestCase):
@@ -20,7 +21,7 @@ class BaseViewTest(APITestCase):
 class StructureTypeModelCreatedTest(BaseViewTest):
 
 	def test_structure_creation(self):
-		#self.assertIsInstance(self.structure_type, StructureTypeFactory(child_depth=2))
+		self.assertIsInstance(self.structure_type, StructureType)
 		assert self.structure_type.pk > 1, 'Should create an structure_type Instance'
 
 

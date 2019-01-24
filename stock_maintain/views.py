@@ -3,6 +3,8 @@ from rest_framework import viewsets, decorators
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+
+from stockman_project.permissions import IsAdminOrReadOnly
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer
 from .models import News, NewsImage, PriceList, NewsFile
 # Create your views here.
@@ -30,6 +32,7 @@ class PriceListView(viewsets.ModelViewSet):
 	serializer_class = PriceListSerializer
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('price_date', 'stock_id', 'sec_code')
+	permission_classes = (IsAdminOrReadOnly,)
 
 	@decorators.action(methods=['get'], detail=False, url_path='view-by-date')
 	def view_by_date(self, request, *args, **kwargs):
@@ -45,18 +48,18 @@ class PriceListView(viewsets.ModelViewSet):
 		return Response(serializer.data)
 
 
-def simple_upload(request):
-	if request.method == 'POST':
-		person_resource = PersonResource()
-		dataset = Dataset()
-		new_persons = request.FILES['myfile']
-
-		imported_data = dataset.load(new_persons.read())
-		result = person_resource.import_data(
-			dataset, dry_run=True)  # Test the data import
-
-		if not result.has_errors():
-			person_resource.import_data(
-				dataset, dry_run=False)  # Actually import now
-
-	return render(request, 'core/simple_upload.html')
+# def simple_upload(request):
+# 	if request.method == 'POST':
+# 		person_resource = PersonResource()
+# 		dataset = Dataset()
+# 		new_persons = request.FILES['myfile']
+#
+# 		imported_data = dataset.load(new_persons.read())
+# 		result = person_resource.import_data(
+# 			dataset, dry_run=True)  # Test the data import
+#
+# 		if not result.has_errors():
+# 			person_resource.import_data(
+# 				dataset, dry_run=False)  # Actually import now
+#
+# 	return render(request, 'core/simple_upload.html')
