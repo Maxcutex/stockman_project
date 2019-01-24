@@ -1,4 +1,3 @@
-import pdb
 
 import pytz
 from django.urls.exceptions import NoReverseMatch
@@ -7,9 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework import exceptions as drf_exceptions
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
-# from user.models import Profile
-# from user.tests import factory as user_factory
-# from user import services as user_services
+
 from allauth.account.models import (
 	EmailAddress,
 	EmailConfirmation,
@@ -98,14 +95,12 @@ class TestUsersValid(APITestCase):
 		user = get_user_model().objects.create(email='user@example.com', password='testerA1234#')
 		user.set_password('testerA1234#')
 		user.save()
-		# import pdb;
-		# pdb.set_trace()
+
 		EmailAddress.objects.create(user=user,
 									email="user@example.com",
 									primary=True,
 									verified=True)
-		# import pdb;
-		# pdb.set_trace()
+
 		response = self.client.post(reverse('account_login'),data={'email': 'user@example.com','password': 'testerA1234#'})
 
 		self.assertEqual(response.status_code, 200)
