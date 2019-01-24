@@ -35,7 +35,7 @@ class RecursiveFactory(factory.Factory):
 class IndustryFactory(factory.DjangoModelFactory):
 	name = faker.name()
 	exchange_code = faker.text(max_nb_chars=10, ext_word_list=None)
-	sync_flag = faker.text(max_nb_chars=10, ext_word_list=None)
+	sync_flag = faker.boolean(chance_of_getting_true=50)
 	logo = faker.text(max_nb_chars=10, ext_word_list=None)
 
 	class Meta:
