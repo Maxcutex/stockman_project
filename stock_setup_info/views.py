@@ -22,6 +22,7 @@ class IndustryView(mixins.CreateModelMixin,
     serializer_class = IndustrySerializer
     authentication_classes = ()
     #permission_classes = (AllowAny,)
+    #pagination_class = None
 
 
 class StructureView(viewsets.ModelViewSet):

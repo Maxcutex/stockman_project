@@ -46,7 +46,7 @@ class StructureTypeFactory(factory.DjangoModelFactory):
 	structure_type_name = faker.text(max_nb_chars=10, ext_word_list=None)
 	description = faker.sentence(100)
 	is_active = faker.boolean(chance_of_getting_true=50)
-	parent_id = factory.SubFactory('stock_setup_info.factory.StructureTypeFactory')
+	parent = factory.SubFactory('stock_setup_info.factory.StructureTypeFactory')
 
 	class Meta:
 		model = StructureType
@@ -56,7 +56,7 @@ class StructureTypeFactory(factory.DjangoModelFactory):
 		child_depth = 10
 
 	child_depth_temp = factory.LazyAttribute(lambda o: o.child_depth - 1)
-	parent_id = factory.Maybe(
+	parent = factory.Maybe(
 		factory.LazyAttribute(lambda o: o.child_depth > 0),
 		yes_declaration=factory.SubFactory(
 			'stock_setup_info.factory.StructureTypeFactory',
@@ -70,7 +70,7 @@ class StructureFactory(factory.DjangoModelFactory):
 	structure_name = faker.text(max_nb_chars=10, ext_word_list=None)
 	structure_code = faker.text(max_nb_chars=10, ext_word_list=None)
 	structure_type = factory.SubFactory(StructureTypeFactory)
-	parent_id = factory.SubFactory('stock_setup_info.factory.StructureFactory')
+	parent = factory.SubFactory('stock_setup_info.factory.StructureFactory')
 	is_active = faker.boolean(chance_of_getting_true=50)
 	comment = faker.sentence(15)
 
@@ -82,7 +82,7 @@ class StructureFactory(factory.DjangoModelFactory):
 		child_depth = 10
 
 	child_depth_temp = factory.LazyAttribute(lambda o: o.child_depth - 1)
-	parent_id = factory.Maybe(
+	parent = factory.Maybe(
 		factory.LazyAttribute(lambda o: o.child_depth > 0),
 		yes_declaration=factory.SubFactory(
 			'stock_setup_info.factory.StructureFactory',

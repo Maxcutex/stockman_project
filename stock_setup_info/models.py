@@ -5,9 +5,9 @@ from model_utils import Choices
 
 class Industry(models.Model):
 	name = models.CharField(max_length=100)
-	exchange_code = models.CharField(max_length=50)
-	sync_flag = models.CharField(max_length=30)
-	logo = models.CharField(max_length=10)
+	exchange_code = models.CharField(max_length=50, null=True)
+	sync_flag = models.BooleanField(default=False)
+	logo = models.CharField(max_length=10, null=True)
 
 	def __str__(self):
 		return self.name
@@ -17,7 +17,7 @@ class StructureType(models.Model):
 	structure_type_name = models.CharField(max_length=100)
 	description = models.CharField(max_length=2000, null=True, blank=True)
 	is_active = models.BooleanField(max_length=100)
-	parent_id = models.ForeignKey(
+	parent = models.ForeignKey(
 		'self', null=True, on_delete=models.CASCADE,
 		related_name='child_structure_type'
 	)
@@ -31,10 +31,10 @@ class Structure(models.Model):
 	structure_code = models.CharField(max_length=50, null=True, blank=True)
 	structure_type = models.ForeignKey(
 		StructureType, on_delete=models.CASCADE, related_name='child_structures')
-	parent_id = models.ForeignKey(
+	parent = models.ForeignKey(
 		'self', null=True, on_delete=models.CASCADE, related_name='structures')
-	is_active = models.BooleanField()
-	comment = models.CharField(max_length=200)
+	is_active = models.BooleanField(default=True)
+	comment = models.CharField(max_length=200, null=True, blank=True)
 
 	def __str__(self):
 		return self.structure_name
