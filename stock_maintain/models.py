@@ -18,7 +18,8 @@ class PriceList(models.Model):
 	x_low = models.FloatField()
 	price = models.FloatField()
 	offer_bid_sign = models.CharField(max_length=5)
-	num_of_deals = models.SmallIntegerField()
+	x_change = models.FloatField()
+	num_of_deals = models.FloatField()
 	volume = models.FloatField()
 	x_value = models.FloatField()
 	dps = models.FloatField()
@@ -29,7 +30,7 @@ class PriceList(models.Model):
 	e_date = models.DateField(max_length=10)
 	source = models.CharField(max_length=20)
 	sync_flag = models.SmallIntegerField()
-	stock_id = models.ForeignKey(
+	stock = models.ForeignKey(
 		Stock, on_delete=models.CASCADE, related_name='price_stock', null=True)
 
 

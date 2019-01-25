@@ -102,6 +102,7 @@ class PriceListFactory(factory.DjangoModelFactory):
 	x_high = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	x_low = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	price = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
+	x_change = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	offer_bid_sign = faker.word(ext_word_list=sign)
 	num_of_deals = faker.random_number()
 	volume = faker.random_number()
@@ -114,7 +115,7 @@ class PriceListFactory(factory.DjangoModelFactory):
 	e_date = faker.date()
 	source = faker.text(10)
 	sync_flag = faker.random_number()
-	stock_id = factory.SubFactory(StockFactory)
+	stock = factory.SubFactory(StockFactory)
 
 	class Meta:
 		model = PriceList
