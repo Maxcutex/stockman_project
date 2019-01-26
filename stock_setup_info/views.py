@@ -46,7 +46,7 @@ class StockManagementView(viewsets.ModelViewSet):
 class StockApiView(APIView):
     """ Stock View using Api View """
 
-    def get(self, request, format=None):
+    def get(self, request: object, format: object = None) -> object:
         """ Returns a list of stock api view """
 
         stock_apiview = [
