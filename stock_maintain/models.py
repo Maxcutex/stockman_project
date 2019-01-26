@@ -119,9 +119,9 @@ class News(models.Model):
 	content = RichTextUploadingField()
 	news_section = models.ForeignKey(
 		Structure, on_delete=models.CASCADE, related_name='news_structure')
-	date = models.DateField()
+	news_date = models.DateField()
 	entry_date = models.DateField()
-	stock_id = models.ForeignKey(
+	stock = models.ForeignKey(
 		Stock, on_delete=models.CASCADE, related_name='news_stock', null=True)
 	sec_code = models.CharField(max_length=10)
 	is_featured = models.BooleanField()

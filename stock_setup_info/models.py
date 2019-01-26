@@ -18,7 +18,7 @@ class StructureType(models.Model):
 	description = models.CharField(max_length=2000, null=True, blank=True)
 	is_active = models.BooleanField(max_length=100)
 	parent = models.ForeignKey(
-		'self', null=True, on_delete=models.CASCADE,
+		'self', blank=True, null=True, on_delete=models.CASCADE,
 		related_name='child_structure_type'
 	)
 
@@ -32,7 +32,7 @@ class Structure(models.Model):
 	structure_type = models.ForeignKey(
 		StructureType, on_delete=models.CASCADE, related_name='child_structures')
 	parent = models.ForeignKey(
-		'self', null=True, on_delete=models.CASCADE, related_name='structures')
+		'self', blank=True, null=True, on_delete=models.CASCADE, related_name='structures')
 	is_active = models.BooleanField(default=True)
 	comment = models.CharField(max_length=200, null=True, blank=True)
 

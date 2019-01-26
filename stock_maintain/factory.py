@@ -41,9 +41,9 @@ class NewsFactory(factory.DjangoModelFactory):
 	title = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
 	content = faker.paragraphs(nb=3, ext_word_list=None)
 	news_section = factory.SubFactory(StructureFactory)
-	date = faker.date()
+	news_date = faker.date()
 	entry_date = faker.date()
-	stock_id = factory.SubFactory(StockFactory)
+	stock= factory.SubFactory(StockFactory)
 	is_featured = faker.boolean()
 	has_downloadable = faker.boolean()
 	is_main = faker.boolean()
@@ -92,9 +92,8 @@ class NewsFileFactory(factory.DjangoModelFactory):
 	class Meta:
 		model = NewsFile
 
-
+sign_x = ['-', '+']
 class PriceListFactory(factory.DjangoModelFactory):
-	sign = ['-', '+']
 	sec_code = faker.text(10)
 	price_date = faker.date()
 	price_close = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
@@ -103,7 +102,7 @@ class PriceListFactory(factory.DjangoModelFactory):
 	x_low = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	price = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	x_change = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
-	offer_bid_sign = faker.word(ext_word_list=sign)
+	offer_bid_sign = '+'
 	num_of_deals = faker.random_number()
 	volume = faker.random_number()
 	x_value = faker.pydecimal(left_digits=None, right_digits=2, positive=True)

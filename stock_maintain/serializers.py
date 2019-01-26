@@ -5,19 +5,30 @@ from .models import (PriceList, AsiIndex, Quote,
 					 )
 
 
-class PriceListSerializer(serializers.HyperlinkedModelSerializer):
+class PriceListSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = PriceList
-		fields = '__all__'
+		fields = (
+			'id', 'sec_code', 'price_date',
+			'price_close', 'x_open', 'x_high',
+			'x_low', 'price', 'offer_bid_sign',
+			'x_change', 'num_of_deals', 'volume',
+			'x_value', 'dps', 'eps',
+			'pe', 'rpt', 'e_time',
+			'e_date', 'source', 'sync_flag','stock'
+		)
+		ordering_fields = ('id',)
+		ordering = ['-id']
 
 
-class AsiIndexSerializer(serializers.HyperlinkedModelSerializer):
+
+class AsiIndexSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = AsiIndex
 		fields = '__all__'
 
 
-class QuoteSerializer(serializers.HyperlinkedModelSerializer):
+class QuoteSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Quote
 		fields = '__all__'
@@ -63,3 +74,4 @@ class NewsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = News
 		fields = '__all__'
+		ordering = ('id',)

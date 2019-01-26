@@ -1,4 +1,3 @@
-
 from mixer.auto import mixer
 from rest_framework.test import APITestCase
 
@@ -13,7 +12,8 @@ class BaseViewTest(APITestCase):
 		self.structure_type = StructureTypeFactory(child_depth=2)
 		self.structure = StructureFactory(child_depth=2, structure_type=self.structure_type)
 		self.stock = mixer.blend('stock_setup_info.models.Stock', structure=self.structure)
-		self.news = mixer.blend('stock_maintain.models.News', content='Hello this is the main news', news_section=self.structure, stock_id= self.stock)
+		self.news = mixer.blend('stock_maintain.models.News', content='Hello this is the main news',
+								news_section=self.structure, stock=self.stock)
 
 
 class NewsModelCreatedTest(BaseViewTest):
@@ -34,4 +34,3 @@ class NewsModelCreatedTest(BaseViewTest):
 
 	def test_news_get_summary(self):
 		pass
-

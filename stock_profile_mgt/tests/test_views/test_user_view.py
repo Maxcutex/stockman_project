@@ -109,7 +109,6 @@ class TestUsersValid(APITestCase):
 
 	def test_retrieve_user_profile(self):
 		user = self._create_login_user_with_verified_email(user_status=True)
-		print(user.data)
 		response = self.client.get(
 			reverse(
 				'user_profile-detail', args=[user.data['user']['id']]
