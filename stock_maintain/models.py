@@ -117,8 +117,6 @@ class Dividend(models.Model):
 class News(models.Model):
 	title = models.CharField(max_length=300)
 	content = RichTextUploadingField()
-	news_section = models.ForeignKey(
-		Structure, on_delete=models.CASCADE, related_name='news_structure')
 	news_date = models.DateField()
 	entry_date = models.DateField()
 	stock = models.ForeignKey(
@@ -138,7 +136,7 @@ class News(models.Model):
 
 class NewsImage(models.Model):
 	image_choice = Choices('size930x620', 'size450x330', 'size300x200')
-	news_id = models.ForeignKey(
+	news = models.ForeignKey(
 		News, on_delete=models.CASCADE, related_name='visual_news', null=True)
 	is_main = models.BooleanField()
 	image_file = models.ImageField(blank=True, upload_to="images/news_image")
@@ -152,7 +150,7 @@ class NewsImage(models.Model):
 
 class NewsFile(models.Model):
 	doc_choices = Choices('pdf', 'word', 'excel')
-	news_id = models.ForeignKey(
+	news = models.ForeignKey(
 		News, on_delete=models.CASCADE, related_name='doc_news', null=True)
 	is_main = models.BooleanField()
 	doc_file = models.FileField(blank=True, upload_to="files/news_docs")
@@ -195,3 +193,26 @@ class OfferIpo(models.Model):
 
 	def __str__(self):
 		return self.company_name
+
+
+class NewsCategorySection(models.Model):
+	news = models.ForeignKey(
+		News, on_delete=models.CASCADE, related_name='category_news', null=True)
+	section = models.ForeignKey(
+		Structure, on_delete=models.CASCADE, related_name='category_news_structure')
+
+
+class AnalysisOpinion(models.Model):
+	title = models.CharField(max_length=300)
+	content = RichTextUploadingField()
+	opinion_date = models.DateField()
+	entry_date = models.DateField()
+	author = models.CharField(max_length=100, null=True)
+
+
+class AnalysisCategorySection(models.Model):
+	analysis = models.ForeignKey(
+		AnalysisOpinion, on_delete=models.CASCADE, related_name='analysis_news', null=True)
+	section = models.ForeignKey(
+		Structure, on_delete=models.CASCADE, related_name='category_analysis_structure')
+

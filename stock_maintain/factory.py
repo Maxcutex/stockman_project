@@ -40,7 +40,6 @@ def get_image_file(name='test.png', ext='png', size=(50, 50), color=(256, 0, 0))
 class NewsFactory(factory.DjangoModelFactory):
 	title = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
 	content = faker.paragraphs(nb=3, ext_word_list=None)
-	news_section = factory.SubFactory(StructureFactory)
 	news_date = faker.date()
 	entry_date = faker.date()
 	stock= factory.SubFactory(StockFactory)

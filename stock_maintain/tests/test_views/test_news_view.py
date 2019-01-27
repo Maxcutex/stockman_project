@@ -15,9 +15,9 @@ class TestNewsApi(APITestCase):
 		self.structure_type = StructureTypeFactory(child_depth=2)
 		self.structure = StructureFactory(child_depth=2, structure_type=self.structure_type)
 		self.stock = mixer.blend('stock_setup_info.models.Stock', structure=self.structure)
-		self.news = mixer.blend('stock_maintain.models.News', news_section=self.structure, stock=self.stock)
-		NewsFactory.create_batch(10, news_section=self.structure, stock=self.stock, is_featured=False)
-		NewsFactory.create_batch(10, news_section=self.structure, stock=self.stock, is_featured=True)
+		self.news = mixer.blend('stock_maintain.models.News',  stock=self.stock)
+		NewsFactory.create_batch(10,  stock=self.stock, is_featured=False)
+		NewsFactory.create_batch(10,  stock=self.stock, is_featured=True)
 		self.main_featured_news = News.objects.filter(is_featured=True).latest('id')
 		self.main_featured_news.is_main = True
 		self.p_date = datetime(year=2014, month=11, day=15, hour=0, minute=0, second=0)
@@ -53,6 +53,9 @@ class TestNewsApi(APITestCase):
 		pass
 
 	def test_create_news_with_images(self):
+		pass
+
+	def test_create_news_with_sections(self):
 		pass
 
 	def test_create_news_with_files(self):

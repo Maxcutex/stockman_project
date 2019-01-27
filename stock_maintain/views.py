@@ -17,7 +17,7 @@ from tablib import Dataset
 class NewsView(viewsets.ModelViewSet):
 	queryset = News.objects.all()
 	serializer_class = NewsSerializer
-	filter_fields = ('is_featured', 'stock_id', 'news_section', 'news_date', 'sec_code')
+	filter_fields = ('is_featured', 'stock_id',  'news_date', 'sec_code')
 
 	@decorators.action(methods=['get'], detail=False, url_path='view-date-range')
 	def view_date_range(self, request, *args, **kwargs):
