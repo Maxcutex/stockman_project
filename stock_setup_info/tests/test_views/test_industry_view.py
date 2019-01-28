@@ -47,7 +47,7 @@ class GetAllViewsTest(BaseViewTest):
 		)
 
 		# fetch the data from the db
-		expected = Industry.objects.all()
+		expected = Industry.objects.get_queryset().order_by('-id')
 		serialized = IndustrySerializer(expected, many=True)
 		self.assertEqual(response.data['results'], serialized.data)
 		self.assertEqual(response.status_code, status.HTTP_200_OK)

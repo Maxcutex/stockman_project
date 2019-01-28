@@ -20,9 +20,11 @@ class StructureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Structure
-        fields = ('id', 'structure_name', 'structure_code',
-                  'is_active', 'structure_type_id', 'structure_type',  # 'structure_type_name',
-                    'parent_id')
+        fields = (
+            'id', 'structure_name', 'structure_code',
+            'is_active', 'structure_type_id', 'structure_type',  # 'structure_type_name',
+            'parent_id'
+        )
         ordering_fields = ('id',)
         ordering = ['-id']
 

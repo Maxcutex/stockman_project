@@ -18,7 +18,7 @@ class IndustryView(mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin,
                    viewsets.GenericViewSet
                    ):
-    queryset = Industry.objects.all()
+    queryset = Industry.objects.get_queryset().order_by('-id')
     serializer_class = IndustrySerializer
     authentication_classes = ()
     #permission_classes = (AllowAny,)
@@ -26,22 +26,24 @@ class IndustryView(mixins.CreateModelMixin,
 
 
 class StructureView(viewsets.ModelViewSet):
-    queryset = Structure.objects.all()
+    queryset = Structure.objects.get_queryset().order_by('-id')
     serializer_class = StructureSerializer
 
 
 class StructureTypeView(viewsets.ModelViewSet):
-    queryset = StructureType.objects.all()
+    queryset = StructureType.objects.get_queryset().order_by('-id')
     serializer_class = StructureTypeSerializer
 
 
 class StockView(viewsets.ModelViewSet):
-    queryset = Stock.objects.all()
+    queryset = Stock.objects.get_queryset().order_by('-id')
     serializer_class = StockSerializer
 
+
 class StockManagementView(viewsets.ModelViewSet):
-    queryset = StockManagement.objects.all()
+    queryset = StockManagement.objects.get_queryset().order_by('-id')
     serializer_class = StockManagementSerializer
+
 
 class StockApiView(APIView):
     """ Stock View using Api View """
