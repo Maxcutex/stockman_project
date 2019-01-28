@@ -23,9 +23,22 @@ def list_news_range(query_params):
 	except:
 		raise APIException(detail='Provide proper dates')
 	news = News.objects.filter(
-		news_date__gte=s_date,  news_date__lt=e_date
+		news_date__gte=s_date, news_date__lt=e_date
 	)
 
+	return news
+
+
+def list_news_by_section(query_params):
+	''' List news list for a given date range'''
+
+	try:
+		section_list = query_params.get('section_list').split(',')
+	except:
+		raise APIException(detail='Provide section list')
+	news = News.objects.filter(
+		category_news__section__structure_name__in=section_list
+	)
 
 	return news
 

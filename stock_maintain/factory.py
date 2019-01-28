@@ -3,7 +3,7 @@ from faker.providers import internet, lorem, python, company
 import factory
 
 from stock_maintain.models import NewsImage, NewsFile, News, PriceList, Quote, AsiIndex, BonusTracker, DailyMarketIndex, \
-	Dividend, OfferIpo
+	Dividend, OfferIpo, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection
 from stock_setup_info.factory import StructureFactory, StockFactory
 from stock_setup_info.models import Industry, StockManagement, StructureType, Structure, Stock
 from faker import Faker, Factory
@@ -54,7 +54,7 @@ class NewsFactory(factory.DjangoModelFactory):
 
 class NewsImageFactory(factory.DjangoModelFactory):
 	image_choice = ['size930x620', 'size450x330', 'size300x200']
-	news_id = factory.SubFactory(NewsFactory)
+	news = factory.SubFactory(NewsFactory)
 	is_main = faker.boolean()
 	# image_file = models.ImageField(blank=True, upload_to="images/news_image")
 	name = faker.text(10)
@@ -74,7 +74,7 @@ class NewsImageFactory(factory.DjangoModelFactory):
 
 class NewsFileFactory(factory.DjangoModelFactory):
 	doc_choices = ['pdf', 'word', 'excel']
-	news_id = factory.SubFactory(NewsFactory)
+	news = factory.SubFactory(NewsFactory)
 	is_main = faker.boolean()
 	# doc_file = models.FileField(blank=True, upload_to="files/news_docs")
 	name = faker.text(10)
@@ -91,7 +91,36 @@ class NewsFileFactory(factory.DjangoModelFactory):
 	class Meta:
 		model = NewsFile
 
+
+class NewsCategorySectionFactory(factory.DjangoModelFactory):
+	news = factory.SubFactory(NewsFactory)
+	section = factory.SubFactory(StructureFactory)
+
+	class Meta:
+		model = NewsCategorySection
+
+
+class AnalysisOpinionFactory(factory.DjangoModelFactory):
+	title = faker.text(100)
+	content = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
+	opinion_date = faker.date()
+	entry_date = faker.date()
+	author = faker.text(10)
+
+	class Meta:
+		model = AnalysisOpinion
+
+
+class AnalysisCategorySectionFactory(factory.DjangoModelFactory):
+	analysis = factory.SubFactory(AnalysisOpinionFactory)
+	section = factory.SubFactory(StructureFactory)
+
+	class Meta:
+		model = AnalysisCategorySection
+
 sign_x = ['-', '+']
+
+
 class PriceListFactory(factory.DjangoModelFactory):
 	sec_code = faker.text(10)
 	price_date = faker.date()

@@ -1,3 +1,4 @@
+import pdb
 from datetime import datetime, timedelta
 
 from mixer.auto import mixer
@@ -5,7 +6,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from stock_maintain.factory import NewsFactory
+from stock_maintain.factory import NewsFactory, NewsCategorySectionFactory
 from stock_maintain.models import News
 from stock_setup_info.factory import StructureFactory, StructureTypeFactory
 
@@ -22,9 +23,10 @@ class TestNewsApi(APITestCase):
 		self.main_featured_news.is_main = True
 		self.p_date = datetime(year=2014, month=11, day=15, hour=0, minute=0, second=0)
 
+
 	def test_check_featured_news_count(self):
 		"""
-		This test ensures that all the industries added in the setup method exists when we make a get request
+		This test ensures that news that are featured
 		"""
 		# hit the api endpoint
 		response = self.client.get(
@@ -34,14 +36,50 @@ class TestNewsApi(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(int(response.data['count']), featured_news_count)
 
-	def test_view_featured_news(self):
-		pass
+	def test_view_news_not_existing(self):
+		"""
+		This test ensures that proper error is shown for non existing news
+		"""
+		# hit the api endpoint
 
-	def test_view_featured_news_not_existing(self):
-		pass
+		response = self.client.get(
+			reverse("news-detail", args=[203]),
+		)
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+		message = 'Not found.'
+		self.assertEqual(response.data['detail'], message)
 
-	def test_get_news_by_section(self):
-		pass
+	def test_get_news_by_section_with_valid_data(self):
+		name_for_section = 'World'
+		news_section = StructureFactory(child_depth=2, structure_type=self.structure_type, structure_name=name_for_section)
+		news_for_section = mixer.blend('stock_maintain.models.News', stock=self.stock)
+		NewsCategorySectionFactory(news=news_for_section, section=news_section)
+
+		response = self.client.get(
+			reverse("news-list-by-section"), {'section_list': name_for_section}
+		)
+		search_array = name_for_section.split(',')
+		news_by_section = News.objects.filter(category_news__section__structure_name__in=search_array)
+		n_count = news_by_section.count()
+		pdb.set_trace()
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(len(response.data), n_count)
+
+	def test_get_news_by_section_with_invalid_data(self):
+		name_for_section = 'Life'
+		name_for_section1 = 'Industry'
+		news_section = StructureFactory(child_depth=2, structure_type=self.structure_type, structure_name=name_for_section)
+		news_for_section = mixer.blend('stock_maintain.models.News', stock=self.stock)
+		NewsCategorySectionFactory(news=news_for_section, section=news_section)
+
+		response = self.client.get(
+			reverse("news-list-by-section"), {'section_list': name_for_section1}
+		)
+		search_array = name_for_section.split(',')
+		news_by_section = News.objects.filter(category_news__section__structure_name__in=search_array)
+		n_count = news_by_section.count()
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertNotEqual(len(response.data), n_count)
 
 	def test_get_news_by_section_not_existing(self):
 		pass
@@ -59,6 +97,15 @@ class TestNewsApi(APITestCase):
 		pass
 
 	def test_create_news_with_files(self):
+		pass
+
+	def test_get_news_with_images(self):
+		pass
+
+	def test_get_news_with_files(self):
+		pass
+
+	def test_get_news_with_sections(self):
 		pass
 
 	def test_news_list_by_date(self):
