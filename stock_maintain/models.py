@@ -212,7 +212,7 @@ class AnalysisOpinion(models.Model):
 
 class AnalysisCategorySection(models.Model):
 	analysis = models.ForeignKey(
-		AnalysisOpinion, on_delete=models.CASCADE, related_name='analysis_news', null=True)
+		AnalysisOpinion, on_delete=models.CASCADE, related_name='category_analysis', null=True)
 	section = models.ForeignKey(
 		Structure, on_delete=models.CASCADE, related_name='category_analysis_structure')
 

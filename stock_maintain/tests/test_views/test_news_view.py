@@ -61,7 +61,6 @@ class TestNewsApi(APITestCase):
 		search_array = name_for_section.split(',')
 		news_by_section = News.objects.filter(category_news__section__structure_name__in=search_array)
 		n_count = news_by_section.count()
-		pdb.set_trace()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(len(response.data), n_count)
 

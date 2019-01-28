@@ -6,7 +6,8 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from stock_maintain.factory import NewsFactory, NewsCategorySectionFactory, AnalysisOpinionFactory
+from stock_maintain.factory import NewsFactory, NewsCategorySectionFactory, AnalysisOpinionFactory, \
+	AnalysisCategorySectionFactory
 from stock_maintain.models import News, AnalysisOpinion
 from stock_setup_info.factory import StructureFactory, StructureTypeFactory
 
@@ -45,97 +46,87 @@ class TestAnalysisApi(APITestCase):
 		message = 'Not found.'
 		self.assertEqual(response.data['detail'], message)
 
-	# def test_get_analysis_by_section_with_valid_data(self):
-	# 	name_for_section = 'World'
-	# 	news_section = StructureFactory(child_depth=2, structure_type=self.structure_type, structure_name=name_for_section)
-	# 	news_for_section = mixer.blend('stock_maintain.models.News', stock=self.stock)
-	# 	NewsCategorySectionFactory(news=news_for_section, section=news_section)
-	#
-	# 	response = self.client.get(
-	# 		reverse("news-list-by-section"), {'section_list': name_for_section}
-	# 	)
-	# 	search_array = name_for_section.split(',')
-	# 	news_by_section = News.objects.filter(category_news__section__structure_name__in=search_array)
-	# 	n_count = news_by_section.count()
-	# 	self.assertEqual(response.status_code, status.HTTP_200_OK)
-	# 	self.assertEqual(len(response.data), n_count)
+	def test_view_analysis_existing(self):
+		"""
+		This test ensures that proper error is shown for non existing news
+		"""
+		name_for_section = 'World'
+		analysis_section = StructureFactory(child_depth=2, structure_type=self.structure_type,
+											structure_name=name_for_section)
+		analysis_for_section = mixer.blend('stock_maintain.models.AnalysisOpinion')
+		AnalysisCategorySectionFactory(analysis=analysis_for_section, section=analysis_section)
+
+		response = self.client.get(
+			reverse("analysis-detail", args=[analysis_for_section.id]),
+		)
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+	def test_get_analysis_by_section_with_valid_data(self):
+		name_for_section = 'World'
+		analysis_section = StructureFactory(child_depth=2, structure_type=self.structure_type, structure_name=name_for_section)
+		analysis_for_section = mixer.blend('stock_maintain.models.AnalysisOpinion')
+		AnalysisCategorySectionFactory(analysis=analysis_for_section, section=analysis_section)
+
+		response = self.client.get(
+			reverse("analysis-list-by-section"), {'section_list': name_for_section}
+		)
+		search_array = name_for_section.split(',')
+		analysis_by_section = AnalysisOpinion.objects.filter(category_analysis__section__structure_name__in=search_array)
+		n_count = analysis_by_section.count()
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(len(response.data), n_count)
 
 
 
-	def test_get_news_by_section_not_existing(self):
-		pass
 
-	def test_create_featured_news(self):
-		pass
 
-	def test_create_news(self):
-		pass
+	def test_analysis_list_by_date(self):
+		"""
+		This test ensures that all analysis by date is pulled
 
-	def test_create_news_with_images(self):
-		pass
+		"""
 
-	def test_create_news_with_sections(self):
-		pass
+		# hit the api endpoint
+		response = self.client.get(
+			reverse("analysis-list"),
+			{
+				'opinion_date': self.analysis.opinion_date
+			}
+		)
+		analysis_list = AnalysisOpinion.objects.filter(opinion_date=self.analysis.opinion_date).count()
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(int(response.data['count']), analysis_list)
 
-	def test_create_news_with_files(self):
-		pass
+	def test_analysis_list_by_date_range(self):
+		"""
+		This test ensures that all analysis for a  date range is returned
+		:return:
+		"""
+		start_date = self.p_date + timedelta(days=-1)
+		end_date = self.p_date + timedelta(days=1)
+		response = self.client.get(
+			reverse("analysis-view-date-range"),
+			{
+				'start_date': start_date.strftime('%Y-%m-%d'),
+				'end_date': end_date.strftime('%Y-%m-%d'),
+			}
+		)
+		analysis_list = AnalysisOpinion.objects.filter(opinion_date__gte=start_date, opinion_date__lte=end_date).count()
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(len(response.data), analysis_list)
 
-	def test_get_news_with_images(self):
-		pass
+	def test_analysis_list_by_date_range_with_improper_dates(self):
+		"""
+		This test ensures that no improper date is sent
+		:return:
+		"""
 
-	def test_get_news_with_files(self):
-		pass
-
-	def test_get_news_with_sections(self):
-		pass
-
-	# def test_news_list_by_date(self):
-	# 	"""
-	# 			This test ensures that all news by date is pulled
-	#
-	# 	"""
-	#
-	# 	# hit the api endpoint
-	# 	response = self.client.get(
-	# 		reverse("news-list"),
-	# 		{
-	# 			'news_date': self.news.news_date
-	# 		}
-	# 	)
-	# 	news_list = News.objects.filter(news_date=self.news.news_date).count()
-	# 	self.assertEqual(response.status_code, status.HTTP_200_OK)
-	# 	self.assertEqual(int(response.data['count']), news_list)
-	#
-	# def test_news_list_by_date_range(self):
-	# 	"""
-	# 			This test ensures that all news for a  date range is returned
-	# 			:return:
-	# 			"""
-	# 	start_date = self.p_date + timedelta(days=-1)
-	# 	end_date = self.p_date + timedelta(days=1)
-	# 	response = self.client.get(
-	# 		reverse("news-view-date-range"),
-	# 		{
-	# 			'start_date': start_date.strftime('%Y-%m-%d'),
-	# 			'end_date': end_date.strftime('%Y-%m-%d'),
-	# 		}
-	# 	)
-	# 	news_list = News.objects.filter(news_date__gte=start_date, news_date__lte=end_date).count()
-	# 	self.assertEqual(response.status_code, status.HTTP_200_OK)
-	# 	self.assertEqual(len(response.data), news_list)
-	#
-	# def test_news_list_by_date_range_with_improper_dates(self):
-	# 	"""
-	# 			This test ensures that no improper date is sent
-	# 			:return:
-	# 			"""
-	#
-	# 	response = self.client.get(
-	# 		reverse("news-view-date-range"),
-	# 		{
-	# 			'start_date': '09-2019-05',
-	# 			'end_date': '987-56',
-	# 			'stock': self.stock.id,
-	# 		}
-	# 	)
-	# 	self.assertRaises(Exception, response)
+		response = self.client.get(
+			reverse("analysis-view-date-range"),
+			{
+				'start_date': '09-2019-05',
+				'end_date': '987-56',
+			}
+		)
+		self.assertRaises(Exception, response)

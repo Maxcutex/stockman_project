@@ -9,7 +9,6 @@ router.register('api/v1/Analysis', views.AnalysisView, basename='analysis')
 router.register('api/v1/PriceLists', views.PriceListView, basename='pricelist')
 router.register('api/v1/NewsImages', views.NewsImageView, basename='newsimages')
 router.register('api/v1/NewsFiles', views.NewsFileView, basename='newsfiles')
-print(router.urls)
 
 urlpatterns = [
     path('', include(router.urls)),
