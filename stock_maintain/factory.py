@@ -1,9 +1,9 @@
 from django.core.files.base import ContentFile
-from faker.providers import internet, lorem, python, company
+from faker.providers import internet, lorem, python, company, date_time
 import factory
 
 from stock_maintain.models import NewsImage, NewsFile, News, PriceList, Quote, AsiIndex, BonusTracker, DailyMarketIndex, \
-	Dividend, OfferIpo
+	Dividend, OfferIpo, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection
 from stock_setup_info.factory import StructureFactory, StockFactory
 from stock_setup_info.models import Industry, StockManagement, StructureType, Structure, Stock
 from faker import Faker, Factory
@@ -17,6 +17,7 @@ faker.add_provider(internet)
 faker.add_provider(lorem)
 faker.add_provider(python)
 faker.add_provider(company)
+faker.add_provider(date_time)
 
 
 # def get_image_choice():
@@ -40,9 +41,8 @@ def get_image_file(name='test.png', ext='png', size=(50, 50), color=(256, 0, 0))
 class NewsFactory(factory.DjangoModelFactory):
 	title = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
 	content = faker.paragraphs(nb=3, ext_word_list=None)
-	news_section = factory.SubFactory(StructureFactory)
-	news_date = faker.date()
-	entry_date = faker.date()
+	news_date = faker.date_this_decade(before_today=True, after_today=False)
+	entry_date = faker.date_this_decade(before_today=True, after_today=False)
 	stock= factory.SubFactory(StockFactory)
 	is_featured = faker.boolean()
 	has_downloadable = faker.boolean()
@@ -55,7 +55,7 @@ class NewsFactory(factory.DjangoModelFactory):
 
 class NewsImageFactory(factory.DjangoModelFactory):
 	image_choice = ['size930x620', 'size450x330', 'size300x200']
-	news_id = factory.SubFactory(NewsFactory)
+	news = factory.SubFactory(NewsFactory)
 	is_main = faker.boolean()
 	# image_file = models.ImageField(blank=True, upload_to="images/news_image")
 	name = faker.text(10)
@@ -75,7 +75,7 @@ class NewsImageFactory(factory.DjangoModelFactory):
 
 class NewsFileFactory(factory.DjangoModelFactory):
 	doc_choices = ['pdf', 'word', 'excel']
-	news_id = factory.SubFactory(NewsFactory)
+	news = factory.SubFactory(NewsFactory)
 	is_main = faker.boolean()
 	# doc_file = models.FileField(blank=True, upload_to="files/news_docs")
 	name = faker.text(10)
@@ -92,10 +92,39 @@ class NewsFileFactory(factory.DjangoModelFactory):
 	class Meta:
 		model = NewsFile
 
+
+class NewsCategorySectionFactory(factory.DjangoModelFactory):
+	news = factory.SubFactory(NewsFactory)
+	section = factory.SubFactory(StructureFactory)
+
+	class Meta:
+		model = NewsCategorySection
+
+
+class AnalysisOpinionFactory(factory.DjangoModelFactory):
+	title = faker.text(100)
+	content = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
+	opinion_date = faker.date_this_decade(before_today=True, after_today=False)
+	entry_date = faker.date_this_decade(before_today=True, after_today=False)
+	author = faker.text(10)
+
+	class Meta:
+		model = AnalysisOpinion
+
+
+class AnalysisCategorySectionFactory(factory.DjangoModelFactory):
+	analysis = factory.SubFactory(AnalysisOpinionFactory)
+	section = factory.SubFactory(StructureFactory)
+
+	class Meta:
+		model = AnalysisCategorySection
+
 sign_x = ['-', '+']
+
+
 class PriceListFactory(factory.DjangoModelFactory):
 	sec_code = faker.text(10)
-	price_date = faker.date()
+	price_date = faker.date_this_decade(before_today=True, after_today=False)
 	price_close = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	x_open = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	x_high = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
@@ -110,8 +139,8 @@ class PriceListFactory(factory.DjangoModelFactory):
 	eps = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	pe = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	rpt = faker.text(10)
-	e_time = faker.date()
-	e_date = faker.date()
+	e_time = faker.date_time_this_year(before_now=True, after_now=False, tzinfo=None)
+	e_date = faker.date_this_decade(before_today=True, after_today=False)
 	source = faker.text(10)
 	sync_flag = faker.random_number()
 	stock = factory.SubFactory(StockFactory)
@@ -133,7 +162,7 @@ class QuoteFactory(factory.DjangoModelFactory):
 
 
 class AsiIndexFactory(factory.DjangoModelFactory):
-	date = faker.date()
+	date = faker.date_this_decade(before_today=True, after_today=False)
 	price_close = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	price_open = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	price_high = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
@@ -150,14 +179,14 @@ class BonusTrackerFactory(factory.DjangoModelFactory):
 	sec_code = faker.text(10)
 	bonus_val = faker.pyint()
 	bonus_aggregate = faker.pyint()
-	date_declared = faker.date()
+	date_declared = faker.date_this_decade(before_today=True, after_today=False)
 
 	class Meta:
 		model = BonusTracker
 
 
 class DailyMarketIndexFactory(factory.DjangoModelFactory):
-	date = faker.date()
+	date = faker.date_this_decade(before_today=True, after_today=False)
 	index = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	deals = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 	volume = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
@@ -191,11 +220,11 @@ class OfferIpoFactory(factory.DjangoModelFactory):
 	exchange_code = faker.text(10)
 	offer_type = faker.sentences(nb=1, ext_word_list=of_type)
 	quarter_type = faker.sentences(nb=1, ext_word_list=of_method)
-	open_date = faker.date()
-	close_date = faker.date()
-	extended_date = faker.date()
-	proposed_listing_date = faker.date()
-	actual_listing_date = faker.date()
+	open_date = faker.date_this_decade(before_today=True, after_today=False)
+	close_date = faker.date_this_decade(before_today=True, after_today=False)
+	extended_date = faker.date_this_decade(before_today=True, after_today=False)
+	proposed_listing_date = faker.date_this_decade(before_today=True, after_today=False)
+	actual_listing_date = faker.date_this_decade(before_today=True, after_today=False)
 
 	class Meta:
 		model = OfferIpo
