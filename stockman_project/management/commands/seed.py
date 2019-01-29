@@ -7,7 +7,7 @@ from faker import Factory
 # python manage.py seed --mode=refresh
 from django.db.backends.utils import logger
 
-from stock_maintain.models import PriceList, News
+from stock_maintain.models import PriceList, News, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection
 from stock_setup_info.models import StructureType, Structure, Industry, Stock
 
 MODE_CLEAR = "clear"
@@ -38,6 +38,11 @@ def clear_data():
 	StructureType.objects.all().delete()
 	logger.info("Delete Industry instances")
 	Industry.objects.all().delete()
+	logger.info("Delete Price instances")
+	PriceList.objects.all().delete()
+	logger.info("Delete Stock instances")
+	Stock.objects.all().delete()
+
 
 
 def create_industy():
@@ -48,6 +53,8 @@ def create_industy():
 		logo=faker.text(max_nb_chars=10, ext_word_list=None)
 	)
 	industry.save()
+	logger.info("{} industry created.".format(industry))
+	return industry
 
 
 def create_structure_type():
@@ -58,6 +65,7 @@ def create_structure_type():
 		parent=None
 	)
 	structure_type.save()
+	logger.info("{} structure type created.".format(structure_type))
 	structure_type1 = StructureType(
 		structure_type_name='NEWS SECTIONS',
 		description=faker.sentence(100),
@@ -65,6 +73,7 @@ def create_structure_type():
 		parent=None
 	)
 	structure_type1.save()
+	logger.info("{} structure type created.".format(structure_type1))
 
 
 def create_structure():
@@ -140,6 +149,7 @@ def create_structure():
 		comment=faker.sentence(15)
 	)
 	structure.save()
+	logger.info("{} structures created.".format(structure))
 
 
 def create_stock():
@@ -176,6 +186,8 @@ def create_stock():
 		is_active=faker.boolean()
 	)
 	stock.save()
+	logger.info("{} stock created.".format(stock))
+	return stock
 
 
 def create_price_list():
@@ -203,6 +215,8 @@ def create_price_list():
 		stock_id=1
 	)
 	price_item.save()
+	logger.info("{} price list created.".format(price_item))
+	return price_item
 
 
 def create_news():
@@ -236,43 +250,58 @@ def create_news():
 	create_news_images(news.id)
 	create_news_section(news.id, 3)
 	create_news_section(news.id, 2)
+	logger.info("{} news created.".format(news))
+	return news
 
 
-def create_news_images():
-	pass
+def create_news_images(news_id, news_name):
+	news_images = NewsImage(
+		news=news_id,
+		is_main=faker.boolean(),
+		name=faker.text(10),
+		image_type='size300x200',
+		image_file=factory.LazyAttribute(
+			lambda _: ContentFile(
+				factory.django.ImageField()._make_data(
+					{'width': 200, 'height': 300}
+				), news_name + '.jpg'
+			)
+		)
+	)
+	news_images.save()
 
 
 def create_news_section(news_id, section_id):
-	news_section =
+	news_section = NewsCategorySection(
+		news=news_id,
+		section=section_id
+	)
+	news_section.save()
 
 
 def create_analysis():
-	create_analysis_section()
+	analysis = AnalysisOpinion(
+		title=faker.text(100),
+		content = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None),
+		opinion_date = faker.date_this_decade(before_today=True, after_today=False),
+		entry_date = faker.date_this_decade(before_today=True, after_today=False),
+		author = faker.text(10)
+	)
+	analysis.save()
+	create_analysis_section(analysis.id, 4)
 
 
-def create_analysis_section():
-	pass
+def create_analysis_section(analysis_id, section_id):
+	analysis_section = AnalysisCategorySection(
+		news=analysis_id,
+		section=section_id
+	)
+	analysis_section.save()
 
 
 def create_market_indices():
 	pass
 
-
-def create_address():
-	"""Creates an address object combining different elements from the list"""
-	logger.info("Creating address")
-	street_flats = ["#221 B", "#101 A", "#550I", "#420G", "#A13"]
-	street_localities = ["Bakers Street", "Rajori Gardens", "Park Street", "MG Road", "Indiranagar"]
-	pincodes = ["101234", "101232", "101231", "101236", "101239"]
-
-	address = Address(
-		street_flat=random.choice(street_flats),
-		street_locality=random.choice(street_localities),
-		pincode=random.choice(pincodes),
-	)
-	address.save()
-	logger.info("{} address created.".format(address))
-	return address
 
 
 def run_seed(self, mode):
