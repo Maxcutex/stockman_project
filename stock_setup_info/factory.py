@@ -9,27 +9,27 @@ faker.add_provider(lorem)
 
 
 class RecursiveClass:
-    def __init__(self, child):
-        self.child = child
+	def __init__(self, child):
+		self.child = child
 
 
 class RecursiveFactory(factory.Factory):
-    class Meta:
-        model = RecursiveClass
-        exclude = ('child_depth_temp', )
+	class Meta:
+		model = RecursiveClass
+		exclude = ('child_depth_temp',)
 
-    class Params:
-        child_depth = 10
+	class Params:
+		child_depth = 10
 
-    child_depth_temp=factory.LazyAttribute(lambda o: o.child_depth-1)
-    child = factory.Maybe(
-        factory.LazyAttribute(lambda o: o.child_depth > 0),
-        yes_declaration=factory.SubFactory(
-            'stock_setup_info.factory.RecursiveFactory',
-            child_depth=factory.SelfAttribute('..child_depth_temp'),
-        ),
-        no_declaration=None,
-    )
+	child_depth_temp = factory.LazyAttribute(lambda o: o.child_depth - 1)
+	child = factory.Maybe(
+		factory.LazyAttribute(lambda o: o.child_depth > 0),
+		yes_declaration=factory.SubFactory(
+			'stock_setup_info.factory.RecursiveFactory',
+			child_depth=factory.SelfAttribute('..child_depth_temp'),
+		),
+		no_declaration=None,
+	)
 
 
 class IndustryFactory(factory.DjangoModelFactory):
