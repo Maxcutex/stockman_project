@@ -288,7 +288,7 @@ EMAIL_USE_TLS = False
 
 # rest-auth
 # ACCOUNT_ADAPTER = 'api.adapter.DefaultAccountAdapterCustom'
-URL_FRONT = 'http://localhost:8000/'
+URL_FRONT = 'http://localhost:3000/'
 LOGIN_URL='/login/'
 # LOGIN_URL = 'http://stockman-api.herokuapp.com/api/v1/login/'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'

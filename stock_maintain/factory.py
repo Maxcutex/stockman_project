@@ -1,11 +1,10 @@
 from django.core.files.base import ContentFile
-from faker.providers import internet, lorem, python, company, date_time
+from faker.providers import internet, lorem, python, company, date_time, person
 import factory
 
 from stock_maintain.models import NewsImage, NewsFile, News, PriceList, Quote, AsiIndex, BonusTracker, DailyMarketIndex, \
-	Dividend, OfferIpo, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection
+	Dividend, OfferIpo, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection, Author
 from stock_setup_info.factory import StructureFactory, StockFactory
-from stock_setup_info.models import Industry, StockManagement, StructureType, Structure, Stock
 from faker import Faker, Factory
 
 from io import StringIO
@@ -14,6 +13,7 @@ from django.core.files.base import File
 
 faker = Factory.create()
 faker.add_provider(internet)
+faker.add_provider(person)
 faker.add_provider(lorem)
 faker.add_provider(python)
 faker.add_provider(company)
@@ -38,6 +38,26 @@ def get_image_file(name='test.png', ext='png', size=(50, 50), color=(256, 0, 0))
 	return File(file_obj, name=name)
 
 
+class AuthorFactory(factory.DjangoModelFactory):
+	image_file = factory.LazyAttribute(
+		lambda _: ContentFile(
+			factory.django.ImageField()._make_data(
+				{'width': 1024, 'height': 768}
+			), 'example.jpg'
+		)
+	)
+	first_name = faker.first_name()
+	last_name = faker.last_name()
+	description = faker.paragraphs(nb=3, ext_word_list=None)
+	twitter = '@ennytwit'
+	facebook = '@eeee'
+	linked_in = 'linkedin.com/ennytwit'
+	email = faker.email()
+
+	class Meta:
+		model = Author
+
+
 class NewsFactory(factory.DjangoModelFactory):
 	title = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
 	content = faker.paragraphs(nb=3, ext_word_list=None)
@@ -47,7 +67,7 @@ class NewsFactory(factory.DjangoModelFactory):
 	is_featured = faker.boolean()
 	has_downloadable = faker.boolean()
 	is_main = faker.boolean()
-	author = faker.name()
+	author = factory.SubFactory(AuthorFactory)
 
 	class Meta:
 		model = News
@@ -106,7 +126,7 @@ class AnalysisOpinionFactory(factory.DjangoModelFactory):
 	content = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
 	opinion_date = faker.date_this_decade(before_today=True, after_today=False)
 	entry_date = faker.date_this_decade(before_today=True, after_today=False)
-	author = faker.text(10)
+	author = factory.SubFactory(AuthorFactory)
 
 	class Meta:
 		model = AnalysisOpinion

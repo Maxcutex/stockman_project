@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 from model_utils import Choices
 
@@ -11,6 +11,11 @@ class Industry(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
 class StructureType(models.Model):
@@ -25,6 +30,11 @@ class StructureType(models.Model):
 	def __str__(self):
 		return self.structure_type_name
 
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
 
 class Structure(models.Model):
 	structure_name = models.CharField(max_length=100)
@@ -38,6 +48,11 @@ class Structure(models.Model):
 
 	def __str__(self):
 		return self.structure_name
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
 class Stock(models.Model):
@@ -77,6 +92,11 @@ class Stock(models.Model):
 	def __str__(self):
 		return self.name
 
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
 
 class ManagementType(ChoiceEnum):
 	management = "management"
@@ -93,3 +113,8 @@ class StockManagement(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
