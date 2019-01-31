@@ -7,7 +7,7 @@ from stock_maintain import models
 from .resources import PriceListResource
 from .models import (PriceList, AsiIndex, Quote,
 					 BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, NewsFile, NewsCategorySection,
-					 AnalysisOpinion, AnalysisCategorySection)
+					 AnalysisOpinion, AnalysisCategorySection, Author)
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -27,7 +27,7 @@ get_picture_preview.short_description = _("Picture Preview")
 # admin.site.register(PriceList)
 class NewsImageInline(admin.TabularInline):
 	model = NewsImage
-	extra = 0
+	extra = 1
 	fields = ["is_main", "name", "image_type", "image_file", get_picture_preview]
 	readonly_fields = ["get_edit_link", get_picture_preview]
 
@@ -50,10 +50,17 @@ class NewsFileInline(admin.TabularInline):
 	fields = ["is_main", "name", "doc_type", "doc_file"]
 
 
+class AuthorInline(admin.TabularInline):
+	model = Author
+	extra = 1
+	fields = ["is_main", "name", "doc_type", "doc_file"]
+
+
 class NewsSectionInline(admin.TabularInline):
 	model = NewsCategorySection
 	extra = 0
 	fields = ["news", "section"]
+
 
 @admin.register(PriceList)
 class PriceListAdmin(ImportExportModelAdmin):
@@ -85,10 +92,15 @@ class DividendAdmin(ImportExportModelAdmin):
 	pass
 
 
+@admin.register(Author)
+class AuthorAdmin(ImportExportModelAdmin):
+	pass
+
+
 @admin.register(News)
 class NewsAdmin(ImportExportModelAdmin):
 	model = models.News
-	inlines = [NewsImageInline, NewsFileInline, NewsSectionInline]
+	inlines = [NewsImageInline, NewsFileInline, NewsSectionInline, AuthorInline]
 	list_display = ('excerpt',)
 
 	def excerpt(self, obj):
@@ -115,4 +127,3 @@ class AnalysisOpinionSectionInline(admin.TabularInline):
 class AnalysisOpinionAdmin(ImportExportModelAdmin):
 	model = models.AnalysisOpinion
 	inlines = [AnalysisOpinionSectionInline]
-
