@@ -50,12 +50,6 @@ class NewsFileInline(admin.TabularInline):
 	fields = ["is_main", "name", "doc_type", "doc_file"]
 
 
-class AuthorInline(admin.TabularInline):
-	model = Author
-	extra = 1
-	fields = ["is_main", "name", "doc_type", "doc_file"]
-
-
 class NewsSectionInline(admin.TabularInline):
 	model = NewsCategorySection
 	extra = 0
@@ -100,7 +94,7 @@ class AuthorAdmin(ImportExportModelAdmin):
 @admin.register(News)
 class NewsAdmin(ImportExportModelAdmin):
 	model = models.News
-	inlines = [NewsImageInline, NewsFileInline, NewsSectionInline, AuthorInline]
+	inlines = [NewsImageInline, NewsFileInline, NewsSectionInline]
 	list_display = ('excerpt',)
 
 	def excerpt(self, obj):
