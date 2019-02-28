@@ -122,7 +122,7 @@ class Dividend(models.Model):
 			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
-class Author(models.Model):
+class SiteAuthor(models.Model):
 	image_file = models.ImageField(blank=True, upload_to="images/authors_image")
 	first_name = models.CharField(max_length=120)
 	last_name = models.CharField(max_length=120)
@@ -148,7 +148,7 @@ class News(models.Model):
 	has_downloadable = models.BooleanField(default=False)
 	is_main = models.BooleanField(default=False)
 	author = models.ForeignKey(
-		Author, on_delete=models.CASCADE, related_name='news_author', null=True, blank=True)
+		SiteAuthor, on_delete=models.CASCADE, related_name='news_author', null=True, blank=True)
 
 	def get_summary(self, char):
 		return self.content[:char]
@@ -160,6 +160,24 @@ class News(models.Model):
 	def truncate(cls):
 		with connection.cursor() as cursor:
 			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+	@property
+	def stock_indexing(self):
+		"""Stock for indexing.
+
+		Used in Elasticsearch indexing.
+		"""
+		if self.stock is not None:
+			return self.stock.name
+
+	@property
+	def author_indexing(self):
+		"""Publisher for indexing.
+
+		Used in Elasticsearch indexing.
+		"""
+		if self.author is not None:
+			return self.author.first_name + ' ' + self.author.last_name
 
 
 class NewsImage(models.Model):
@@ -251,7 +269,7 @@ class AnalysisOpinion(models.Model):
 	opinion_date = models.DateField()
 	entry_date = models.DateField()
 	author = models.ForeignKey(
-		Author, on_delete=models.CASCADE, related_name='analysis_author', null=True)
+		SiteAuthor, on_delete=models.CASCADE, related_name='analysis_author', null=True)
 
 	@classmethod
 	def truncate(cls):

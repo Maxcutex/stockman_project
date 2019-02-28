@@ -14,7 +14,7 @@ from faker import Factory
 from django.db.backends.utils import logger
 
 from stock_maintain.models import PriceList, News, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection, \
-	NewsImage, AnalysisImage
+	NewsImage, AnalysisImage, Author
 from stock_setup_info.models import StructureType, Structure, Industry, Stock
 
 MODE_CLEAR = "clear"
@@ -248,6 +248,16 @@ def create_price_list(stock):
 
 
 def create_news(stock, section, section2):
+	author = Author(
+		image_file=get_image_file(),
+		first_name=faker.first_name(),
+		last_name=faker.last_name(),
+		description=faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None),
+		twitter=faker.name(),
+		facebook=faker.name(),
+		linked_in=faker.name(),
+		email=faker.name(),
+	)
 	news = News(
 		title=faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None),
 		content=faker.paragraphs(nb=3, ext_word_list=None),
@@ -257,7 +267,7 @@ def create_news(stock, section, section2):
 		is_featured=faker.boolean(),
 		has_downloadable=faker.boolean(),
 		is_main=faker.boolean(),
-		author=faker.name(),
+		author=author,
 	)
 	news.save()
 	create_news_images(news)
@@ -272,7 +282,7 @@ def create_news(stock, section, section2):
 		is_featured=faker.boolean(),
 		has_downloadable=faker.boolean(),
 		is_main=faker.boolean(),
-		author=faker.name(),
+		author=author,
 	)
 	news1.save()
 	create_news_images(news1)
@@ -322,8 +332,8 @@ def create_analysis_section(analysis, section):
 	)
 	analysis_section.save()
 
-def create_analysis_images(analysis):
 
+def create_analysis_images(analysis):
 	analysis_images = AnalysisImage(
 		analysis=analysis,
 		is_main=faker.boolean(),
@@ -332,6 +342,7 @@ def create_analysis_images(analysis):
 		image_file=get_image_file()
 	)
 	analysis_images.save()
+
 
 def create_market_indices():
 	pass

@@ -7,7 +7,7 @@ from stock_maintain import models
 from .resources import PriceListResource
 from .models import (PriceList, AsiIndex, Quote,
 					 BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, NewsFile, NewsCategorySection,
-					 AnalysisOpinion, AnalysisCategorySection, Author)
+					 AnalysisOpinion, AnalysisCategorySection, SiteAuthor)
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -86,8 +86,8 @@ class DividendAdmin(ImportExportModelAdmin):
 	pass
 
 
-@admin.register(Author)
-class AuthorAdmin(ImportExportModelAdmin):
+@admin.register(SiteAuthor)
+class SiteAuthorAdmin(ImportExportModelAdmin):
 	pass
 
 
