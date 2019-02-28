@@ -11,7 +11,7 @@ DEBUG = True
 # 	'--with-coverage',
 # 	'--cover-package=stockman_project, stock_setup_info, stock_profile_mgt',
 # ]
-DATABASE_URL = os.path.join(BASE_DIR, 'db.sqlite3')
+#DATABASE_URL = os.path.join(BASE_DIR, 'db.sqlite3')
 ALLOWED_HOSTS = ['*']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
