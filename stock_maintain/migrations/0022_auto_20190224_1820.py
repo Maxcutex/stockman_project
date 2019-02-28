@@ -4,7 +4,7 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-    atomic = False
+    atomic = False,
 
     dependencies = [
         ('stock_maintain', '0021_auto_20190224_1808'),
