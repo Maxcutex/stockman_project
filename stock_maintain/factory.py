@@ -3,7 +3,7 @@ from faker.providers import internet, lorem, python, company, date_time, person
 import factory
 
 from stock_maintain.models import NewsImage, NewsFile, News, PriceList, Quote, AsiIndex, BonusTracker, DailyMarketIndex, \
-	Dividend, OfferIpo, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection, Author
+	Dividend, OfferIpo, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection, SiteAuthor
 from stock_setup_info.factory import StructureFactory, StockFactory
 from faker import Faker, Factory
 
@@ -38,7 +38,7 @@ def get_image_file(name='test.png', ext='png', size=(50, 50), color=(256, 0, 0))
 	return File(file_obj, name=name)
 
 
-class AuthorFactory(factory.DjangoModelFactory):
+class SiteAuthorFactory(factory.DjangoModelFactory):
 	image_file = factory.LazyAttribute(
 		lambda _: ContentFile(
 			factory.django.ImageField()._make_data(
@@ -55,7 +55,7 @@ class AuthorFactory(factory.DjangoModelFactory):
 	email = faker.email()
 
 	class Meta:
-		model = Author
+		model = SiteAuthor
 
 
 class NewsFactory(factory.DjangoModelFactory):
@@ -67,7 +67,7 @@ class NewsFactory(factory.DjangoModelFactory):
 	is_featured = faker.boolean()
 	has_downloadable = faker.boolean()
 	is_main = faker.boolean()
-	author = factory.SubFactory(AuthorFactory)
+	author = factory.SubFactory(SiteAuthorFactory)
 
 	class Meta:
 		model = News
@@ -126,7 +126,7 @@ class AnalysisOpinionFactory(factory.DjangoModelFactory):
 	content = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
 	opinion_date = faker.date_this_decade(before_today=True, after_today=False)
 	entry_date = faker.date_this_decade(before_today=True, after_today=False)
-	author = factory.SubFactory(AuthorFactory)
+	author = factory.SubFactory(SiteAuthorFactory)
 
 	class Meta:
 		model = AnalysisOpinion
