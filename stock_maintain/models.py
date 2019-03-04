@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 from stock_setup_info.models import Stock, Structure
 from model_utils import Choices
@@ -33,10 +33,13 @@ class PriceList(models.Model):
 	stock = models.ForeignKey(
 		Stock, on_delete=models.CASCADE, related_name='price_stock', null=True)
 
-
-
 	def __str__(self):
 		return self.sec_code
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
 class Quote(models.Model):
@@ -113,6 +116,25 @@ class Dividend(models.Model):
 	def __str__(self):
 		return self.name
 
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+class SiteAuthor(models.Model):
+	image_file = models.ImageField(blank=True, upload_to="images/authors_image")
+	first_name = models.CharField(max_length=120)
+	last_name = models.CharField(max_length=120)
+	description = RichTextUploadingField()
+	twitter = models.CharField(max_length=150)
+	facebook = models.CharField(max_length=150)
+	linked_in = models.CharField(max_length=150)
+	email = models.CharField(max_length=250, null=True, blank=True)
+
+	def __str__(self):
+		return self.name
+
 
 class News(models.Model):
 	title = models.CharField(max_length=300)
@@ -125,13 +147,37 @@ class News(models.Model):
 	is_featured = models.BooleanField()
 	has_downloadable = models.BooleanField(default=False)
 	is_main = models.BooleanField(default=False)
-	author = models.CharField(max_length=100, null=True)
+	author = models.ForeignKey(
+		SiteAuthor, on_delete=models.CASCADE, related_name='news_author', null=True, blank=True)
 
 	def get_summary(self, char):
 		return self.content[:char]
 
 	def __str__(self):
 		return self.title
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+	@property
+	def stock_indexing(self):
+		"""Stock for indexing.
+
+		Used in Elasticsearch indexing.
+		"""
+		if self.stock is not None:
+			return self.stock.name
+
+	@property
+	def author_indexing(self):
+		"""Publisher for indexing.
+
+		Used in Elasticsearch indexing.
+		"""
+		if self.author is not None:
+			return self.author.first_name + ' ' + self.author.last_name
 
 
 class NewsImage(models.Model):
@@ -147,6 +193,11 @@ class NewsImage(models.Model):
 	def __str__(self):
 		return self.name
 
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
 
 class NewsFile(models.Model):
 	doc_choices = Choices('pdf', 'word', 'excel')
@@ -160,6 +211,11 @@ class NewsFile(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
 class OfferType(ChoiceEnum):
@@ -201,13 +257,24 @@ class NewsCategorySection(models.Model):
 	section = models.ForeignKey(
 		Structure, on_delete=models.CASCADE, related_name='category_news_structure')
 
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
 
 class AnalysisOpinion(models.Model):
 	title = models.CharField(max_length=300)
 	content = RichTextUploadingField()
 	opinion_date = models.DateField()
 	entry_date = models.DateField()
-	author = models.CharField(max_length=100, null=True)
+	author = models.ForeignKey(
+		SiteAuthor, on_delete=models.CASCADE, related_name='analysis_author', null=True)
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
 class AnalysisCategorySection(models.Model):
@@ -216,3 +283,26 @@ class AnalysisCategorySection(models.Model):
 	section = models.ForeignKey(
 		Structure, on_delete=models.CASCADE, related_name='category_analysis_structure')
 
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+class AnalysisImage(models.Model):
+	image_choice = Choices('size930x620', 'size450x330', 'size300x200')
+	analysis = models.ForeignKey(
+		AnalysisOpinion, on_delete=models.CASCADE, related_name='visual_analysis', null=True)
+	is_main = models.BooleanField()
+	image_file = models.ImageField(blank=True, upload_to="images/analysis_image")
+	name = models.CharField(max_length=100)
+	image_type = models.CharField(
+		choices=image_choice, default=image_choice.size930x620, max_length=30)
+
+	def __str__(self):
+		return self.name
+
+	@classmethod
+	def truncate(cls):
+		with connection.cursor() as cursor:
+			cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))

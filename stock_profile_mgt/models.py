@@ -60,3 +60,4 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 	def __str__(self):
 		""" For converting object to a string """
 		return self.email
+

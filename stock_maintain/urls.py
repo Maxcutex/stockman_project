@@ -5,6 +5,7 @@ from rest_framework.routers import SimpleRouter
 router = SimpleRouter()
 
 router.register('api/v1/News', views.NewsView, basename='news')
+router.register('api/v1/Authors', views.SiteAuthorView, basename='author')
 router.register('api/v1/Analysis', views.AnalysisView, basename='analysis')
 router.register('api/v1/PriceLists', views.PriceListView, basename='pricelist')
 router.register('api/v1/NewsImages', views.NewsImageView, basename='newsimages')

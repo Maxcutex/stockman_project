@@ -8,8 +8,8 @@ from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 from stockman_project.permissions import IsAdminOrReadOnly
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
-	AnalysisOpinionSerializer
-from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion
+	AnalysisOpinionSerializer, SiteAuthorSerializer
+from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor
 import stock_maintain.services as stock_maintain_services
 # Create your views here.
 from tablib import Dataset
@@ -18,7 +18,7 @@ from tablib import Dataset
 class AnalysisView(viewsets.ModelViewSet):
 	queryset = AnalysisOpinion.objects.get_queryset().order_by('-id')
 	serializer_class = AnalysisOpinionSerializer
-	filter_fields = ('title',  'opinion_date')
+	filter_fields = ('title', 'opinion_date')
 
 	@decorators.action(methods=['get'], detail=False, url_path='view-date-range')
 	def view_date_range(self, request, *args, **kwargs):
@@ -51,10 +51,15 @@ class AnalysisView(viewsets.ModelViewSet):
 		return Response(serializer.data)
 
 
+class SiteAuthorView(viewsets.ModelViewSet):
+	queryset = SiteAuthor.objects.get_queryset().order_by('-id')
+	serializer_class = SiteAuthorSerializer
+
+
 class NewsView(viewsets.ModelViewSet):
 	queryset = News.objects.get_queryset().order_by('-id')
 	serializer_class = NewsSerializer
-	filter_fields = ('is_featured', 'stock_id',  'news_date', 'sec_code')
+	filter_fields = ('is_featured', 'stock_id', 'news_date', 'sec_code')
 
 	@decorators.action(methods=['get'], detail=False, url_path='view-date-range')
 	def view_date_range(self, request, *args, **kwargs):

@@ -53,6 +53,7 @@ class StockManagementSerializer(serializers.ModelSerializer):
 class StockSerializer(serializers.ModelSerializer):
     list_date = serializers.DateField(input_formats=[('%mm-%dd-%yyyy', 'iso-8601')])
     regis_close = serializers.DateField(input_formats=[('%Y-%m-%d', 'iso-8601')])
+    filter_fields = ('description', 'stock_code', 'name')
 
     class Meta:
         model = Stock

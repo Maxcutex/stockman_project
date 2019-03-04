@@ -6,8 +6,8 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from stock_maintain.factory import NewsFactory, PriceListFactory
-from stock_maintain.models import News, PriceList
+from stock_maintain.factory import PriceListFactory
+from stock_maintain.models import  PriceList
 from stock_setup_info.factory import StructureFactory, StructureTypeFactory, StockFactory
 
 

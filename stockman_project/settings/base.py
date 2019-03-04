@@ -14,11 +14,16 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
+from pathlib import Path
+
 from decouple import config
 import dj_database_url
 
+CHECK_DIR = Path(__file__).parent.parent.parent
+# BASE_DIR = Path(__file__).parent.parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -27,7 +32,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = '21)^n6=5y$ams&oyqlumbhbaqthx9y+)p=9_&f30tgb-$uibhu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
@@ -43,7 +48,7 @@ INSTALLED_APPS = [
 	'rest_framework',
 	'rest_framework.authtoken',
 	'stock_setup_info',
-	'stock_profile_mgt', 'stock_maintain', 'django_filters',
+	'stock_profile_mgt', 'stock_maintain', 'django_filters', 'search_indexes',
 	'import_export', 'corsheaders', 'ckeditor', 'ckeditor_uploader',
 	'rest_auth',
 	'rest_auth.registration',
@@ -51,77 +56,37 @@ INSTALLED_APPS = [
 	'allauth',
 	'allauth.account',
 	'allauth.socialaccount',
-	'allauth.socialaccount.providers.agave',
 	'allauth.socialaccount.providers.amazon',
-	'allauth.socialaccount.providers.angellist',
-	'allauth.socialaccount.providers.asana',
 	'allauth.socialaccount.providers.auth0',
-	'allauth.socialaccount.providers.authentiq',
 	'allauth.socialaccount.providers.baidu',
 	'allauth.socialaccount.providers.basecamp',
 	'allauth.socialaccount.providers.bitbucket',
-	'allauth.socialaccount.providers.bitbucket_oauth2',
-	'allauth.socialaccount.providers.bitly',
-	'allauth.socialaccount.providers.cern',
-	'allauth.socialaccount.providers.coinbase',
-	'allauth.socialaccount.providers.dataporten',
-	'allauth.socialaccount.providers.daum',
 	'allauth.socialaccount.providers.digitalocean',
-	'allauth.socialaccount.providers.discord',
-	'allauth.socialaccount.providers.disqus',
-	'allauth.socialaccount.providers.douban',
-	'allauth.socialaccount.providers.draugiem',
 	'allauth.socialaccount.providers.dropbox',
-	'allauth.socialaccount.providers.dwolla',
-	'allauth.socialaccount.providers.edmodo',
-	'allauth.socialaccount.providers.eveonline',
-	'allauth.socialaccount.providers.evernote',
 	'allauth.socialaccount.providers.facebook',
-	'allauth.socialaccount.providers.feedly',
-	'allauth.socialaccount.providers.fivehundredpx',
 	'allauth.socialaccount.providers.flickr',
-	'allauth.socialaccount.providers.foursquare',
-	'allauth.socialaccount.providers.fxa',
 	'allauth.socialaccount.providers.github',
 	'allauth.socialaccount.providers.gitlab',
 	'allauth.socialaccount.providers.google',
-	'allauth.socialaccount.providers.hubic',
 	'allauth.socialaccount.providers.instagram',
-	'allauth.socialaccount.providers.kakao',
-	'allauth.socialaccount.providers.line',
 	'allauth.socialaccount.providers.linkedin',
 	'allauth.socialaccount.providers.linkedin_oauth2',
 	'allauth.socialaccount.providers.mailru',
 	'allauth.socialaccount.providers.mailchimp',
-	'allauth.socialaccount.providers.meetup',
-	'allauth.socialaccount.providers.naver',
-	'allauth.socialaccount.providers.odnoklassniki',
 	'allauth.socialaccount.providers.openid',
-	'allauth.socialaccount.providers.orcid',
 	'allauth.socialaccount.providers.paypal',
-	'allauth.socialaccount.providers.persona',
 	'allauth.socialaccount.providers.pinterest',
 	'allauth.socialaccount.providers.reddit',
-	'allauth.socialaccount.providers.robinhood',
 	'allauth.socialaccount.providers.shopify',
 	'allauth.socialaccount.providers.slack',
-	'allauth.socialaccount.providers.soundcloud',
 	'allauth.socialaccount.providers.spotify',
 	'allauth.socialaccount.providers.stackexchange',
-	'allauth.socialaccount.providers.stripe',
-	'allauth.socialaccount.providers.trello',
 	'allauth.socialaccount.providers.tumblr',
-	'allauth.socialaccount.providers.twentythreeandme',
-	'allauth.socialaccount.providers.twitch',
 	'allauth.socialaccount.providers.twitter',
-	'allauth.socialaccount.providers.untappd',
-	'allauth.socialaccount.providers.vimeo',
-	'allauth.socialaccount.providers.vimeo_oauth2',
-	'allauth.socialaccount.providers.vk',
-	'allauth.socialaccount.providers.weibo',
-	'allauth.socialaccount.providers.weixin',
-	'allauth.socialaccount.providers.windowslive',
-	'allauth.socialaccount.providers.xing',
+	# Django Elasticsearch integration
+	'django_elasticsearch_dsl',
+	# Django REST framework Elasticsearch integration (this package)
+	'django_elasticsearch_dsl_drf',
 
 ]
 SITE_ID = 1
@@ -136,6 +101,18 @@ MIDDLEWARE = [
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+
+ELASTICSEARCH_DSL = {
+	'default': {
+		'hosts': 'localhost:9200'
+	},
+}
+
+# Name of the Elasticsearch index
+ELASTICSEARCH_INDEX_NAMES = {
+	'search_indexes.documents.news': 'news',
+	'search_indexes.documents.stock': 'stock',
+}
 
 ROOT_URLCONF = 'stockman_project.urls'
 
@@ -245,7 +222,10 @@ CORS_ALLOW_HEADERS = (
 	'x-requested-with',
 )
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '..' + os.path.join(CHECK_DIR, 'media')
+print('Base Directory:=>', BASE_DIR)
+print('Project Directory:=>', PROJECT_ROOT)
+print('Check Directory:=>', CHECK_DIR)
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'stock_profile_mgt.UserProfile'
@@ -282,14 +262,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = '127.0.0.1'
 EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = ''
-EMAIL_HOST_PASSWORD =''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 1025
 EMAIL_USE_TLS = False
 
 # rest-auth
 # ACCOUNT_ADAPTER = 'api.adapter.DefaultAccountAdapterCustom'
-URL_FRONT = 'http://localhost:8000/'
-LOGIN_URL='/login/'
+URL_FRONT = 'http://localhost:3000/'
+LOGIN_URL = 'http:///fronten.com/'
 # LOGIN_URL = 'http://stockman-api.herokuapp.com/api/v1/login/'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
