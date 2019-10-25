@@ -34,7 +34,7 @@ export $(cat .env)
 
 Execute the following code to install all the application dependencies.
 ```
-python install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Execute the following code to migrate all data tables/object
