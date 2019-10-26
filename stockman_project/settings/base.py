@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'import_export', 'corsheaders', 'ckeditor', 'ckeditor_uploader',
     'rest_auth',
     'rest_auth.registration',
-    'djan# go.contrib.sites',
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
