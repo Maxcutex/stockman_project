@@ -11,6 +11,7 @@ NOSE_ARGS = [
     '--cover-package=stockman_project, stock_setup_info, stock_profile_mgt',
 ]
 
+
 # configure your database
 DATABASES = {
     'default': {
