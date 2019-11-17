@@ -1,6 +1,6 @@
 from django.core.mail import send_mail
 from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, decorators
 from rest_framework.permissions import AllowAny
 
 from .models import (Industry, Structure, StructureType, Stock, StockManagement)
@@ -11,7 +11,7 @@ from .serializers import (
 from rest_framework import mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+import stock_setup_info.services as stock_setup_info_services
 
 # class IndustryView(viewsets.ModelViewSet):
 class IndustryView(mixins.CreateModelMixin,
@@ -38,6 +38,36 @@ class StructureTypeView(viewsets.ModelViewSet):
 class StockView(viewsets.ModelViewSet):
     queryset = Stock.objects.get_queryset().order_by('-id')
     serializer_class = StockSerializer
+
+    @decorators.action(methods=['get'], detail=False, url_path='by-code')
+    def by_code(self, request, *args, **kwargs):
+        stock = stock_setup_info_services.get_stock_by_code(
+            query_params=request.query_params,
+        )
+        paginate = kwargs.get('paginate')
+        if paginate is not None:
+            page = self.paginate_queryset(stock)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = StockSerializer(stock, many=True)
+        return Response(serializer.data)
+
+    @decorators.action(methods=['get'], detail=False, url_path='search-like-name')
+    def search_like_name(self, request, *args, **kwargs):
+        stocks = stock_setup_info_services.stock_search_like_name(
+            query_params=request.query_params,
+        )
+        paginate = kwargs.get('paginate')
+        if paginate is not None:
+            page = self.paginate_queryset(stocks)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = StockSerializer(stocks, many=True)
+        return Response(serializer.data)
 
 
 class StockManagementView(viewsets.ModelViewSet):

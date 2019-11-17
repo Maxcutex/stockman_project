@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_swagger',
     'rest_framework.authtoken',
     'stock_setup_info',
     'stock_profile_mgt', 'stock_maintain', 'django_filters', 'search_indexes',
