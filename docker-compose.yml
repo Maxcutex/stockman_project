@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:10.1-alpine
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  server:
+    build:
+      context: .
+      dockerfile: .docker/server/Dockerfile
+    command: "python manage.py runserver 0.0.0.0:8000"
+    container_name: stockman_api
+    ports:
+      - "8080:8000"
+    depends_on:
+      - db
+
+
+volumes:
+  postgres_data:
