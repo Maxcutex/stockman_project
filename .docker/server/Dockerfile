@@ -10,6 +10,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apt-get update && apt-get install -y netcat
+RUN apt-get update && apt-get install -y dos2unix
 
 # install dependencies
 RUN pip install --upgrade pip
@@ -21,6 +22,8 @@ COPY ./scripts/entrypoint.sh /usr/src/app/scripts/entrypoint.sh
 
 # copy project
 COPY . /usr/src/app/
+
+RUN dos2unix /usr/src/app/scripts/entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
 
 # run entrypoint.sh
 ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
