@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: .docker/server/Dockerfile
-    command: "python manage.py runserver 0.0.0.0:8000"
+    command: "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     container_name: stockman_api
     ports:
       - "8080:8000"
