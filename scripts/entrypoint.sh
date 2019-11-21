@@ -1,13 +1,9 @@
-#!/bin/sh
-​
+#!/bin/bash
 echo "Waiting for postgres..."
-​
-while ! nc -z db 5432; do
+while [[ ! $(nc -z db 5435) ]]; do
+  echo "delaying ..."
   sleep 0.1
 done
-​
 echo "PostgreSQL started"
-​
-python manage.py migrate --noinput
-​
+python manage.py migrate
 exec "$@"
