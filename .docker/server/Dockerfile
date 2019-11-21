@@ -24,9 +24,9 @@ COPY ./scripts/entrypoint.sh /usr/src/app/scripts/entrypoint.sh
 COPY . /usr/src/app/
 
 RUN dos2unix /usr/src/app/scripts/entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
-
+#RUN ["chmod", "+x", "/usr/src/app/scripts/entrypoint.sh"]
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
+#ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
 #
 ## copy entrypoint.sh
 #COPY scripts/entrypoint.sh /stockman_api/scripts/entrypoint.sh
