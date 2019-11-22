@@ -18,7 +18,8 @@ from pathlib import Path
 
 #from decouple import config
 #import dj_database_url
-
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 CHECK_DIR = Path(__file__).parent.parent.parent
 # BASE_DIR = Path(__file__).parent.parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
