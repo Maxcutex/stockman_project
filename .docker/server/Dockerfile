@@ -17,16 +17,16 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
-# copy entrypoint.sh
-COPY ./scripts/entrypoint.sh /usr/src/app/scripts/entrypoint.sh
+## copy entrypoint.sh
+#COPY ./scripts/entrypoint.sh /usr/src/app/scripts/entrypoint.sh
 
 # copy project
-COPY . /usr/src/app/
+COPY ./ ./
 
-RUN dos2unix /usr/src/app/scripts/entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
-RUN ["chmod", "+x", "/usr/src/app/scripts/entrypoint.sh"]
-# run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
+#RUN dos2unix /usr/src/app/scripts/entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
+#RUN ["chmod", "+x", "/usr/src/app/scripts/entrypoint.sh"]
+## run entrypoint.sh
+#ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
 #
 ## copy entrypoint.sh
 #COPY scripts/entrypoint.sh /stockman_api/scripts/entrypoint.sh

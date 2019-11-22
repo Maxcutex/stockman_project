@@ -1,10 +1,13 @@
 version: '3'
 
 services:
+  redis:
+    image: "redis:latest"
+    command: redis-server
   db:
     image: postgres:10.1-alpine
     ports:
-      - 5435:5432
+      - 5432:5432
     environment:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -16,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: .docker/server/Dockerfile
-    command: "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py runserver 127.0.0.1:8000"
     container_name: stockman_api
     ports:
       - "8080:8000"
