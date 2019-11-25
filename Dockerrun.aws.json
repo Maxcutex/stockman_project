@@ -1,0 +1,28 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+
+        {
+            "name": "server",
+            "image": "maxcutex/stockman-api",
+            "hostname": "api",
+            "essential": false,
+            "memory": 128
+        },
+
+        {
+            "name": "nginx",
+            "image": "maxcutex/stockman-nginx",
+            "hostname": "nginx",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "links": ["server"],
+            "memory": 128
+        }
+    ]
+}

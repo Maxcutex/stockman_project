@@ -1,12 +1,12 @@
 branch-defaults:
   master:
-    environment: Stockmanapi-env
+    environment: Stockmanapp-env
     group_suffix: null
 global:
-  application_name: stockmanapi
+  application_name: stockmanapp
   branch: null
   default_ec2_keyname: null
-  default_platform: Docker 18.06.1-ce
+  default_platform: Multi-container Docker 18.09.9-ce (Generic)
   default_region: us-east-2
   include_git_submodules: true
   instance_profile: null
