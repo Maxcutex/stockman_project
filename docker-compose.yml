@@ -21,6 +21,8 @@ services:
       dockerfile: .docker/server/Dockerfile
     command: bash -c "python manage.py migrate && python manage.py runserver 127.0.0.1:8000"
     container_name: stockman_api
+    volumes:
+      - .:/usr/src/app/
     ports:
       - "8080:8000"
     depends_on:
