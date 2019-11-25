@@ -21,7 +21,7 @@ RUN pip install -r requirements.txt
 #COPY ./scripts/entrypoint.sh /usr/src/app/scripts/entrypoint.sh
 
 # copy project
-COPY ./ ./
+COPY .docker/server ./
 
 #RUN dos2unix /usr/src/app/scripts/entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
 #RUN ["chmod", "+x", "/usr/src/app/scripts/entrypoint.sh"]

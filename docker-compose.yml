@@ -18,7 +18,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: .docker/server/Dockerfile
+      dockerfile: Dockerfile.dev
     command: bash -c "python manage.py migrate && python manage.py runserver 127.0.0.1:8000"
     container_name: stockman_api
     volumes:
