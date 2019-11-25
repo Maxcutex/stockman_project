@@ -1,17 +1,17 @@
-branch-defaults:
-  master:
-    environment: Stockmanapp-env
-    group_suffix: null
-global:
-  application_name: stockmanapp
-  branch: null
-  default_ec2_keyname: null
-  default_platform: Multi-container Docker 18.09.9-ce (Generic)
-  default_region: us-east-2
-  include_git_submodules: true
-  instance_profile: null
-  platform_name: null
-  platform_version: null
-  repository: null
-  sc: git
-  workspace_type: Application
+#branch-defaults:
+#  master:
+#    environment: Stockmanapp-env
+#    group_suffix: null
+#global:
+#  application_name: stockmanapp
+#  branch: null
+#  default_ec2_keyname: null
+#  default_platform: Multi-container Docker 18.09.9-ce (Generic)
+#  default_region: us-east-2
+#  include_git_submodules: true
+#  instance_profile: null
+#  platform_name: null
+#  platform_version: null
+#  repository: null
+#  sc: git
+#  workspace_type: Application

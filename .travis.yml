@@ -1,0 +1,23 @@
+language: python
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t stockman-api -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true stockman-api python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt && python manage.py test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "stockmanapi"
+  env: "Stockmanapi-env"
+  bucket_name: "elasticbeanstalk-us-east-2-606297809594"
+  bucket_path: "stockmanapi"
+  on:
+    branch: development
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
