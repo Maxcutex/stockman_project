@@ -35,3 +35,5 @@ COPY . .
 #
 #ENTRYPOINT ["/stockman_api/scripts/entrypoint.sh"]
 EXPOSE 8080
+#RUN python manage.py migrate
+CMD ["python", "manage.py", "runserver"]
