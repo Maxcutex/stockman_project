@@ -79,32 +79,32 @@ jobs:
 
   deploy:
     machine: true
-      steps:
-        - checkout
-        - run:
-            name: build images
-            command: |
-              docker build -t maxcutex/stockman-api .
-              docker build -t maxcutex/stockman-nginx ./nginx
-        - run:
-            name: docker login
-            command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-        - run:
-            name: push to docker hub
-            command: |
-              docker push maxcutex/stockman-api
-              docker push maxcutex/stockman-nginx
-        - run:
-            name: Installing deployment dependencies
-            working_directory: /
-            command: |
-              sudo apt-get -y -qq update
-              sudo apt-get install python-pip python-dev build-essential
-              sudo pip install --upgrade setuptools
-              sudo pip install awsebcli --upgrade
-        - run:
-            name: Deploying
-            command: eb deploy Stockmanapp-env
+    steps:
+      - checkout
+      - run:
+          name: build images
+          command: |
+            docker build -t maxcutex/stockman-api .
+            docker build -t maxcutex/stockman-nginx ./nginx
+      - run:
+          name: docker login
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+      - run:
+          name: push to docker hub
+          command: |
+            docker push maxcutex/stockman-api
+            docker push maxcutex/stockman-nginx
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            sudo pip install --upgrade setuptools
+            sudo pip install awsebcli --upgrade
+      - run:
+          name: Deploying
+          command: eb deploy Stockmanapp-env
 
 
 workflows:
