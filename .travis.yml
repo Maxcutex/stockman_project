@@ -9,7 +9,7 @@ before_install:
 
 script:
   - docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.4.2
-  - docker run -e CI=true stockman-api  /bin/bash -c "export APP_ENV=testing && python manage.py test"
+  - docker run -e CI=true stockman-api  /bin/bash -c "export APP_ENV=testing && python manage.py migrate && python manage.py test"
 
 deploy:
   provider: elasticbeanstalk
