@@ -10,11 +10,11 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apt-get update && apt-get install -y netcat
-RUN apt-get update && apt-get install -y dos2unix
+#RUN apt-get update && apt-get install -y dos2unix
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/app/requirements.txt
+COPY ./requirements.txt /usr/src/app/stockman_project/requirements.txt
 RUN pip install -r requirements.txt
 
 ## copy entrypoint.sh
