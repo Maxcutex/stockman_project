@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-
+import platform
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
 from pathlib import Path
@@ -24,6 +24,7 @@ CHECK_DIR = Path(__file__).parent.parent.parent
 # BASE_DIR = Path(__file__).parent.parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 # PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 #print(os.environ, "<=== OS")
 # Quick-start development settings - unsuitable for production
@@ -139,12 +140,12 @@ WSGI_APPLICATION = 'stockman_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
