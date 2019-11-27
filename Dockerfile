@@ -29,12 +29,13 @@ COPY . .
 #ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
 #
 ## copy entrypoint.sh
-#COPY scripts/entrypoint.sh /stockman_api/scripts/entrypoint.sh
+COPY scripts/entrypoint.sh /usr/src/app/scripts/entrypoint.sh
 ##
-#RUN ["chmod", "+x", "/stockman_api/scripts/entrypoint.sh"]
+RUN ["chmod", "+x", "/usr/src/app/scripts/entrypoint.sh"]
 #
-#ENTRYPOINT ["/stockman_api/scripts/entrypoint.sh"]
 EXPOSE 8000
+ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
+
 #RUN python manage.py migrate
-CMD ["python", "manage.py", "migrate" , "&&", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["python", "manage.py", "migrate" , "&&", "python", "manage.py", "runserver", "0.0.0.0:8000"]
 
