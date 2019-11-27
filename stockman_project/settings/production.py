@@ -30,9 +30,13 @@ DATABASES = {
 LOGIN_URL = 'http://127.0.0.1/login/'
 SITE_ID = 2
 
+ELASTIC_HOST_NAME = os.environ.get('ELASTIC_HOST_NAME', 'localhost')
+ELASTIC_HOST_PORT = os.environ.get('ELASTIC_HOST_PORT', '9200')
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'https://5n81n1hkhm:fph0n9svco@pine-154210453.us-east-1.bonsaisearch.net:443'
+        'hosts': ELASTIC_HOST_NAME+':' + ELASTIC_HOST_PORT
     },
 }
+
+

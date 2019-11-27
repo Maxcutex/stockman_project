@@ -106,12 +106,6 @@ MIDDLEWARE = [
 
 ]
 
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'localhost:9200'
-    },
-}
-
 # Name of the Elasticsearch index
 ELASTICSEARCH_INDEX_NAMES = {
     'search_indexes.documents.news': 'news',
