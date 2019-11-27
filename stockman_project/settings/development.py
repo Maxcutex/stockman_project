@@ -27,7 +27,7 @@ DATABASES = {
         },
     }
 }
-# HOST_NAME = os.environ.get('HOST_NAME')
-# ALLOWED_HOSTS += [HOST_NAME]
+HOST_NAME = os.environ.get('HOST_NAME')
+ALLOWED_HOSTS += [HOST_NAME]
 LOGIN_URL = 'http://127.0.0.1/login/'
 SITE_ID = 2
