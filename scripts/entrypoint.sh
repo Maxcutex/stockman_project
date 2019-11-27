@@ -5,6 +5,6 @@ echo "Waiting for postgres..."
 #  sleep 0.1
 #done
 #echo "PostgreSQL started"
-exec "python manage.py migrate"
-exec "python manage.py runserver"
+python manage.py migrate
+python manage.py runserver
 exec "$@"
