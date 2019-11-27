@@ -1,16 +1,17 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+
+from stock_profile_mgt.models import UserProfile
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        if User.objects.count() == 0:
+        if UserProfile.objects.count() == 0:
             username = "admin"
             email = "admin@stockman.com"
             password = 'admin'
             print('Creating account for %s (%s)' % (username, email))
-            admin = User.objects.create_superuser(email=email, username=username, password=password)
+            admin = UserProfile.objects.create_superuser(email=email, username=username, password=password)
             admin.is_active = True
             admin.is_admin = True
             admin.save()
