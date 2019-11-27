@@ -34,6 +34,7 @@ COPY . .
 #RUN ["chmod", "+x", "/stockman_api/scripts/entrypoint.sh"]
 #
 #ENTRYPOINT ["/stockman_api/scripts/entrypoint.sh"]
-EXPOSE 80
+EXPOSE 8000
 #RUN python manage.py migrate
-CMD ["python", "manage.py", "runserver"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
