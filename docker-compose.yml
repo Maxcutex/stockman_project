@@ -15,18 +15,26 @@ services:
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-  server:
+  api:
     build:
       context: .
       dockerfile: Dockerfile.dev
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     container_name: stockman_api
-    volumes:
-      - .:/usr/src/app/stockman_project/
+
     ports:
       - "8000:8000"
     depends_on:
       - db
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - '3050:80'
+    depends_on:
+      - api
 
 
 volumes:
