@@ -90,7 +90,7 @@ class Stock(models.Model):
     is_active = models.BooleanField(default=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.stock_code
 
     @classmethod
     def truncate(cls):

@@ -127,13 +127,13 @@ class SiteAuthor(models.Model):
     first_name = models.CharField(max_length=120)
     last_name = models.CharField(max_length=120)
     description = RichTextUploadingField()
-    twitter = models.CharField(max_length=150)
-    facebook = models.CharField(max_length=150)
-    linked_in = models.CharField(max_length=150)
+    twitter = models.CharField(max_length=150, null=True, blank=True)
+    facebook = models.CharField(max_length=150, null=True, blank=True)
+    linked_in = models.CharField(max_length=150,null=True, blank=True)
     email = models.CharField(max_length=250, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.first_name
 
 
 class News(models.Model):
