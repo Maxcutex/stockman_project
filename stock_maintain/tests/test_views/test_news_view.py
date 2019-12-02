@@ -59,7 +59,7 @@ class TestNewsApi(APITestCase):
 			reverse("news-list-by-section"), {'section_list': name_for_section}
 		)
 		search_array = name_for_section.split(',')
-		news_by_section = News.objects.filter(category_news__section__structure_name__in=search_array)
+		news_by_section = News.objects.filter(category_news__section__section_name__in=search_array)
 		n_count = news_by_section.count()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(len(response.data), n_count)
@@ -75,7 +75,7 @@ class TestNewsApi(APITestCase):
 			reverse("news-list-by-section"), {'section_list': name_for_section1}
 		)
 		search_array = name_for_section.split(',')
-		news_by_section = News.objects.filter(category_news__section__structure_name__in=search_array)
+		news_by_section = News.objects.filter(category_news__section__section_name__in=search_array)
 		n_count = news_by_section.count()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertNotEqual(len(response.data), n_count)

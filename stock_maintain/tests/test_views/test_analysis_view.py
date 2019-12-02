@@ -7,7 +7,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from stock_maintain.factory import NewsFactory, NewsCategorySectionFactory, AnalysisOpinionFactory, \
-	AnalysisCategorySectionFactory
+	AnalysisCategorySectionFactory, SectionGroupFactory
 from stock_maintain.models import News, AnalysisOpinion
 from stock_setup_info.factory import StructureFactory, StructureTypeFactory
 
@@ -51,10 +51,10 @@ class TestAnalysisApi(APITestCase):
 		This test ensures that proper error is shown for non existing news
 		"""
 		name_for_section = 'World'
-		analysis_section = StructureFactory(child_depth=2, structure_type=self.structure_type,
-											structure_name=name_for_section)
+
+		analysis_section = SectionGroupFactory(section_name=name_for_section)
 		analysis_for_section = mixer.blend('stock_maintain.models.AnalysisOpinion')
-		AnalysisCategorySectionFactory(analysis=analysis_for_section, section=analysis_section)
+		AnalysisCategorySectionFactory(analysis=analysis_for_section, section_category=analysis_section)
 
 		response = self.client.get(
 			reverse("analysis-detail", args=[analysis_for_section.id]),
@@ -64,15 +64,15 @@ class TestAnalysisApi(APITestCase):
 
 	def test_get_analysis_by_section_with_valid_data(self):
 		name_for_section = 'World'
-		analysis_section = StructureFactory(child_depth=2, structure_type=self.structure_type, structure_name=name_for_section)
+		analysis_section = SectionGroupFactory(section_name=name_for_section)
 		analysis_for_section = mixer.blend('stock_maintain.models.AnalysisOpinion')
-		AnalysisCategorySectionFactory(analysis=analysis_for_section, section=analysis_section)
+		AnalysisCategorySectionFactory(analysis=analysis_for_section, section_category=analysis_section)
 
 		response = self.client.get(
 			reverse("analysis-list-by-section"), {'section_list': name_for_section}
 		)
 		search_array = name_for_section.split(',')
-		analysis_by_section = AnalysisOpinion.objects.filter(category_analysis__section__structure_name__in=search_array)
+		analysis_by_section = AnalysisOpinion.objects.filter(category_analysis__section__section_name__in=search_array)
 		n_count = analysis_by_section.count()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(len(response.data), n_count)
