@@ -10,11 +10,9 @@ def get_stock_by_code(query_params):
         stock_code = query_params.get('stock_code')
     except:
         raise APIException(detail='Provide proper stock code')
-    stock = Stock.objects.filter(
+    return Stock.objects.filter(
         stock_code=stock_code
     )
-
-    return stock
 
 
 def stock_search_like_name(query_params):
@@ -24,6 +22,4 @@ def stock_search_like_name(query_params):
         stock_code = query_params.get('stock_code')
     except:
         raise APIException(detail='Provide proper search variable')
-    stock = Stock.objects.filter(Q(stock_code__contains=stock_code) | Q(name__contains=stock_code))
-
-    return stock
+    return Stock.objects.filter(Q(stock_code__contains=stock_code) | Q(name__contains=stock_code))

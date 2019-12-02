@@ -22,11 +22,10 @@ def list_analysis_range(query_params):
         e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
     except:
         raise APIException(detail='Provide proper dates')
-    analysis = AnalysisOpinion.objects.filter(
+
+    return AnalysisOpinion.objects.filter(
         opinion_date__gte=s_date, opinion_date__lt=e_date
     )
-
-    return analysis
 
 
 def list_analysis_by_section(query_params):
@@ -36,11 +35,9 @@ def list_analysis_by_section(query_params):
         section_list = query_params.get('section_list').split(',')
     except:
         raise APIException(detail='Provide section list')
-    news = AnalysisOpinion.objects.filter(
+    return AnalysisOpinion.objects.filter(
         category_analysis__section_category__section_name__in=section_list
     )
-
-    return news
 
 
 def list_news_range(query_params):
@@ -58,11 +55,9 @@ def list_news_range(query_params):
         e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
     except:
         raise APIException(detail='Provide proper dates')
-    news = News.objects.filter(
+    return News.objects.filter(
         news_date__gte=s_date, news_date__lt=e_date
     )
-
-    return news
 
 
 def list_news_by_section(query_params):
@@ -72,11 +67,9 @@ def list_news_by_section(query_params):
         section_list = query_params.get('section_list').split(',')
     except:
         raise APIException(detail='Provide section list')
-    news = News.objects.filter(
+    return News.objects.filter(
         category_news__section_category__section_name__in=section_list
     )
-
-    return news
 
 
 def list_price_range(query_params):
@@ -95,10 +88,9 @@ def list_price_range(query_params):
         e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
     except:
         raise APIException(detail='Provide proper dates')
-    prices = PriceList.objects.filter(
+    return PriceList.objects.filter(
         price_date__gte=s_date, price_date__lt=e_date, stock_id=stock
     )
-    return prices
 
 
 def list_inside_business_by_section(query_params):
@@ -108,11 +100,10 @@ def list_inside_business_by_section(query_params):
         section_list = query_params.get('section_list').split(',')
     except:
         raise APIException(detail='Provide section list')
-    news = InsideBusiness.objects.filter(
+
+    return InsideBusiness.objects.filter(
         category_inside_business_section__section_category__section_name__in=section_list
     )
-
-    return news
 
 
 def list_inside_business_range(query_params):
@@ -130,7 +121,6 @@ def list_inside_business_range(query_params):
         e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
     except:
         raise APIException(detail='Provide proper dates')
-    articles = InsideBusiness.objects.filter(
+    return InsideBusiness.objects.filter(
         opinion_date__gte=s_date, opinion_date__lt=e_date
     )
-    return articles
