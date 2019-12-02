@@ -151,10 +151,10 @@ class SiteAuthorAdmin(ImportExportModelAdmin):
 class NewsAdmin(ImportExportModelAdmin):
 	model = models.News
 	inlines = [NewsImageInline, NewsFileInline, NewsSectionInline]
-	list_display = ('excerpt',)
+	list_display = ('newstitle',)
 
-	def excerpt(self, obj):
-		return obj.get_summary(5)
+	def newstitle(self, obj):
+		return obj.title
 
 
 @admin.register(NewsImage)

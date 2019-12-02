@@ -4,7 +4,7 @@ from stock_setup_info.models import Stock
 
 
 def get_stock_by_code(query_params):
-    ''' Get stock by the stock code provided'''
+    """ Get stock by the stock code provided"""
 
     try:
         stock_code = query_params.get('stock_code')
@@ -16,7 +16,7 @@ def get_stock_by_code(query_params):
 
 
 def stock_search_like_name(query_params):
-    ''' Get all stock with like search of name provided'''
+    """ Get all stock with like search of name provided"""
 
     try:
         stock_code = query_params.get('stock_code')
