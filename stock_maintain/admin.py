@@ -8,7 +8,8 @@ from stock_setup_info.models import SectionGroup
 from .resources import PriceListResource
 from .models import (PriceList, AsiIndex, Quote,
 					 BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, NewsFile, NewsCategorySection,
-					 AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusiness, InsideBusinessSection)
+					 AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusiness, InsideBusinessSection,
+					 AnalysisImage, AnalysisFile, InsideBusinessImage, InsideBusinessFile)
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -56,6 +57,55 @@ class NewsSectionInline(admin.TabularInline):
 	extra = 0
 	fields = ["news", "section_category"]
 
+
+class AnalysisImageInline(admin.TabularInline):
+	model = AnalysisImage
+	extra = 1
+	fields = ["is_main", "name", "image_type", "image_file", get_picture_preview]
+	readonly_fields = ["get_edit_link", get_picture_preview]
+
+	def get_edit_link(self, obj=None):
+		if obj.pk:  # if object has already been saved and has a primary key, show link to it
+			url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[force_text(obj.pk)])
+			return """<a href="{url}">{text}</a>""".format(
+				url=url,
+				text=_("Edit this %s separately") % obj._meta.verbose_name,
+			)
+		return _("(save and continue editing to create a link)")
+
+	get_edit_link.short_description = _("Edit link")
+	get_edit_link.allow_tags = True
+
+
+class AnalysisFileInline(admin.TabularInline):
+	model = AnalysisFile
+	extra = 0
+	fields = ["is_main", "name", "doc_type", "doc_file"]
+
+
+class InsideBusinessImageInline(admin.TabularInline):
+	model = InsideBusinessImage
+	extra = 1
+	fields = ["is_main", "name", "image_type", "image_file", get_picture_preview]
+	readonly_fields = ["get_edit_link", get_picture_preview]
+
+	def get_edit_link(self, obj=None):
+		if obj.pk:  # if object has already been saved and has a primary key, show link to it
+			url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[force_text(obj.pk)])
+			return """<a href="{url}">{text}</a>""".format(
+				url=url,
+				text=_("Edit this %s separately") % obj._meta.verbose_name,
+			)
+		return _("(save and continue editing to create a link)")
+
+	get_edit_link.short_description = _("Edit link")
+	get_edit_link.allow_tags = True
+
+
+class InsideBusinessFileInline(admin.TabularInline):
+	model = InsideBusinessFile
+	extra = 0
+	fields = ["is_main", "name", "doc_type", "doc_file"]
 
 @admin.register(PriceList)
 class PriceListAdmin(ImportExportModelAdmin):
@@ -126,7 +176,7 @@ class AnalysisOpinionSectionInline(admin.TabularInline):
 @admin.register(AnalysisOpinion)
 class AnalysisOpinionAdmin(ImportExportModelAdmin):
 	model = models.AnalysisOpinion
-	inlines = [AnalysisOpinionSectionInline]
+	inlines = [AnalysisOpinionSectionInline, AnalysisImageInline, AnalysisFileInline]
 	list_display = ('titles',)
 
 	def titles(self, obj):
@@ -142,7 +192,7 @@ class InsideBusinessInline(admin.TabularInline):
 @admin.register(InsideBusiness)
 class InsideBusinessAdmin(ImportExportModelAdmin):
 	model = models.InsideBusiness
-	inlines = [InsideBusinessInline]
+	inlines = [InsideBusinessInline, InsideBusinessImageInline, InsideBusinessFileInline]
 	list_display = ('titles',)
 
 	def titles(self, obj):

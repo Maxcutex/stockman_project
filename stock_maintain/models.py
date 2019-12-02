@@ -215,6 +215,9 @@ class NewsFile(models.Model):
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
+
+
+
 class OfferType(ChoiceEnum):
     hipo = "Hybrid Inital Public Offer"
     hpo = "Hybrid Public Offer"
@@ -274,6 +277,25 @@ class AnalysisOpinion(models.Model):
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
+class AnalysisFile(models.Model):
+    doc_choices = Choices('pdf', 'word', 'excel')
+    analysis = models.ForeignKey(
+        AnalysisOpinion, on_delete=models.CASCADE, related_name='doc_analysis', null=True)
+    is_main = models.BooleanField()
+    doc_file = models.FileField(blank=True, upload_to="files/analysis_docs")
+    name = models.CharField(max_length=100)
+    doc_type = models.CharField(
+        choices=doc_choices, default=doc_choices.pdf, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
 class AnalysisCategorySection(models.Model):
     analysis = models.ForeignKey(
         AnalysisOpinion, on_delete=models.CASCADE, related_name='category_analysis', null=True)
@@ -326,6 +348,44 @@ class InsideBusinessSection(models.Model):
         InsideBusiness, on_delete=models.CASCADE, related_name='category_inside_business', null=True)
     section_category = models.ForeignKey(
         SectionGroup, on_delete=models.CASCADE, related_name='category_inside_business_section', null=True)
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+class InsideBusinessFile(models.Model):
+    doc_choices = Choices('pdf', 'word', 'excel')
+    inside_business = models.ForeignKey(
+        InsideBusiness, on_delete=models.CASCADE, related_name='doc_inside_business', null=True)
+    is_main = models.BooleanField()
+    doc_file = models.FileField(blank=True, upload_to="files/inside_business_docs")
+    name = models.CharField(max_length=100)
+    doc_type = models.CharField(
+        choices=doc_choices, default=doc_choices.pdf, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+class InsideBusinessImage(models.Model):
+    image_choice = Choices('size930x620', 'size450x330', 'size300x200')
+    inside_business = models.ForeignKey(
+        InsideBusiness, on_delete=models.CASCADE, related_name='visual_inside_business', null=True)
+    is_main = models.BooleanField()
+    image_file = models.ImageField(blank=True, upload_to="images/inside_business_image")
+    name = models.CharField(max_length=100)
+    image_type = models.CharField(
+        choices=image_choice, default=image_choice.size930x620, max_length=30)
+
+    def __str__(self):
+        return self.name
 
     @classmethod
     def truncate(cls):
