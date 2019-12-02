@@ -36,6 +36,18 @@ class StructureType(models.Model):
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
+class SectionGroup(models.Model):
+    section_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.section_name
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
 class Structure(models.Model):
     structure_name = models.CharField(max_length=100)
     structure_code = models.CharField(max_length=50, null=True, blank=True)

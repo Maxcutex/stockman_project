@@ -15,7 +15,7 @@ from django.db.backends.utils import logger
 
 from stock_maintain.models import PriceList, News, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection, \
 	NewsImage, AnalysisImage, Author
-from stock_setup_info.models import StructureType, Structure, Industry, Stock
+from stock_setup_info.models import StructureType, Structure, Industry, Stock, SectionGroup
 
 MODE_CLEAR = "clear"
 
@@ -348,6 +348,26 @@ def create_market_indices():
 	pass
 
 
+def create_section_group():
+	if SectionGroup.objects.count() == 0:
+		section_group = SectionGroup(section_name="World")
+		section_group.save()
+		section_group1 = SectionGroup(section_name="Money")
+		section_group1.save()
+		section_group11 = SectionGroup(section_name="Life")
+		section_group11.save()
+		section_group111 = SectionGroup(section_name="Economy")
+		section_group111.save()
+		section_group2 = SectionGroup(section_name="Business")
+		section_group2.save()
+		section_group21 = SectionGroup(section_name="Politics")
+		section_group21.save()
+		section_group211 = SectionGroup(section_name="Markets")
+		section_group211.save()
+		section_group2111 = SectionGroup(section_name="Art")
+		section_group2111.save()
+
+
 def run_seed(self, mode):
 	""" Seed database based on mode
 
@@ -355,14 +375,15 @@ def run_seed(self, mode):
     :return:
     """
 	# Clear data from tables
-	clear_data()
+	#clear_data()
 	if mode == MODE_CLEAR:
 		return
-	industry = create_industy()
-	structure_type, structure_type1 = create_structure_type()
-	structure, structure2 = create_structure(structure_type)
-	stock = create_stock(industry, structure)
-	create_price_list(stock)
-	create_news(stock, structure, structure2)
-	create_analysis(structure)
-	create_market_indices()
+	#industry = create_industy()
+	#structure_type, structure_type1 = create_structure_type()
+	#structure, structure2 = create_structure(structure_type)
+	#stock = create_stock(industry, structure)
+	#create_price_list(stock)
+	#create_news(stock, structure, structure2)
+	#create_analysis(structure)
+	#create_market_indices()
+	create_section_group()

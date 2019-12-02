@@ -7,5 +7,6 @@ echo "Waiting for postgres..."
 #echo "PostgreSQL started"
 python manage.py migrate
 python manage.py initadmin
+python manage.py seed --mode refresh
 python manage.py runserver 0.0.0.0:8000
 exec "$@"

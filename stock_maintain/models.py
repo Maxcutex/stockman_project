@@ -1,6 +1,6 @@
 from django.db import models, connection
 from enumchoicefield import ChoiceEnum, EnumChoiceField
-from stock_setup_info.models import Stock, Structure
+from stock_setup_info.models import Stock, Structure, SectionGroup
 from model_utils import Choices
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -129,7 +129,7 @@ class SiteAuthor(models.Model):
     description = RichTextUploadingField()
     twitter = models.CharField(max_length=150, null=True, blank=True)
     facebook = models.CharField(max_length=150, null=True, blank=True)
-    linked_in = models.CharField(max_length=150,null=True, blank=True)
+    linked_in = models.CharField(max_length=150, null=True, blank=True)
     email = models.CharField(max_length=250, null=True, blank=True)
 
     def __str__(self):
@@ -172,10 +172,7 @@ class News(models.Model):
 
     @property
     def author_indexing(self):
-        """Publisher for indexing.
-
-		Used in Elasticsearch indexing.
-		"""
+        """Publisher for indexing. Used in Elasticsearch indexing. """
         if self.author is not None:
             return self.author.first_name + ' ' + self.author.last_name
 
@@ -254,8 +251,8 @@ class OfferIpo(models.Model):
 class NewsCategorySection(models.Model):
     news = models.ForeignKey(
         News, on_delete=models.CASCADE, related_name='category_news', null=True)
-    section = models.ForeignKey(
-        Structure, on_delete=models.CASCADE, related_name='category_news_structure')
+    section_category = models.ForeignKey(
+        SectionGroup, on_delete=models.CASCADE, related_name='category_news_section', null=True)
 
     @classmethod
     def truncate(cls):
@@ -280,8 +277,8 @@ class AnalysisOpinion(models.Model):
 class AnalysisCategorySection(models.Model):
     analysis = models.ForeignKey(
         AnalysisOpinion, on_delete=models.CASCADE, related_name='category_analysis', null=True)
-    section = models.ForeignKey(
-        Structure, on_delete=models.CASCADE, related_name='category_analysis_structure')
+    section_category = models.ForeignKey(
+        SectionGroup, on_delete=models.CASCADE, related_name='category_analysis_section', null=True)
 
     @classmethod
     def truncate(cls):

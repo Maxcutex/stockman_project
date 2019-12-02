@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework.reverse import reverse
 
 from stock_maintain import models
+from stock_setup_info.models import SectionGroup
 from .resources import PriceListResource
 from .models import (PriceList, AsiIndex, Quote,
 					 BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, NewsFile, NewsCategorySection,
@@ -53,7 +54,7 @@ class NewsFileInline(admin.TabularInline):
 class NewsSectionInline(admin.TabularInline):
 	model = NewsCategorySection
 	extra = 0
-	fields = ["news", "section"]
+	fields = ["news", "section_category"]
 
 
 @admin.register(PriceList)
@@ -74,6 +75,11 @@ class QuoteAdmin(ImportExportModelAdmin):
 @admin.register(BonusTracker)
 class BonusTrackerAdmin(ImportExportModelAdmin):
 	pass
+
+
+@admin.register(SectionGroup)
+class SectionGroupAdmin(ImportExportModelAdmin):
+	model = models.SectionGroup
 
 
 @admin.register(DailyMarketIndex)
@@ -114,7 +120,7 @@ class OfferIpoAdmin(ImportExportModelAdmin):
 class AnalysisOpinionSectionInline(admin.TabularInline):
 	model = AnalysisCategorySection
 	extra = 0
-	fields = ["analysis", "section"]
+	fields = ["analysis", "section_category"]
 
 
 @admin.register(AnalysisOpinion)
