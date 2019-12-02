@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from stock_maintain.factory import NewsFactory, NewsCategorySectionFactory
+from stock_maintain.factory import NewsFactory, NewsCategorySectionFactory, SectionGroupFactory
 from stock_maintain.models import News
 from stock_setup_info.factory import StructureFactory, StructureTypeFactory
 
@@ -51,9 +51,9 @@ class TestNewsApi(APITestCase):
 
 	def test_get_news_by_section_with_valid_data(self):
 		name_for_section = 'World'
-		news_section = StructureFactory(child_depth=2, structure_type=self.structure_type, structure_name=name_for_section)
+		news_section = SectionGroupFactory(section_name=name_for_section)
 		news_for_section = mixer.blend('stock_maintain.models.News', stock=self.stock)
-		NewsCategorySectionFactory(news=news_for_section, section=news_section)
+		NewsCategorySectionFactory(news=news_for_section, section_category=news_section)
 
 		response = self.client.get(
 			reverse("news-list-by-section"), {'section_list': name_for_section}
@@ -67,9 +67,9 @@ class TestNewsApi(APITestCase):
 	def test_get_news_by_section_with_invalid_data(self):
 		name_for_section = 'Life'
 		name_for_section1 = 'Industry'
-		news_section = StructureFactory(child_depth=2, structure_type=self.structure_type, structure_name=name_for_section)
+		news_section = SectionGroupFactory(section_name=name_for_section)
 		news_for_section = mixer.blend('stock_maintain.models.News', stock=self.stock)
-		NewsCategorySectionFactory(news=news_for_section, section=news_section)
+		NewsCategorySectionFactory(news=news_for_section, section_category=news_section)
 
 		response = self.client.get(
 			reverse("news-list-by-section"), {'section_list': name_for_section1}

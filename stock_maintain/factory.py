@@ -11,6 +11,8 @@ from io import StringIO
 from PIL import Image
 from django.core.files.base import File
 
+from stock_setup_info.models import SectionGroup
+
 faker = Factory.create()
 faker.add_provider(internet)
 faker.add_provider(person)
@@ -113,9 +115,16 @@ class NewsFileFactory(factory.DjangoModelFactory):
 		model = NewsFile
 
 
+class SectionGroupFactory(factory.DjangoModelFactory):
+	section_name = faker.text(50)
+
+	class Meta:
+		model = SectionGroup
+
+
 class NewsCategorySectionFactory(factory.DjangoModelFactory):
 	news = factory.SubFactory(NewsFactory)
-	section = factory.SubFactory(StructureFactory)
+	section_category = factory.SubFactory(SectionGroupFactory)
 
 	class Meta:
 		model = NewsCategorySection
@@ -134,7 +143,7 @@ class AnalysisOpinionFactory(factory.DjangoModelFactory):
 
 class AnalysisCategorySectionFactory(factory.DjangoModelFactory):
 	analysis = factory.SubFactory(AnalysisOpinionFactory)
-	section = factory.SubFactory(StructureFactory)
+	section_category = factory.SubFactory(SectionGroupFactory)
 
 	class Meta:
 		model = AnalysisCategorySection
