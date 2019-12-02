@@ -8,7 +8,7 @@ from stock_setup_info.models import SectionGroup
 from .resources import PriceListResource
 from .models import (PriceList, AsiIndex, Quote,
 					 BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, NewsFile, NewsCategorySection,
-					 AnalysisOpinion, AnalysisCategorySection, SiteAuthor)
+					 AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusiness, InsideBusinessSection)
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -127,3 +127,23 @@ class AnalysisOpinionSectionInline(admin.TabularInline):
 class AnalysisOpinionAdmin(ImportExportModelAdmin):
 	model = models.AnalysisOpinion
 	inlines = [AnalysisOpinionSectionInline]
+	list_display = ('titles',)
+
+	def titles(self, obj):
+		return obj.title
+
+
+class InsideBusinessInline(admin.TabularInline):
+	model = InsideBusinessSection
+	extra = 0
+	fields = ["inside_business", "section_category"]
+
+
+@admin.register(InsideBusiness)
+class InsideBusinessAdmin(ImportExportModelAdmin):
+	model = models.InsideBusiness
+	inlines = [InsideBusinessInline]
+	list_display = ('titles',)
+
+	def titles(self, obj):
+		return obj.title

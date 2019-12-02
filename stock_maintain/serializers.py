@@ -5,7 +5,8 @@ from stock_setup_info.serializers import StructureSerializer
 from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
-                     NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor)
+                     NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusinessSection,
+                     InsideBusiness)
 
 
 class PriceListSerializer(serializers.ModelSerializer):
@@ -127,6 +128,25 @@ class AnalysisOpinionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnalysisOpinion
+        fields = '__all__'
+        ordering_fields = ('id',)
+        ordering = ['-id']
+
+
+class InsideBusinessSectionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = InsideBusinessSection
+        fields = '__all__'
+        ordering_fields = ('id',)
+        ordering = ['-id']
+
+
+class InsideBusinessSerializer(serializers.ModelSerializer):
+    inside_business_section = InsideBusinessSectionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = InsideBusiness
         fields = '__all__'
         ordering_fields = ('id',)
         ordering = ['-id']

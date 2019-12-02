@@ -303,3 +303,31 @@ class AnalysisImage(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+class InsideBusiness(models.Model):
+    title = models.CharField(max_length=300)
+    content = RichTextUploadingField()
+    opinion_date = models.DateField()
+    entry_date = models.DateField()
+    author = models.ForeignKey(
+        SiteAuthor, on_delete=models.CASCADE, related_name='inside_business_author', null=True)
+
+    def __str__(self):
+        return self.title
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+class InsideBusinessSection(models.Model):
+    inside_business = models.ForeignKey(
+        InsideBusiness, on_delete=models.CASCADE, related_name='category_inside_business', null=True)
+    section_category = models.ForeignKey(
+        SectionGroup, on_delete=models.CASCADE, related_name='category_inside_business_section', null=True)
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
