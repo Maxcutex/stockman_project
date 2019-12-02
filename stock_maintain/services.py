@@ -37,7 +37,7 @@ def list_analysis_by_section(query_params):
     except:
         raise APIException(detail='Provide section list')
     news = AnalysisOpinion.objects.filter(
-        category_analysis__section__structure_name__in=section_list
+        category_analysis__section_category__section_name__in=section_list
     )
 
     return news
@@ -73,7 +73,7 @@ def list_news_by_section(query_params):
     except:
         raise APIException(detail='Provide section list')
     news = News.objects.filter(
-        category_news__section__structure_name__in=section_list
+        category_news__section_category__section_name__in=section_list
     )
 
     return news
