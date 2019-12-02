@@ -72,7 +72,7 @@ class TestAnalysisApi(APITestCase):
 			reverse("analysis-list-by-section"), {'section_list': name_for_section}
 		)
 		search_array = name_for_section.split(',')
-		analysis_by_section = AnalysisOpinion.objects.filter(category_analysis__section__section_name__in=search_array)
+		analysis_by_section = AnalysisOpinion.objects.filter(category_analysis__section_category__section_name__in=search_array)
 		n_count = analysis_by_section.count()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(len(response.data), n_count)
