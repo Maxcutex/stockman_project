@@ -14,7 +14,7 @@ from faker import Factory
 from django.db.backends.utils import logger
 
 from stock_maintain.models import PriceList, News, AnalysisCategorySection, AnalysisOpinion, NewsCategorySection, \
-	NewsImage, AnalysisImage, Author
+	NewsImage, AnalysisImage
 from stock_setup_info.models import StructureType, Structure, Industry, Stock, SectionGroup
 
 MODE_CLEAR = "clear"
