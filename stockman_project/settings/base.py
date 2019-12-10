@@ -37,7 +37,7 @@ SECRET_KEY = '21)^n6=5y$ams&oyqlumbhbaqthx9y+)p=9_&f30tgb-$uibhu'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','stockman-api.herokuapp.com','api']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','stockman-api.herokuapp.com','api','https://stockmanreact.ennyboy.now.sh/']
 
 # Application definition
 

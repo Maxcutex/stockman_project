@@ -6,7 +6,7 @@ from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
                      NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusinessSection,
-                     InsideBusiness)
+                     InsideBusiness, InsideBusinessImage)
 
 
 class PriceListSerializer(serializers.ModelSerializer):
@@ -67,6 +67,20 @@ class NewsImageSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         image_file = NewsImage.image_file
         return request.build_absolute_uri(MEDIA_URL + "images/news_image/" + str(image_file))
+
+
+class InsideBusinessImageSerializer(serializers.ModelSerializer):
+    # image_file = serializers.ImageField(max_length=None, use_url=True)
+    image_file = serializers.SerializerMethodField()
+
+    class Meta:
+        model = InsideBusinessImage
+        fields = '__all__'
+
+    def get_image_file(self, InsideBusinessImage):
+        request = self.context.get('request')
+        image_file = InsideBusinessImage.image_file
+        return request.build_absolute_uri(MEDIA_URL + "images/inside_business_image/" + str(image_file))
 
 
 class NewsFileSerializer(serializers.ModelSerializer):
@@ -134,6 +148,8 @@ class AnalysisOpinionSerializer(serializers.ModelSerializer):
 
 
 class InsideBusinessSectionSerializer(serializers.ModelSerializer):
+    visual_inside = InsideBusinessImageSerializer(many=True, read_only=True)
+    author = SiteAuthorSerializer(read_only=True)
 
     class Meta:
         model = InsideBusinessSection
