@@ -31,7 +31,7 @@ class NewsDocument(Document):
 
 		model = News  # The model associate with this DocType
 		fields = [
-			'id','title','content',
+			'id','title',
 			'news_date', 'entry_date',
 			'stock', 'author', 'sec_code',
 			'is_featured',
