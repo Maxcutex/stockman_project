@@ -161,20 +161,20 @@ class News(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
-    # @property
-    # def stock_indexing(self):
-    #     """Stock for indexing.
-    #
-	# 	Used in Elasticsearch indexing.
-	# 	"""
-    #     if self.stock is not None:
-    #         return self.stock.name
-    #
-    # @property
-    # def author_indexing(self):
-    #     """Publisher for indexing. Used in Elasticsearch indexing. """
-    #     if self.author is not None:
-    #         return self.author.first_name + ' ' + self.author.last_name
+    @property
+    def stock_indexing(self):
+        """Stock for indexing.
+
+		Used in Elasticsearch indexing.
+		"""
+        if self.stock is not None:
+            return self.stock.name
+
+    @property
+    def author_indexing(self):
+        """Publisher for indexing. Used in Elasticsearch indexing. """
+        if self.author is not None:
+            return self.author.first_name + ' ' + self.author.last_name
 
 
 class NewsImage(models.Model):
