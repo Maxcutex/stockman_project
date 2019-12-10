@@ -18,7 +18,7 @@ from pathlib import Path
 
 #from decouple import config
 #import dj_database_url
-
+from .pagination_defaults import DefaultResultsSetPagination
 
 CHECK_DIR = Path(__file__).parent.parent.parent
 # BASE_DIR = Path(__file__).parent.parent.parent
@@ -239,7 +239,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',),
     #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'DEFAULT_PAGINATION_CLASS': 'pagination_defaults.DefaultResultsSetPagination',
+    'DEFAULT_PAGINATION_CLASS': 'DefaultResultsSetPagination',
     'PAGE_SIZE': 10
 }
 USERNAME = None
