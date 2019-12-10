@@ -15,10 +15,9 @@ import platform
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
 from pathlib import Path
-
 #from decouple import config
 #import dj_database_url
-from .pagination_defaults import DefaultResultsSetPagination
+
 
 CHECK_DIR = Path(__file__).parent.parent.parent
 # BASE_DIR = Path(__file__).parent.parent.parent
@@ -238,8 +237,8 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [], set to null to enable view based permissions per views
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',),
-    #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'DEFAULT_PAGINATION_CLASS': 'DefaultResultsSetPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    #'DEFAULT_PAGINATION_CLASS': 'DefaultResultsSetPagination',
     'PAGE_SIZE': 10
 }
 USERNAME = None

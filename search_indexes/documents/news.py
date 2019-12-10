@@ -1,5 +1,6 @@
 from django.conf import settings
-from django_elasticsearch_dsl import DocType, Index, fields
+from django_elasticsearch_dsl import Document, Index, fields
+from django_elasticsearch_dsl.registries import registry
 from elasticsearch_dsl import analyzer
 
 from stock_maintain.models import News
@@ -21,8 +22,8 @@ html_strip = analyzer(
 )
 
 
-@INDEX.doc_type
-class NewsDocument(DocType):
+@registry.register_document
+class NewsDocument(Document):
 	"""News Elasticsearch document."""
 
 	id = fields.IntegerField(attr='id')
@@ -72,7 +73,7 @@ class NewsDocument(DocType):
 
 	is_main = fields.BooleanField()
 
-	class Meta(object):
+	class Django:
 		"""Meta options."""
 
 		model = News  # The model associate with this DocType

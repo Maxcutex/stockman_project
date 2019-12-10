@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 from stockman_project.permissions import IsAdminOrReadOnly
+from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
     AnalysisOpinionSerializer, SiteAuthorSerializer, QuoteSerializer, InsideBusinessSerializer
 from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor, Quote, InsideBusiness
@@ -19,6 +20,7 @@ class AnalysisView(viewsets.ModelViewSet):
     queryset = AnalysisOpinion.objects.get_queryset().order_by('-id')
     serializer_class = AnalysisOpinionSerializer
     filter_fields = ('title', 'opinion_date')
+    pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -54,12 +56,14 @@ class AnalysisView(viewsets.ModelViewSet):
 class SiteAuthorView(viewsets.ModelViewSet):
     queryset = SiteAuthor.objects.get_queryset().order_by('-id')
     serializer_class = SiteAuthorSerializer
+    pagination_class = DefaultResultsSetPagination
 
 
 class NewsView(viewsets.ModelViewSet):
     queryset = News.objects.get_queryset().order_by('-id')
     serializer_class = NewsSerializer
     filter_fields = ('is_featured', 'stock_id', 'news_date', 'sec_code')
+    pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -95,6 +99,7 @@ class InsideBusinessView(viewsets.ModelViewSet):
     queryset = InsideBusiness.objects.get_queryset().order_by('-id')
     serializer_class = InsideBusinessSerializer
     filter_fields = ('title', 'opinion_date','entry_date')
+    pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -130,11 +135,13 @@ class InsideBusinessView(viewsets.ModelViewSet):
 class NewsImageView(viewsets.ModelViewSet):
     queryset = NewsImage.objects.all()
     serializer_class = NewsImageSerializer
+    pagination_class = DefaultResultsSetPagination
 
 
 class NewsFileView(viewsets.ModelViewSet):
     queryset = NewsFile.objects.all()
     serializer_class = NewsFileSerializer
+    pagination_class = DefaultResultsSetPagination
 
 
 class PriceListView(viewsets.ModelViewSet):
@@ -143,6 +150,7 @@ class PriceListView(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('price_date', 'stock', 'sec_code')
     permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -163,6 +171,7 @@ class PriceListView(viewsets.ModelViewSet):
 class QuotesView(viewsets.ModelViewSet):
     queryset = Quote.objects.get_queryset().order_by('-id')
     serializer_class = QuoteSerializer
+    pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='by-stock-code')
     def view_date_range(self, request, *args, **kwargs):
