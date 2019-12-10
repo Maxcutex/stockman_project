@@ -5,14 +5,6 @@ from elasticsearch_dsl import analyzer
 
 from stock_maintain.models import News
 
-# Name of the Elasticsearch index
-INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
-
-# See Elasticsearch Indices API reference for available settings
-INDEX.settings(
-	number_of_shards=1,
-	number_of_replicas=1
-)
 
 html_strip = analyzer(
 	'html_strip',
@@ -24,6 +16,12 @@ html_strip = analyzer(
 
 @registry.register_document
 class NewsDocument(Document):
+	class Index:
+		# Name of the Elasticsearch index
+		name = 'news'
+		# See Elasticsearch Indices API reference for available settings
+		settings = {'number_of_shards': 1,
+					'number_of_replicas': 0}
 	"""News Elasticsearch document."""
 
 	id = fields.IntegerField(attr='id')
