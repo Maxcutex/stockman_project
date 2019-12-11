@@ -23,9 +23,9 @@ class NewsDocument(Document):
         settings = {'number_of_shards': 1,
                     'number_of_replicas': 0}
 
-        # stock = fields.ObjectField(properties={
-        #     'stock_code': fields.TextField(),
-        # })
+        stock = fields.ObjectField(properties={
+            'stock_code': fields.TextField(),
+        })
         # author = fields.ObjectField(properties={
         #     'first_name': fields.TextField(),
         #     'last_name': fields.TextField(),
@@ -43,7 +43,7 @@ class NewsDocument(Document):
             'has_downloadable',
             'is_main',
         ]
-        # related_models = [Stock]
+        related_models = [Stock]
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
