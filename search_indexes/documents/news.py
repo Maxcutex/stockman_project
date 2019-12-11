@@ -23,13 +23,13 @@ class NewsDocument(Document):
         settings = {'number_of_shards': 1,
                     'number_of_replicas': 0}
 
-        stock = fields.ObjectField(properties={
-            'stock_code': fields.TextField(),
-        })
-        author = fields.ObjectField(properties={
-            'first_name': fields.TextField(),
-            'last_name': fields.TextField(),
-        })
+        # stock = fields.ObjectField(properties={
+        #     'stock_code': fields.TextField(),
+        # })
+        # author = fields.ObjectField(properties={
+        #     'first_name': fields.TextField(),
+        #     'last_name': fields.TextField(),
+        # })
 
     class Django:
         """Meta options."""
@@ -43,19 +43,19 @@ class NewsDocument(Document):
             'has_downloadable',
             'is_main',
         ]
-        related_models = [Stock, SiteAuthor]
+        # related_models = [Stock]
 
-    def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(NewsDocument, self).get_queryset().select_related(
-            'stock', 'author'
-        )
-
-    def get_instances_from_related(self, related_instance):
-        """If related_models is set, define how to retrieve the News instance(s) from the related model.
-        The related_models option should be used with caution because it can lead in the index
-        to the updating of a lot of items.
-        """
-        if isinstance(related_instance, Stock):
-            return related_instance.news_set.all()
+    # def get_queryset(self):
+    #     """Not mandatory but to improve performance we can select related in one sql request"""
+    #     return super(NewsDocument, self).get_queryset().select_related(
+    #         'stock'
+    #     )
+    #
+    # def get_instances_from_related(self, related_instance):
+    #     """If related_models is set, define how to retrieve the News instance(s) from the related model.
+    #     The related_models option should be used with caution because it can lead in the index
+    #     to the updating of a lot of items.
+    #     """
+    #     if isinstance(related_instance, Stock):
+    #         return related_instance.stock_code
 
