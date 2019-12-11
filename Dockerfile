@@ -29,7 +29,7 @@ COPY . .
 #ENTRYPOINT ["/usr/src/app/scripts/entrypoint.sh"]
 #
 ## copy entrypoint.sh
-RUN python manage.py migrate
+#RUN python manage.py migrate
 COPY scripts/entrypoint.sh /usr/src/app/entrypoint.sh
 ##
 RUN ["chmod", "+x", "/usr/src/app/entrypoint.sh"]
