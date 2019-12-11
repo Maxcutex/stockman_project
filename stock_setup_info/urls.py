@@ -7,6 +7,8 @@ from search_indexes.urls import router as search_router
 
 router = routers.DefaultRouter()
 router.register('api/v1/industries', views.IndustryView, basename='industry')
+router.register('api/v1/main_sector', views.MainSectorView, basename='main_sector')
+router.register('api/v1/sub_sector', views.SubSectorView, basename='sub_sector')
 router.register('api/v1/structures', views.StructureView, basename='structures')
 router.register('api/v1/structuretypes', views.StructureTypeView, basename='structure_types')
 router.register('api/v1/stocks', views.StockView, basename='stocks')

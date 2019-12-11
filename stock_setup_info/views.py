@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, decorators
 from rest_framework.permissions import AllowAny
 
-from .models import (Industry, Structure, StructureType, Stock, StockManagement)
+from .models import (Industry, Structure, StructureType, Stock, StockManagement, MainSector, SubSector)
 from .serializers import (
     IndustrySerializer, StructureSerializer, StructureTypeSerializer,
     StockManagementSerializer, StockSerializer)
@@ -24,6 +24,25 @@ class IndustryView(mixins.CreateModelMixin,
     #permission_classes = (AllowAny,)
     #pagination_class = None
 
+
+
+class MainSectorView(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin,
+                   viewsets.GenericViewSet
+                   ):
+    queryset = MainSector.objects.get_queryset().order_by('-id')
+    serializer_class = MainSectorSerializer
+    authentication_classes = ()
+
+
+class SubSectorView(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin,
+                   viewsets.GenericViewSet
+                   ):
+    queryset = SubSector.objects.get_queryset().order_by('-id')
+    serializer_class = SubSectorSerializer
+    authentication_classes = ()
+    
 
 class StructureView(viewsets.ModelViewSet):
     queryset = Structure.objects.get_queryset().order_by('-id')
