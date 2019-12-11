@@ -66,7 +66,7 @@ class StockSerializer(serializers.ModelSerializer):
                   'website', 'email', 'gsm',
                   'land_tel', 'fax_no', 'regis_close',
                   'year_end', 'logo', 'shares_in_issue',
-                  'capitalization', 'industry', 'structure'
+                  'capitalization', 'industry'
                   )
         ordering_fields = ('id',)
         ordering = ['-id']
