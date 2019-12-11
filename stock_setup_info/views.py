@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from .models import (Industry, Structure, StructureType, Stock, StockManagement, MainSector, SubSector)
 from .serializers import (
     IndustrySerializer, StructureSerializer, StructureTypeSerializer,
-    StockManagementSerializer, StockSerializer)
+    StockManagementSerializer, StockSerializer, MainSectorSerializer, SubSectorSerializer)
 
 from rest_framework import mixins
 from rest_framework.views import APIView
