@@ -9,6 +9,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=stockman_project, stock_setup_info, stock_profile_mgt',
+    '--verbosity=2'
 ]
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())

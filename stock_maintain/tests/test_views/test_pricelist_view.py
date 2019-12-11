@@ -8,14 +8,15 @@ from rest_framework.test import APITestCase
 
 from stock_maintain.factory import PriceListFactory
 from stock_maintain.models import  PriceList
-from stock_setup_info.factory import StructureFactory, StructureTypeFactory, StockFactory
+from stock_setup_info.factory import StructureFactory, StructureTypeFactory, StockFactory, MainSectorFactory, \
+	SubSectorFactory
 
 
 class TestPriceListApi(APITestCase):
 	def setUp(self):
-		self.structure_type = StructureTypeFactory(child_depth=2)
-		self.structure = StructureFactory(child_depth=2, structure_type=self.structure_type)
-		self.stock = mixer.blend('stock_setup_info.models.Stock', structure=self.structure)
+		self.main_sector = MainSectorFactory()
+		self.sub_sector = SubSectorFactory(main_sector=self.main_sector)
+		self.stock = mixer.blend('stock_setup_info.models.Stock', sub_sector=self.sub_sector)
 		self.p_date1 = datetime(year=2014, month=11, day=15, hour=0, minute=0, second=0)
 		self.price_list = mixer.blend('stock_maintain.models.PriceList', stock=self.stock, price_date=self.p_date1)
 		self.p_date = datetime(year=2014, month=11, day=15, hour=0, minute=0, second=0)

@@ -1,10 +1,17 @@
 from django.conf import settings
-from django_elasticsearch_dsl import Document, Index, fields
-from django_elasticsearch_dsl.registries import registry
+from django_elasticsearch_dsl import DocType, Index, fields
 from elasticsearch_dsl import analyzer
 
-from stock_maintain.models import News, SiteAuthor
-from stock_setup_info.models import Stock
+from stock_maintain.models import News
+
+# Name of the Elasticsearch index
+INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
+
+# See Elasticsearch Indices API reference for available settings
+INDEX.settings(
+    number_of_shards=1,
+    number_of_replicas=1
+)
 
 html_strip = analyzer(
     'html_strip',
@@ -14,48 +21,58 @@ html_strip = analyzer(
 )
 
 
-@registry.register_document
-class NewsDocument(Document):
-    class Index:
-        # Name of the Elasticsearch index
-        name = 'news'
-        # See Elasticsearch Indices API reference for available settings
-        settings = {'number_of_shards': 1,
-                    'number_of_replicas': 0}
+@INDEX.doc_type
+class NewsDocument(DocType):
+    """News Elasticsearch document."""
 
-        stock = fields.ObjectField(properties={
-            'stock_code': fields.TextField(),
-        })
-        # author = fields.ObjectField(properties={
-        #     'first_name': fields.TextField(),
-        #     'last_name': fields.TextField(),
-        # })
+    id = fields.IntegerField(attr='id')
 
-    class Django:
+    title = fields.StringField(
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword', fielddata=True),
+        }
+    )
+
+    content = fields.StringField(
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    news_date = fields.DateField()
+    entry_date = fields.DateField()
+
+    stock = fields.StringField(
+        attr='stock_indexing',
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+
+    author = fields.StringField(
+        attr='author_indexing',
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+
+    sec_code = fields.StringField(
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+
+    is_featured = fields.BooleanField()
+
+    has_downloadable = fields.BooleanField()
+
+    is_main = fields.BooleanField()
+
+    class Meta(object):
         """Meta options."""
 
         model = News  # The model associate with this DocType
-        fields = [
-            'id', 'title',
-            'news_date', 'entry_date',
-            'sec_code',
-            'is_featured',
-            'has_downloadable',
-            'is_main',
-        ]
-        related_models = [Stock]
-
-    def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(NewsDocument, self).get_queryset().select_related(
-            'stock'
-        )
-
-    def get_instances_from_related(self, related_instance):
-        """If related_models is set, define how to retrieve the News instance(s) from the related model.
-        The related_models option should be used with caution because it can lead in the index
-        to the updating of a lot of items.
-        """
-        if isinstance(related_instance, Stock):
-            return related_instance.stock_code
-

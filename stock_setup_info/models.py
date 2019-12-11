@@ -18,6 +18,34 @@ class Industry(models.Model):
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
 
+class MainSector(models.Model):
+    name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
+class SubSector(models.Model):
+    name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=False)
+    main_sector = models.ForeignKey(
+        MainSector, on_delete=models.CASCADE, related_name='sub_sector_main_sector')
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
+
+
 class StructureType(models.Model):
     structure_type_name = models.CharField(max_length=100)
     description = models.CharField(max_length=2000, null=True, blank=True)
@@ -97,8 +125,8 @@ class Stock(models.Model):
     view_count = models.BigIntegerField(default=0, null=True)
     industry = models.ForeignKey(
         Industry, on_delete=models.CASCADE, related_name='stocks')
-    structure = models.ForeignKey(
-        Structure, on_delete=models.CASCADE, related_name='stock_structure')
+    sub_sector = models.ForeignKey(
+        SubSector, on_delete=models.CASCADE, related_name='stock_sub_sector')
     is_active = models.BooleanField(default=True, null=True)
 
     def __str__(self):

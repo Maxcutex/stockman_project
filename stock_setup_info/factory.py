@@ -1,6 +1,6 @@
 from faker.providers import internet, lorem
 import factory
-from stock_setup_info.models import Industry, StockManagement, StructureType, Structure, Stock
+from stock_setup_info.models import Industry, StockManagement, StructureType, Structure, Stock, SubSector, MainSector
 from faker import Faker, Factory
 
 faker = Factory.create()
@@ -40,6 +40,23 @@ class IndustryFactory(factory.DjangoModelFactory):
 
 	class Meta:
 		model = Industry
+
+
+class MainSectorFactory(factory.DjangoModelFactory):
+	name = faker.name()
+	is_active = faker.boolean(chance_of_getting_true=50)
+
+	class Meta:
+		model = MainSector
+
+
+class SubSectorFactory(factory.DjangoModelFactory):
+	name = faker.name()
+	is_active = faker.boolean(chance_of_getting_true=50)
+	main_sector = factory.SubFactory(MainSector)
+
+	class Meta:
+		model = SubSector
 
 
 class StructureTypeFactory(factory.DjangoModelFactory):
@@ -93,6 +110,7 @@ class StructureFactory(factory.DjangoModelFactory):
 
 
 class StockFactory(factory.DjangoModelFactory):
+	id = faker.random_number()
 	stock_code = faker.text(max_nb_chars=20, ext_word_list=None)
 	name = faker.text(max_nb_chars=20, ext_word_list=None)
 	exchange_code = faker.text(max_nb_chars=20, ext_word_list=None)
@@ -102,7 +120,7 @@ class StockFactory(factory.DjangoModelFactory):
 	tier_code = faker.text(max_nb_chars=20, ext_word_list=None)
 	par_value = faker.text(max_nb_chars=20, ext_word_list=None)
 	list_date = faker.date()
-	outstanding_shares = faker.text(max_nb_chars=20, ext_word_list=None)
+	outstanding_shares = faker.random_number()
 	grp_code = faker.text(max_nb_chars=20, ext_word_list=None)
 	registrar = faker.text(max_nb_chars=20, ext_word_list=None)
 	address_1 = faker.text(max_nb_chars=20, ext_word_list=None)

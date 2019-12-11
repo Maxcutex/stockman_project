@@ -163,10 +163,7 @@ class News(models.Model):
 
     @property
     def stock_indexing(self):
-        """Stock for indexing.
-
-		Used in Elasticsearch indexing.
-		"""
+        """Stock for indexing.		Used in Elasticsearch indexing.		"""
         if self.stock is not None:
             return self.stock.name
 
@@ -213,9 +210,6 @@ class NewsFile(models.Model):
     def truncate(cls):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
-
-
-
 
 
 class OfferType(ChoiceEnum):
@@ -337,6 +331,7 @@ class InsideBusiness(models.Model):
 
     def __str__(self):
         return self.title
+
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:

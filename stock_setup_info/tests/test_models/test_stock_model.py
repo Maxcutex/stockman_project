@@ -1,8 +1,9 @@
-x
+
 from mixer.auto import mixer
 from rest_framework.test import APITestCase
 
-from stock_setup_info.factory import StockFactory, StructureFactory, StructureTypeFactory
+from stock_setup_info.factory import StockFactory, StructureFactory, StructureTypeFactory, MainSectorFactory, \
+	SubSectorFactory
 from stock_setup_info.models import Stock
 
 
@@ -12,7 +13,10 @@ class BaseViewTest(APITestCase):
 		# self.stock = StockFactory()
 		self.structure_type = StructureTypeFactory(child_depth=2)
 		self.structure = StructureFactory(child_depth=2, structure_type=self.structure_type)
-		self.stock = mixer.blend('stock_setup_info.models.Stock', structure=self.structure)
+		self.main_sector = MainSectorFactory()
+		self.sub_sector = SubSectorFactory(main_sector=self.main_sector)
+		self.stock = mixer.blend('stock_setup_info.models.Stock', sub_sector=self.sub_sector)
+		#self.stock = StockFactory()
 
 
 class StockModelCreatedTest(BaseViewTest):
