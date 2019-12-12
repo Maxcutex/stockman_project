@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='stock',
             name='sub_sector',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='stock_sub_sector', to='stock_setup_info.SubSector'),
+            field=models.ForeignKey(default=None, null=True,on_delete=django.db.models.deletion.CASCADE, related_name='stock_sub_sector', to='stock_setup_info.SubSector'),
             preserve_default=False,
         ),
     ]

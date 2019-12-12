@@ -126,7 +126,7 @@ class Stock(models.Model):
     industry = models.ForeignKey(
         Industry, on_delete=models.CASCADE, related_name='stocks')
     sub_sector = models.ForeignKey(
-        SubSector, on_delete=models.CASCADE, related_name='stock_sub_sector')
+        SubSector, on_delete=models.CASCADE, related_name='stock_sub_sector',null=True,default=None)
     is_active = models.BooleanField(default=True, null=True)
 
     def __str__(self):
