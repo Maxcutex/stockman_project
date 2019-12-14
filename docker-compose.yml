@@ -19,11 +19,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py collectstatic --no-input && python manage.py initadmin && python manage.py runserver 0.0.0.0:8000"
     container_name: stockman_api
 
     ports:
       - "8000:8000"
+    environment:
+      - USE_S3=${USE_S3}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_STORAGE_BUCKET_NAME=${AWS_STORAGE_BUCKET_NAME}
     depends_on:
       - db
   nginx:
