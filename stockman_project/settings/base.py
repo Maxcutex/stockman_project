@@ -226,7 +226,8 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ORIGIN_REGEX_WHITELIST = (
     'localhost:8000',
     'localhost:3000',
-    '127.0.0.1:9000'
+    '127.0.0.1:9000',
+    'https://elasticbeanstalk-us-east-2-606297809594.s3.amazonaws.com/'
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
