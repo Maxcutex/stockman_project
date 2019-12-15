@@ -193,6 +193,8 @@ if USE_S3:
     AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    CKEDITOR_BASEPATH = f'{STATIC_URL}ckeditor/ckeditor/'
+
 
     # s3 public media settings
     PUBLIC_MEDIA_LOCATION = 'media'
@@ -203,6 +205,7 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     MEDIA_ROOT = '..' + os.path.join(CHECK_DIR, 'media')
     MEDIA_URL = '/media/'
+    CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 STATICFILES_DIR = (
     os.path.join(BASE_DIR, "static"),
    # '/static/',
@@ -210,7 +213,7 @@ STATICFILES_DIR = (
 
 
 
-CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
