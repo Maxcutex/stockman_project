@@ -193,13 +193,14 @@ if USE_S3:
     AWS_LOCATION = 'static'
     AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'stockman_project.storage_backends.StaticStorage'
     CKEDITOR_BASEPATH = f'{STATIC_URL}ckeditor/ckeditor/'
 
     # s3 public media settings
     PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_ROOT = '..' + os.path.join(CHECK_DIR, 'media')
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE = 'stockman_project.storage_backends.PublicMediaStorage'
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
