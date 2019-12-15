@@ -187,6 +187,7 @@ if USE_S3:
     AWS_DEFAULT_ACL = 'public-read'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    TEXT_CKEDITOR_BASE_PATH = f'https://{AWS_S3_CUSTOM_DOMAIN}/djangocms_text_ckeditor/ckeditor/'
     # s3 static settings
     AWS_LOCATION = 'static'
     AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
