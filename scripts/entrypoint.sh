@@ -5,6 +5,7 @@ echo "Waiting for postgres..."
 #  sleep 0.1
 #done
 #echo "PostgreSQL started"
+export USE_S3=TRUE
 python manage.py migrate
 python manage.py collectstatic --no-input
 python manage.py initadmin
