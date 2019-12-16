@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bash -c "python manage.py migrate && python manage.py collectstatic --no-input && python manage.py initadmin && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate  && python manage.py initadmin && python manage.py runserver 0.0.0.0:8000"
     container_name: stockman_api
 
     ports:
