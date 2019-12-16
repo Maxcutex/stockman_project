@@ -198,8 +198,8 @@ if USE_S3:
 
     # s3 public media settings
     PUBLIC_MEDIA_LOCATION = 'media'
-    MEDIA_ROOT = '..' + os.path.join(CHECK_DIR, 'media')
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    #MEDIA_ROOT = '..' + os.path.join(CHECK_DIR, 'media')
+    #MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'stockman_project.storage_backends.PublicMediaStorage'
 else:
     STATIC_URL = '/static/'
