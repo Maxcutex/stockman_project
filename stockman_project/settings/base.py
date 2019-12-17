@@ -223,13 +223,15 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8000',
     'localhost:3000',
     '127.0.0.1:9000',
-    'https://elasticbeanstalk-us-east-2-606297809594.s3.amazonaws.com/'
+    'https://elasticbeanstalk-us-east-2-606297809594.s3.amazonaws.com/',
+    'https://stockmanreact.ennyboy.now.sh/'
 )
 CORS_ORIGIN_REGEX_WHITELIST = (
     'localhost:8000',
     'localhost:3000',
     '127.0.0.1:9000',
-    'https://elasticbeanstalk-us-east-2-606297809594.s3.amazonaws.com/'
+    'https://elasticbeanstalk-us-east-2-606297809594.s3.amazonaws.com/',
+    'https://stockmanreact.ennyboy.now.sh/'
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
