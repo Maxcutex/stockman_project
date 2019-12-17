@@ -124,3 +124,21 @@ def list_inside_business_range(query_params):
     return InsideBusiness.objects.filter(
         opinion_date__gte=s_date, opinion_date__lt=e_date
     )
+
+
+def list_price_date(query_params):
+    """ List prices for a given date range"""
+    price_date = query_params.get('price_date').split('-')
+    try:
+        price_year = int(price_date[0])
+        price_month = int(price_date[1])
+        price_day = int(price_date[2])
+
+        s_date = datetime(year=price_year, month=price_month, day=price_day, hour=0, minute=0, second=0) \
+            .replace(tzinfo=pytz.UTC)
+
+    except:
+        raise APIException(detail='Provide proper date')
+    return PriceList.objects.filter(
+        price_date=s_date
+    )
