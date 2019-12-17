@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, decorators
 from rest_framework.permissions import AllowAny
 
+from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
 from .models import (Industry, Structure, StructureType, Stock, StockManagement, MainSector, SubSector)
 from .serializers import (
     IndustrySerializer, StructureSerializer, StructureTypeSerializer,
@@ -21,6 +22,7 @@ class IndustryView(mixins.CreateModelMixin,
     queryset = Industry.objects.get_queryset().order_by('-id')
     serializer_class = IndustrySerializer
     authentication_classes = ()
+    pagination_class = DefaultResultsSetPagination
     #permission_classes = (AllowAny,)
     #pagination_class = None
 
@@ -33,6 +35,7 @@ class MainSectorView(mixins.CreateModelMixin,
     queryset = MainSector.objects.get_queryset().order_by('-id')
     serializer_class = MainSectorSerializer
     authentication_classes = ()
+    pagination_class = DefaultResultsSetPagination
 
 
 class SubSectorView(mixins.CreateModelMixin,
@@ -42,21 +45,25 @@ class SubSectorView(mixins.CreateModelMixin,
     queryset = SubSector.objects.get_queryset().order_by('-id')
     serializer_class = SubSectorSerializer
     authentication_classes = ()
+    pagination_class = DefaultResultsSetPagination
     
 
 class StructureView(viewsets.ModelViewSet):
     queryset = Structure.objects.get_queryset().order_by('-id')
     serializer_class = StructureSerializer
+    pagination_class = DefaultResultsSetPagination
 
 
 class StructureTypeView(viewsets.ModelViewSet):
     queryset = StructureType.objects.get_queryset().order_by('-id')
     serializer_class = StructureTypeSerializer
+    pagination_class = DefaultResultsSetPagination
 
 
 class StockView(viewsets.ModelViewSet):
     queryset = Stock.objects.get_queryset().order_by('-id')
     serializer_class = StockSerializer
+    pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='by-code')
     def by_code(self, request, *args, **kwargs):
@@ -92,10 +99,12 @@ class StockView(viewsets.ModelViewSet):
 class StockManagementView(viewsets.ModelViewSet):
     queryset = StockManagement.objects.get_queryset().order_by('-id')
     serializer_class = StockManagementSerializer
+    pagination_class = DefaultResultsSetPagination
 
 
 class StockApiView(APIView):
     """ Stock View using Api View """
+    pagination_class = DefaultResultsSetPagination
 
     def get(self, request: object, format: object = None) -> object:
         """ Returns a list of stock api view """
