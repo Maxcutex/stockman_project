@@ -47,7 +47,7 @@ docker-pycreds==0.4.0
 dockerpty==0.4.1
 docopt==0.6.2
 docutils==0.15.2
-elasticsearch==7.1.0
+elasticsearch==6.3.1
 elasticsearch-dsl==6.1.0
 et-xmlfile==1.0.1
 factory-boy==2.11.1
