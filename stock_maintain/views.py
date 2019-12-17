@@ -167,6 +167,21 @@ class PriceListView(viewsets.ModelViewSet):
         serializer = PriceListSerializer(price_list, many=True)
         return Response(serializer.data)
 
+    @decorators.action(methods=['get'], detail=False, url_path='view-by-date')
+    def view_by_date(self, request, *args, **kwargs):
+        price_list = stock_maintain_services.list_price_date(
+            query_params=request.query_params,
+        )
+        paginate = kwargs.get('paginate')
+        if paginate is not None:
+            page = self.paginate_queryset(price_list)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = PriceListSerializer(price_list, many=True)
+        return Response(serializer.data)
+
 
 class QuotesView(viewsets.ModelViewSet):
     queryset = Quote.objects.get_queryset().order_by('-id')
