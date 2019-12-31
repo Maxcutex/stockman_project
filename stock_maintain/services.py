@@ -5,6 +5,7 @@ import pytz
 from rest_framework.exceptions import APIException
 
 from stock_maintain.models import News, PriceList, AnalysisOpinion, InsideBusiness
+from stock_setup_info.models import Stock, MainSector, SubSector
 
 
 def list_analysis_range(query_params):
@@ -139,6 +140,48 @@ def list_price_date(query_params):
 
     except:
         raise APIException(detail='Provide proper date')
+
     return PriceList.objects.filter(
         price_date=s_date
     )
+
+def list_price_date_by_sectors(query_params):
+    """ List prices for a given date range by sectors"""
+
+    price_date = query_params.get('price_date').split('-')
+    try:
+        price_year = int(price_date[0])
+        price_month = int(price_date[1])
+        price_day = int(price_date[2])
+
+        s_date = datetime(year=price_year, month=price_month, day=price_day, hour=0, minute=0, second=0) \
+            .replace(tzinfo=pytz.UTC)
+
+    except:
+        raise APIException(detail='Provide proper date')
+
+    main_sector_list = MainSector.objects.all()
+    date_sector_list = []
+    id = 0
+    for main_sector in main_sector_list:
+        sub_sector_list = SubSector.objects.filter(main_sector_id=main_sector.id)
+
+        for sub_sector in sub_sector_list:
+            date_sector ={}
+            stocks_involved = Stock.objects.filter(sub_sector_id=sub_sector.id).values_list('stock_code', flat=True)
+
+            price_list_objects = PriceList.objects.filter(
+                price_date=s_date, sec_code__in=stocks_involved)
+            # pdb.set_trace()
+            if price_list_objects:
+                id+=1
+                date_sector['id'] = id
+                date_sector['sub_sector'] = sub_sector
+                date_sector['sub_sector_name'] = sub_sector.name
+                date_sector['main_sector_name'] = main_sector.name
+                date_sector['main_sector'] = main_sector
+                date_sector['price_list'] = price_list_objects
+
+                date_sector_list.append(date_sector)
+
+    return date_sector_list

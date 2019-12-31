@@ -22,12 +22,9 @@ class PriceList(models.Model):
     num_of_deals = models.FloatField()
     volume = models.FloatField()
     x_value = models.FloatField()
-    dps = models.FloatField()
-    eps = models.FloatField()
-    pe = models.FloatField()
+
     rpt = models.CharField(max_length=10)
-    e_time = models.DateTimeField(max_length=10)
-    e_date = models.DateField(max_length=10)
+
     source = models.CharField(max_length=20)
     sync_flag = models.SmallIntegerField()
     stock = models.ForeignKey(

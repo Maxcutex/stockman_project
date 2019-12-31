@@ -2,18 +2,20 @@ import pdb
 
 from django.shortcuts import render
 from rest_framework import viewsets, decorators
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import detail_route, list_route, api_view
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 from stockman_project.permissions import IsAdminOrReadOnly
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
-    AnalysisOpinionSerializer, SiteAuthorSerializer, QuoteSerializer, InsideBusinessSerializer
+    AnalysisOpinionSerializer, SiteAuthorSerializer, QuoteSerializer, InsideBusinessSerializer, \
+    CustomPriceListSerializer
 from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor, Quote, InsideBusiness
 import stock_maintain.services as stock_maintain_services
 # Create your views here.
-from tablib import Dataset
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 class AnalysisView(viewsets.ModelViewSet):
@@ -94,6 +96,7 @@ class NewsView(viewsets.ModelViewSet):
 
         serializer = NewsSerializer(news_list, many=True)
         return Response(serializer.data)
+
 
 class InsideBusinessView(viewsets.ModelViewSet):
     queryset = InsideBusiness.objects.get_queryset().order_by('-id')
@@ -180,6 +183,37 @@ class PriceListView(viewsets.ModelViewSet):
                 return self.get_paginated_response(serializer.data)
 
         serializer = PriceListSerializer(price_list, many=True)
+        return Response(serializer.data)
+
+    @decorators.action(methods=['get'], detail=False, url_path='view-by-date-sector')
+    def view_by_date_sector(self, request, *args, **kwargs):
+        pdb.set_trace()
+        price_list = stock_maintain_services.list_price_date_by_sectors(
+            query_params=request.query_params,
+        )
+        paginate = kwargs.get('paginate')
+        if paginate is not None:
+            page = self.paginate_queryset(price_list)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = PriceListSerializer(price_list, many=True)
+        return Response(serializer.data)
+
+
+class PriceListAPIView(APIView):
+    """ PriceList View using Api View """
+    pagination_class = DefaultResultsSetPagination
+
+
+    def get(self, request, *args, **kwargs):
+        """ Returns a list of pricelist api view """
+        price_list = stock_maintain_services.list_price_date_by_sectors(
+            query_params=request.query_params,
+        )
+        serializer = CustomPriceListSerializer(price_list, many=True)
+
         return Response(serializer.data)
 
 

@@ -164,12 +164,9 @@ class PriceListFactory(factory.DjangoModelFactory):
 	num_of_deals = faker.random_number()
 	volume = faker.random_number()
 	x_value = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
-	dps = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
-	eps = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
-	pe = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
+
 	rpt = faker.text(10)
-	e_time = faker.date_time_this_year(before_now=True, after_now=False, tzinfo=None)
-	e_date = faker.date_this_decade(before_today=True, after_today=False)
+
 	source = faker.text(10)
 	sync_flag = faker.random_number()
 	stock = factory.SubFactory(StockFactory)

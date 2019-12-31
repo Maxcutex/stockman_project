@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
-from stock_setup_info.serializers import StructureSerializer
+from stock_setup_info.serializers import StructureSerializer, SubSectorSerializer, MainSectorSerializer
 from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
@@ -17,12 +17,21 @@ class PriceListSerializer(serializers.ModelSerializer):
             'price_close', 'x_open', 'x_high',
             'x_low', 'price', 'offer_bid_sign',
             'x_change', 'num_of_deals', 'volume',
-            'x_value', 'dps', 'eps',
-            'pe', 'rpt', 'e_time',
-            'e_date', 'source', 'sync_flag', 'stock'
+            'x_value',  'rpt',  'source', 'sync_flag', 'stock'
         )
         ordering_fields = ('id',)
         ordering = ['-id']
+
+
+class CustomPriceListSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    sub_sector = SubSectorSerializer()
+    main_sector = MainSectorSerializer()
+    price_list = PriceListSerializer(many=True)
+    sub_sector_name = serializers.CharField(max_length=200)
+    main_sector_name = serializers.CharField(max_length=200)
+
+
 
 
 class AsiIndexSerializer(serializers.ModelSerializer):
