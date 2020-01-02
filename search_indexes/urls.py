@@ -9,6 +9,7 @@ router = SimpleRouter()
 router.register('api/v1/search/news', NewsDocumentView, basename='search_news')
 
 
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

@@ -1,3 +1,4 @@
+from drf_haystack.serializers import HaystackSerializer
 from rest_framework import serializers
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
@@ -7,6 +8,7 @@ from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
                      NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusinessSection,
                      InsideBusiness, InsideBusinessImage)
+from .search_indexes import NewsIndex
 
 
 class PriceListSerializer(serializers.ModelSerializer):
@@ -175,3 +177,15 @@ class InsideBusinessSerializer(serializers.ModelSerializer):
         fields = '__all__'
         ordering_fields = ('id',)
         ordering = ['-id']
+
+
+class NewsSearchSerializer(HaystackSerializer):
+
+    class Meta:
+
+        index_classes = [NewsIndex]
+
+
+        fields = [
+            "title", "content", "news_date", "entry_date", "sec_code", "is_featured", "has_downloadable", "is_main"
+        ]
