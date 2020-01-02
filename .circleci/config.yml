@@ -82,16 +82,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Installing deployment dependencies
-          working_directory: /
+          name: Deploy Develop to Heroku
           command: |
-            sudo apt-get -y -qq update
-            sudo apt-get install python-pip python-dev build-essential
-            sudo pip install --upgrade setuptools
-            sudo pip install awsebcli --upgrade
-      - run:
-          name: Deploying
-          command: eb deploy Stockmanapi-env
+            git config --global user.email "eno.bassey@andela.com"
+            git config --global user.name "Eno Bassey"
+            git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git develop:master
 
 
 workflows:

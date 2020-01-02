@@ -17,6 +17,7 @@ from datetime import timedelta
 from pathlib import Path
 #from decouple import config
 #import dj_database_url
+import urllib.parse as urlparse
 
 
 CHECK_DIR = Path(__file__).parent.parent.parent
@@ -52,7 +53,9 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'rest_framework.authtoken',
     'stock_setup_info',
-    'stock_profile_mgt', 'stock_maintain', 'django_filters', 'search_indexes',
+    'stock_profile_mgt', 'stock_maintain', 'django_filters',
+    'search_indexes',
+    'haystack',
     'import_export', 'corsheaders', 'ckeditor', 'ckeditor_uploader',
     'rest_auth',
     'rest_auth.registration',
@@ -113,6 +116,19 @@ ELASTICSEARCH_INDEX_NAMES = {
     'search_indexes.documents.news': 'news',
     'search_indexes.documents.stock': 'stock',
 }
+
+ES_URL = urlparse(os.environ.get('BONSAI_URL') or 'http://127.0.0.1:9200/')
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': ES_URL.scheme + '://' + ES_URL.hostname + ':443',
+        'INDEX_NAME': 'haystack',
+    },
+}
+
+if ES_URL.username:
+    HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": ES_URL.username + ':' + ES_URL.password}
 
 ROOT_URLCONF = 'stockman_project.urls'
 
