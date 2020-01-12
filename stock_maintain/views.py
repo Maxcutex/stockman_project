@@ -1,7 +1,6 @@
 import pdb
 
 from django.shortcuts import render
-from drf_haystack.viewsets import HaystackViewSet
 from rest_framework import viewsets, decorators
 from rest_framework.decorators import detail_route, list_route, api_view
 from rest_framework.response import Response
@@ -11,7 +10,7 @@ from stockman_project.permissions import IsAdminOrReadOnly
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
     AnalysisOpinionSerializer, SiteAuthorSerializer, QuoteSerializer, InsideBusinessSerializer, \
-    CustomPriceListSerializer, NewsSearchSerializer
+    CustomPriceListSerializer
 from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor, Quote, InsideBusiness
 import stock_maintain.services as stock_maintain_services
 # Create your views here.
@@ -239,11 +238,7 @@ class QuotesView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class NewsSearchView(HaystackViewSet):
 
-    index_models = [News]
-
-    serializer_class = NewsSearchSerializer
 
 # def simple_upload(request):
 # 	if request.method == 'POST':

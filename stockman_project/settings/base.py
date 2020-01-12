@@ -11,13 +11,15 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import pdb
 import platform
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
 from pathlib import Path
 #from decouple import config
 #import dj_database_url
-import urllib.parse as urlparse
+# import urllib.parse as urlparse
+from urllib.parse import urlparse
 
 
 CHECK_DIR = Path(__file__).parent.parent.parent
@@ -55,7 +57,6 @@ INSTALLED_APPS = [
     'stock_setup_info',
     'stock_profile_mgt', 'stock_maintain', 'django_filters',
     'search_indexes',
-    'haystack',
     'import_export', 'corsheaders', 'ckeditor', 'ckeditor_uploader',
     'rest_auth',
     'rest_auth.registration',
@@ -116,19 +117,19 @@ ELASTICSEARCH_INDEX_NAMES = {
     'search_indexes.documents.news': 'news',
     'search_indexes.documents.stock': 'stock',
 }
-
 ES_URL = urlparse(os.environ.get('BONSAI_URL') or 'http://127.0.0.1:9200/')
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': ES_URL.scheme + '://' + ES_URL.hostname + ':443',
-        'INDEX_NAME': 'haystack',
-    },
-}
-
-if ES_URL.username:
-    HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": ES_URL.username + ':' + ES_URL.password}
+# port = ES_URL.port or 80
+# HAYSTACK_CONNECTIONS = {
+#     'default': {
+#         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+#         'URL': ES_URL.scheme + '://' + ES_URL.hostname + ':'+ str(port),
+#         'INDEX_NAME': 'haystack',
+#     },
+# }
+#
+# if ES_URL.username:
+#     HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": ES_URL.username + ':' + ES_URL.password}
 
 ROOT_URLCONF = 'stockman_project.urls'
 

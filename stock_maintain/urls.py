@@ -2,12 +2,10 @@ from django.urls import path, include
 from . import views
 from rest_framework.routers import SimpleRouter
 
-from .views import NewsSearchView
 
 router = SimpleRouter()
 
 router.register('api/v1/News', views.NewsView, basename='news')
-router.register('api/v1/News/search', NewsSearchView, basename='news_search')
 router.register('api/v1/Authors', views.SiteAuthorView, basename='author')
 router.register('api/v1/Analysis', views.AnalysisView, basename='analysis')
 router.register('api/v1/PriceLists', views.PriceListView, basename='pricelist')
