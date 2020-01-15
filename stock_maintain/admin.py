@@ -151,6 +151,7 @@ class SiteAuthorAdmin(ImportExportModelAdmin):
 class NewsAdmin(ImportExportModelAdmin):
 	model = models.News
 	inlines = [NewsImageInline, NewsFileInline, NewsSectionInline]
+	search_fields = ('title', 'description', )
 	list_display = ('newstitle',)
 
 	def newstitle(self, obj):
@@ -177,6 +178,7 @@ class AnalysisOpinionSectionInline(admin.TabularInline):
 class AnalysisOpinionAdmin(ImportExportModelAdmin):
 	model = models.AnalysisOpinion
 	inlines = [AnalysisOpinionSectionInline, AnalysisImageInline, AnalysisFileInline]
+	search_fields = ('title', 'description',)
 	list_display = ('titles',)
 
 	def titles(self, obj):
@@ -193,6 +195,7 @@ class InsideBusinessInline(admin.TabularInline):
 class InsideBusinessAdmin(ImportExportModelAdmin):
 	model = models.InsideBusiness
 	inlines = [InsideBusinessInline, InsideBusinessImageInline, InsideBusinessFileInline]
+	search_fields = ('title', 'description',)
 	list_display = ('titles',)
 
 	def titles(self, obj):
