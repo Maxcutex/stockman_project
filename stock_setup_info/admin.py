@@ -6,7 +6,6 @@ from .models import Industry, Stock, Structure, StructureType, StockManagement, 
 # Register your models here.
 
 admin.site.register(Industry)
-admin.site.register(Stock)
 
 
 @admin.register(Stock)
