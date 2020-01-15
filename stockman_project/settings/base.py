@@ -40,7 +40,7 @@ SECRET_KEY = '21)^n6=5y$ams&oyqlumbhbaqthx9y+)p=9_&f30tgb-$uibhu'
 DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','stockman-api.herokuapp.com','api','https://stockmanreact.ennyboy.now.sh/',
-                 'https://elasticbeanstalk-us-east-2-606297809594.s3.amazonaws.com/']
+                 'https://elasticbeanstalk-us-east-2-606297809594.s3.amazonaws.com/','https://stockman-frontend.herokuapp.com/']
 
 # Application definition
 
