@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'stock_setup_info',
     'stock_profile_mgt', 'stock_maintain', 'django_filters',
-    'search_indexes',
+    # 'search_indexes', until elastic search is fixed
     'import_export', 'corsheaders', 'ckeditor', 'ckeditor_uploader',
     'rest_auth',
     'rest_auth.registration',
