@@ -92,9 +92,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.tumblr',
     'allauth.socialaccount.providers.twitter',
     # Django Elasticsearch integration
-    'django_elasticsearch_dsl',
+    # 'django_elasticsearch_dsl',
     # Django REST framework Elasticsearch integration (this package)
-    'django_elasticsearch_dsl_drf',
+    # 'django_elasticsearch_dsl_drf',
     # for uploading
     'storages',
 
