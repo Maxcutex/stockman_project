@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
+from stock_setup_info.models import SectionGroup
 from stock_setup_info.serializers import StructureSerializer, SubSectorSerializer, MainSectorSerializer
 from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
@@ -32,6 +33,10 @@ class CustomPriceListSerializer(serializers.Serializer):
     main_sector_name = serializers.CharField(max_length=200)
 
 
+class SectionGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SectionGroup
+        fields = '__all__'
 
 
 class AsiIndexSerializer(serializers.ModelSerializer):
@@ -101,7 +106,7 @@ class NewsFileSerializer(serializers.ModelSerializer):
 
 
 class NewsCategorySectionSerializer(serializers.ModelSerializer):
-    section = StructureSerializer(read_only=True)
+    section_category = SectionGroupSerializer(read_only=True)
 
     class Meta:
         model = NewsCategorySection
