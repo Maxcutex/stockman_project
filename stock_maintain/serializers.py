@@ -80,7 +80,7 @@ class NewsImageSerializer(serializers.ModelSerializer):
     def get_image_file(self, NewsImage):
         request = self.context.get('request')
         image_file = NewsImage.image_file
-        return request.build_absolute_uri(MEDIA_URL + "images/news_image/" + str(image_file))
+        return request.build_absolute_uri(MEDIA_URL  + str(image_file))
 
 
 class InsideBusinessImageSerializer(serializers.ModelSerializer):
@@ -94,7 +94,7 @@ class InsideBusinessImageSerializer(serializers.ModelSerializer):
     def get_image_file(self, InsideBusinessImage):
         request = self.context.get('request')
         image_file = InsideBusinessImage.image_file
-        return request.build_absolute_uri(MEDIA_URL + "images/inside_business_image/" + str(image_file))
+        return request.build_absolute_uri(MEDIA_URL  + str(image_file))
 
 
 class NewsFileSerializer(serializers.ModelSerializer):
@@ -125,7 +125,7 @@ class SiteAuthorSerializer(serializers.ModelSerializer):
     def get_image_file(self, SiteAuthor):
         request = self.context.get('request')
         image_file = SiteAuthor.image_file
-        return request.build_absolute_uri(MEDIA_URL + "images/authors_image/" + str(image_file))
+        return request.build_absolute_uri(MEDIA_URL  + str(image_file))
 
 
 class NewsSerializer(serializers.ModelSerializer):
