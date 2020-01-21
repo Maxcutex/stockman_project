@@ -5,7 +5,7 @@ import pytz
 from rest_framework.exceptions import APIException
 
 from stock_maintain.models import News, PriceList, AnalysisOpinion, InsideBusiness
-from stock_setup_info.models import Stock, MainSector, SubSector
+from stock_setup_info.models import Stock, MainSector, SubSector, SectionGroup
 
 
 def list_analysis_range(query_params):
@@ -71,6 +71,22 @@ def list_news_by_section(query_params):
     return News.objects.filter(
         category_news__section_category__section_name__in=section_list
     )
+
+
+def group_news_by_section():
+    ''' group news for all the created sections'''
+
+    section_list = SectionGroup.objects.all()
+
+    news_list = []
+
+    for section in section_list:
+        list_news = News.objects.filter(
+            category_news__section_category__section_name=section
+        ).order_by("-id")[:5]
+        news_list.append(list_news)
+
+    return news_list
 
 
 def list_price_range(query_params):
@@ -145,6 +161,7 @@ def list_price_date(query_params):
         price_date=s_date
     )
 
+
 def list_price_date_by_sectors(query_params):
     """ List prices for a given date range by sectors"""
 
@@ -167,14 +184,14 @@ def list_price_date_by_sectors(query_params):
         sub_sector_list = SubSector.objects.filter(main_sector_id=main_sector.id)
 
         for sub_sector in sub_sector_list:
-            date_sector ={}
+            date_sector = {}
             stocks_involved = Stock.objects.filter(sub_sector_id=sub_sector.id).values_list('stock_code', flat=True)
 
             price_list_objects = PriceList.objects.filter(
                 price_date=s_date, sec_code__in=stocks_involved)
             # pdb.set_trace()
             if price_list_objects:
-                id+=1
+                id += 1
                 date_sector['id'] = id
                 date_sector['sub_sector'] = sub_sector
                 date_sector['sub_sector_name'] = sub_sector.name

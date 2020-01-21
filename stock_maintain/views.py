@@ -97,6 +97,13 @@ class NewsView(viewsets.ModelViewSet):
         serializer = NewsSerializer(news_list, many=True)
         return Response(serializer.data)
 
+    @decorators.action(methods=['get'], detail=False, url_path='group-by-section')
+    def group_by_section(self, request, *args, **kwargs):
+        news_list = stock_maintain_services.group_news_by_section()
+
+        serializer = NewsSerializer(news_list, many=True)
+        return Response(serializer.data)
+
 
 class InsideBusinessView(viewsets.ModelViewSet):
     queryset = InsideBusiness.objects.get_queryset().order_by('-id')

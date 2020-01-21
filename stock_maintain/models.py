@@ -140,7 +140,7 @@ class News(models.Model):
     entry_date = models.DateField()
     stock = models.ForeignKey(
         Stock, on_delete=models.CASCADE, related_name='news_stock', null=True)
-    sec_code = models.CharField(max_length=10)
+    sec_code = models.CharField(max_length=10, null=True)
     is_featured = models.BooleanField()
     has_downloadable = models.BooleanField(default=False)
     is_main = models.BooleanField(default=False)
