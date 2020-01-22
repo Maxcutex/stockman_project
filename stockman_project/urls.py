@@ -22,11 +22,24 @@ from django.conf import settings
 from rest_auth.registration.views import RegisterView
 from rest_auth.views import LoginView
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
-from rest_framework_swagger.views import get_swagger_view
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from stock_profile_mgt.views import CustomLoginView, complete_view, django_rest_auth_null
 
-schema_view = get_swagger_view(title='StockMan  API')
+schema_view = get_schema_view(
+   openapi.Info(
+      title="StockMan API",
+      default_version='v1',
+      description="API documentation for Stockman",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   re_path('', include('stock_setup_info.urls')),
@@ -50,7 +63,7 @@ urlpatterns = [
                   path('api-token-verify/', verify_jwt_token),
 
                   # path('rest-auth/registration/', include('rest_auth.registration.urls')),
-                  path('swagger', schema_view)
+                  path('swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
 
               ] + static(
     settings.MEDIA_URL,

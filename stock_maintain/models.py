@@ -172,7 +172,7 @@ class News(models.Model):
 
 
 class NewsImage(models.Model):
-    image_choice = Choices('size930x620', 'size450x330', 'size300x200')
+    image_choice = Choices('size930x620', 'size450x330', 'size300x200', 'size158x158')
     news = models.ForeignKey(
         News, on_delete=models.CASCADE, related_name='visual_news', null=True)
     is_main = models.BooleanField()
