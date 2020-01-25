@@ -84,9 +84,16 @@ def group_news_by_section():
         list_news = News.objects.filter(
             category_news__section_category__section_name=section
         ).order_by("-id")[:5]
-        #pdb.set_trace()
         for news in list_news:
-            news_list.append(news)
+            pdb.set_trace()
+            if len(news_list) == 0:
+                news_list.append(news)
+            else:
+
+                for news_list_item in news_list:
+                    pdb.set_trace()
+                    if news.id != news_list_item.id:
+                        news_list.append(news)
     # news = News.objects.filter(
     #     category_news__section_category__section_name=section_name
     # ).order_by("-id")[:5]

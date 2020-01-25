@@ -65,7 +65,7 @@ class NewsView(viewsets.ModelViewSet):
     queryset = News.objects.get_queryset().order_by('-id')
     serializer_class = NewsSerializer
     filter_fields = ('is_featured', 'stock_id', 'news_date', 'sec_code')
-    pagination_class = DefaultResultsSetPagination
+    # pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -101,7 +101,16 @@ class NewsView(viewsets.ModelViewSet):
     def group_by_section(self, request, *args, **kwargs):
         news_list = stock_maintain_services.group_news_by_section()
 
-        serializer = NewsSerializer(news_list, many=True, context={"request":request})
+        paginate = kwargs.get('paginate')
+        if paginate is not None:
+            page = self.paginate_queryset(news_list)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = NewsSerializer(news_list, many=True, context={"request": request})
+
+        # return self.get_paginated_response(serializer.data)
 
         return Response(serializer.data)
 
