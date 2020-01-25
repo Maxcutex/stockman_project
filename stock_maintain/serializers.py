@@ -1,3 +1,5 @@
+import pdb
+
 from rest_framework import serializers
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
@@ -18,7 +20,7 @@ class PriceListSerializer(serializers.ModelSerializer):
             'price_close', 'x_open', 'x_high',
             'x_low', 'price', 'offer_bid_sign',
             'x_change', 'num_of_deals', 'volume',
-            'x_value',  'rpt',  'source', 'sync_flag', 'stock'
+            'x_value', 'rpt', 'source', 'sync_flag', 'stock'
         )
         ordering_fields = ('id',)
         ordering = ['-id']
@@ -80,7 +82,8 @@ class NewsImageSerializer(serializers.ModelSerializer):
     def get_image_file(self, NewsImage):
         request = self.context.get('request')
         image_file = NewsImage.image_file
-        return request.build_absolute_uri(MEDIA_URL  + str(image_file))
+
+        return request.build_absolute_uri(MEDIA_URL + str(image_file))
 
 
 class InsideBusinessImageSerializer(serializers.ModelSerializer):
@@ -94,7 +97,7 @@ class InsideBusinessImageSerializer(serializers.ModelSerializer):
     def get_image_file(self, InsideBusinessImage):
         request = self.context.get('request')
         image_file = InsideBusinessImage.image_file
-        return request.build_absolute_uri(MEDIA_URL  + str(image_file))
+        return request.build_absolute_uri(MEDIA_URL + str(image_file))
 
 
 class NewsFileSerializer(serializers.ModelSerializer):
@@ -125,7 +128,7 @@ class SiteAuthorSerializer(serializers.ModelSerializer):
     def get_image_file(self, SiteAuthor):
         request = self.context.get('request')
         image_file = SiteAuthor.image_file
-        return request.build_absolute_uri(MEDIA_URL  + str(image_file))
+        return request.build_absolute_uri(MEDIA_URL + str(image_file))
 
 
 class NewsSerializer(serializers.ModelSerializer):
@@ -180,6 +183,3 @@ class InsideBusinessSerializer(serializers.ModelSerializer):
         fields = '__all__'
         ordering_fields = ('id',)
         ordering = ['-id']
-
-
-

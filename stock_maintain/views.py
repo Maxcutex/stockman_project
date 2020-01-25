@@ -101,7 +101,8 @@ class NewsView(viewsets.ModelViewSet):
     def group_by_section(self, request, *args, **kwargs):
         news_list = stock_maintain_services.group_news_by_section()
 
-        serializer = NewsSerializer(news_list, many=True)
+        serializer = NewsSerializer(news_list, many=True, context={"request":request})
+
         return Response(serializer.data)
 
 
