@@ -79,7 +79,6 @@ def group_news_by_section():
     section_list = SectionGroup.objects.all()
 
     news_list = []
-    section_name = 'World'
     for section in section_list:
         list_news = News.objects.filter(
             category_news__section_category__section_name=section
@@ -88,14 +87,13 @@ def group_news_by_section():
             if len(news_list) == 0:
                 news_list.append(news)
             else:
-
+                found = False
                 for news_list_item in news_list:
-                    if news.id != news_list_item.id:
-                        news_list.append(news)
-    # news = News.objects.filter(
-    #     category_news__section_category__section_name=section_name
-    # ).order_by("-id")[:5]
-    # pdb.set_trace()
+                    if news.id == news_list_item.id:
+                        found = True
+                if found == False:
+                    news_list.append(news)
+
     return news_list
 
 
