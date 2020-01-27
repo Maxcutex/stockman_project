@@ -27,6 +27,9 @@ get_picture_preview.short_description = _("Picture Preview")
 
 
 # admin.site.register(PriceList)
+
+
+
 class NewsImageInline(admin.TabularInline):
     model = NewsImage
     extra = 1
@@ -110,9 +113,7 @@ class InsideBusinessFileInline(admin.TabularInline):
 
 @admin.register(PriceList)
 class PriceListAdmin(ImportExportModelAdmin):
-    fields = ["sec_code", "price_date", "price_close", "x_open", "x_high", "x_low", "price", "offer_bid_sign",
-              "x_change",
-              "num_of_deals", "volume", "x_value", "rpt", "source", "sync_flag"]
+    pass
 
 
 @admin.register(AsiIndex)
