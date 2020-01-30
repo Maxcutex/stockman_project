@@ -165,10 +165,7 @@ class PriceListFactory(factory.DjangoModelFactory):
 	volume = faker.random_number()
 	x_value = faker.pydecimal(left_digits=None, right_digits=2, positive=True)
 
-	rpt = faker.text(10)
 
-	source = faker.text(10)
-	sync_flag = faker.random_number()
 	stock = factory.SubFactory(StockFactory)
 
 	class Meta:
