@@ -15,13 +15,7 @@ from .models import (PriceList, AsiIndex, Quote,
 class PriceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = PriceList
-        fields = (
-            'id', 'sec_code', 'price_date',
-            'price_close', 'x_open', 'x_high',
-            'x_low', 'price', 'offer_bid_sign',
-            'x_change', 'num_of_deals', 'volume',
-            'x_value', 'rpt', 'source', 'sync_flag', 'stock'
-        )
+        fields = '__all__'
         ordering_fields = ('id',)
         ordering = ['-id']
 

@@ -10,7 +10,7 @@ class PriceListResource(resources.ModelResource):
         exclude = ('id',)
         fields = ("sec_code", "price_date", "price_close", "x_open", "x_high", "x_low", "price", "offer_bid_sign",
                   "x_change",
-                  "num_of_deals", "volume", "x_value", "rpt", "source", "sync_flag")
+                  "num_of_deals", "volume", "x_value", "x_change")
 
 
 class AsiIndexResource(resources.ModelResource):
