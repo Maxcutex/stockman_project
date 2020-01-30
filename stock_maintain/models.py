@@ -22,11 +22,6 @@ class PriceList(models.Model):
     num_of_deals = models.FloatField()
     volume = models.FloatField()
     x_value = models.FloatField()
-
-    rpt = models.CharField(max_length=10)
-
-    source = models.CharField(max_length=20)
-    sync_flag = models.SmallIntegerField()
     stock = models.ForeignKey(
         Stock, on_delete=models.CASCADE, related_name='price_stock', null=True)
 
