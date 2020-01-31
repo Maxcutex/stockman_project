@@ -114,6 +114,7 @@ class InsideBusinessFileInline(admin.TabularInline):
 @admin.register(PriceList)
 class PriceListAdmin(ImportExportModelAdmin):
     list_display = ('sec_code', 'price_date', 'price')
+    resource_class = PriceListResource
 
 
 @admin.register(AsiIndex)
