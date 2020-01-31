@@ -113,7 +113,7 @@ class InsideBusinessFileInline(admin.TabularInline):
 
 @admin.register(PriceList)
 class PriceListAdmin(ImportExportModelAdmin):
-    pass
+    list_display = ('sec_code', 'price_date', 'price')
 
 
 @admin.register(AsiIndex)
