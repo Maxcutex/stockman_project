@@ -28,6 +28,10 @@ from drf_yasg import openapi
 
 from stock_profile_mgt.views import CustomLoginView, complete_view, django_rest_auth_null
 
+admin.site.site_header = "Stock Man Administration"
+admin.site.site_title = "Stock Man Admin Portal"
+admin.site.index_title = "Welcome to Stock Man Portal"
+
 schema_view = get_schema_view(
    openapi.Info(
       title="StockMan API",
