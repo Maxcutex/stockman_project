@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'stock_setup_info',
     'stock_profile_mgt', 'stock_maintain', 'django_filters',
-    # 'search_indexes', until elastic search is fixed
+    'search_indexes',
     'import_export', 'corsheaders', 'ckeditor', 'ckeditor_uploader',
     'rest_auth',
     'rest_auth.registration',
@@ -93,9 +93,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.tumblr',
     'allauth.socialaccount.providers.twitter',
     # Django Elasticsearch integration
-    # 'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl',
     # Django REST framework Elasticsearch integration (this package)
-    # 'django_elasticsearch_dsl_drf',
+    'django_elasticsearch_dsl_drf',
     # for uploading
     'storages',
 
