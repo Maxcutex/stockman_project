@@ -7,7 +7,7 @@ from stockman_project.settings.pagination_defaults import DefaultResultsSetPagin
 from .models import (Industry, Structure, StructureType, Stock, StockManagement, MainSector, SubSector)
 from .serializers import (
     IndustrySerializer, StructureSerializer, StructureTypeSerializer,
-    StockManagementSerializer, StockSerializer, MainSectorSerializer, SubSectorSerializer)
+    StockManagementSerializer, StockSerializer, MainSectorSerializer, SubSectorSerializer, StockMiniSerializer)
 
 from rest_framework import mixins
 from rest_framework.views import APIView
@@ -64,6 +64,12 @@ class StockView(viewsets.ModelViewSet):
     queryset = Stock.objects.get_queryset().order_by('-id')
     serializer_class = StockSerializer
     pagination_class = DefaultResultsSetPagination
+
+    @decorators.action(methods=['get'], detail=False, url_path='all')
+    def all(self, request, *args, **kwargs):
+        stocks = Stock.objects.get_queryset().order_by('stock_code')
+        serializer = StockMiniSerializer(stocks, many=True)
+        return Response(serializer.data)
 
     @decorators.action(methods=['get'], detail=False, url_path='by-code')
     def by_code(self, request, *args, **kwargs):

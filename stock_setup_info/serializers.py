@@ -86,3 +86,12 @@ class StockSerializer(serializers.ModelSerializer):
                   )
         ordering_fields = ('id',)
         ordering = ['-id']
+
+class StockMiniSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Stock
+        fields = ('id', 'name', 'stock_code'
+                  )
+        ordering_fields = ('id',)
+        ordering = ['-id']

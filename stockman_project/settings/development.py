@@ -29,16 +29,15 @@ DATABASES = {
     }
 }
 
-# ELASTIC_HOST_NAME = os.environ.get('ELASTIC_HOST_NAME', 'localhost')
-# ELASTIC_HOST_PORT = os.environ.get('ELASTIC_HOST_PORT', '9200')
+ELASTIC_HOST_NAME = os.environ.get('ELASTIC_HOST_NAME', 'localhost')
+ELASTIC_HOST_PORT = os.environ.get('ELASTIC_HOST_PORT', '9200')
 # ELASTIC_URL = os.environ.get('ELASTIC_URL', 'http://localhost:9200')
 #
-# ELASTICSEARCH_DSL = {
-#     'default': {
-#         'hosts':  ES_URL
-#         #'hosts': ELASTIC_HOST_NAME + ':' + ELASTIC_HOST_PORT, ES_URL
-#         },
-# }
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': ELASTIC_HOST_NAME + ':' + ELASTIC_HOST_PORT,
+        },
+}
 
 
 HOST_NAME = os.environ.get('HOST_NAME')
