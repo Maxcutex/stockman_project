@@ -58,22 +58,22 @@ class NewsDocumentView(BaseDocumentViewSet):
                 LOOKUP_QUERY_LTE,
             ],
         },
-        'title': 'title.raw',
-        'content': 'content.raw',
+        'title': 'title',
+        # 'content': 'content.raw',
         'news_date': 'news_date',
         'entry_date': 'entry_date',
-        'stock': 'stock.raw',
-        'sec_code': 'sec_code.raw',
-        'author': 'author.raw',
+        # 'stock': 'stock.raw',
+        # 'sec_code': 'sec_code.raw',
+        # 'author': 'author.raw',
 
     }
     # Define ordering fields
     ordering_fields = {
         'id': 'id',
-        'title': 'title.raw',
+        'title': 'title',
         'news_date': 'news_date',
         'entry_date': 'entry_date',
-        'stock': 'stock.raw',
+        # 'stock': 'stock.raw',
     }
     # Specify default ordering
     ordering = ('id', 'title',)

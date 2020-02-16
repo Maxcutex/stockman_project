@@ -295,7 +295,7 @@ class AnalysisCategorySection(models.Model):
 
 
 class AnalysisImage(models.Model):
-    image_choice = Choices('size930x620', 'size450x330', 'size300x200')
+    image_choice = Choices('size930x620', 'size450x330', 'size300x200', 'size158x158')
     analysis = models.ForeignKey(
         AnalysisOpinion, on_delete=models.CASCADE, related_name='visual_analysis', null=True)
     is_main = models.BooleanField()
@@ -362,7 +362,7 @@ class InsideBusinessFile(models.Model):
 
 
 class InsideBusinessImage(models.Model):
-    image_choice = Choices('size930x620', 'size450x330', 'size300x200')
+    image_choice = Choices('size930x620', 'size450x330', 'size300x200', 'size158x158')
     inside_business = models.ForeignKey(
         InsideBusiness, on_delete=models.CASCADE, related_name='visual_inside_business', null=True)
     is_main = models.BooleanField()
