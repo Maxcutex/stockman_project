@@ -114,10 +114,10 @@ MIDDLEWARE = [
 ]
 
 # Name of the Elasticsearch index
-# ELASTICSEARCH_INDEX_NAMES = {
-#     'search_indexes.documents.news': 'news',
-#     'search_indexes.documents.stock': 'stock',
-# }
+ELASTICSEARCH_INDEX_NAMES = {
+    'search_indexes.documents.news': 'news',
+    'search_indexes.documents.stock': 'stock',
+}
 ES_URL = urlparse(os.environ.get('BONSAI_URL') or 'http://127.0.0.1:9200/')
 
 # port = ES_URL.port or 80
