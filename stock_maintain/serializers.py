@@ -9,7 +9,7 @@ from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
                      NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusinessSection,
-                     InsideBusiness, InsideBusinessImage)
+                     InsideBusiness, InsideBusinessImage, NewsFile, InsideBusinessFile)
 
 
 class PriceListSerializer(serializers.ModelSerializer):
@@ -98,7 +98,15 @@ class NewsFileSerializer(serializers.ModelSerializer):
     doc_file = serializers.FileField(max_length=None, use_url=True)
 
     class Meta:
-        model = NewsImage
+        model = NewsFile
+        fields = '__all__'
+
+
+class InsideBusinessFileSerializer(serializers.ModelSerializer):
+    doc_file = serializers.FileField(max_length=None, use_url=True)
+
+    class Meta:
+        model = InsideBusinessFile
         fields = '__all__'
 
 
@@ -159,8 +167,9 @@ class AnalysisOpinionSerializer(serializers.ModelSerializer):
 
 
 class InsideBusinessSectionSerializer(serializers.ModelSerializer):
-    visual_inside = InsideBusinessImageSerializer(many=True, read_only=True)
-    author = SiteAuthorSerializer(read_only=True)
+    # visual_inside = InsideBusinessImageSerializer(many=True, read_only=True)
+    # author = SiteAuthorSerializer(read_only=True)
+    section_category = SectionGroupSerializer(read_only=True)
 
     class Meta:
         model = InsideBusinessSection
@@ -171,6 +180,9 @@ class InsideBusinessSectionSerializer(serializers.ModelSerializer):
 
 class InsideBusinessSerializer(serializers.ModelSerializer):
     inside_business_section = InsideBusinessSectionSerializer(many=True, read_only=True)
+    visual_inside = InsideBusinessImageSerializer(many=True, read_only=True)
+    author = SiteAuthorSerializer(read_only=True)
+    doc_inside_business = InsideBusinessFileSerializer(many=True, read_only=True)
 
     class Meta:
         model = InsideBusiness
