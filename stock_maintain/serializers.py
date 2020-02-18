@@ -81,7 +81,7 @@ class NewsImageSerializer(serializers.ModelSerializer):
 
 
 class InsideBusinessImageSerializer(serializers.ModelSerializer):
-    # image_file = serializers.ImageField(max_length=None, use_url=True)
+    #image_file = serializers.ImageField(max_length=None, use_url=True)
     image_file = serializers.SerializerMethodField()
 
     class Meta:
@@ -179,8 +179,8 @@ class InsideBusinessSectionSerializer(serializers.ModelSerializer):
 
 
 class InsideBusinessSerializer(serializers.ModelSerializer):
-    inside_business_section = InsideBusinessSectionSerializer(many=True, read_only=True)
-    visual_inside = InsideBusinessImageSerializer(many=True, read_only=True)
+    category_inside_business = InsideBusinessSectionSerializer(many=True, read_only=True)
+    visual_inside_business = InsideBusinessImageSerializer(many=True, read_only=True)
     author = SiteAuthorSerializer(read_only=True)
     doc_inside_business = InsideBusinessFileSerializer(many=True, read_only=True)
 
