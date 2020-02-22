@@ -9,7 +9,7 @@ from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
                      NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusinessSection,
-                     InsideBusiness, InsideBusinessImage, NewsFile, InsideBusinessFile)
+                     InsideBusiness, InsideBusinessImage, NewsFile, InsideBusinessFile, AnalysisImage)
 
 
 class PriceListSerializer(serializers.ModelSerializer):
@@ -94,11 +94,33 @@ class InsideBusinessImageSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(MEDIA_URL + str(image_file))
 
 
+class AnalysisImageSerializer(serializers.ModelSerializer):
+    #image_file = serializers.ImageField(max_length=None, use_url=True)
+    image_file = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AnalysisImage
+        fields = '__all__'
+
+    def get_image_file(self, InsideBusinessImage):
+        request = self.context.get('request')
+        image_file = InsideBusinessImage.image_file
+        return request.build_absolute_uri(MEDIA_URL + str(image_file))
+
+
 class NewsFileSerializer(serializers.ModelSerializer):
     doc_file = serializers.FileField(max_length=None, use_url=True)
 
     class Meta:
         model = NewsFile
+        fields = '__all__'
+
+
+class AnalysisOpinionFileSerializer(serializers.ModelSerializer):
+    doc_file = serializers.FileField(max_length=None, use_url=True)
+
+    class Meta:
+        model = AnalysisOpinion
         fields = '__all__'
 
 
@@ -147,7 +169,7 @@ class NewsSerializer(serializers.ModelSerializer):
 
 
 class AnalysisCategorySectionSerializer(serializers.ModelSerializer):
-    category_analysis_structure = StructureSerializer(many=True, read_only=True)
+    category_analysis_structure = SectionGroupSerializer(many=True, read_only=True)
 
     class Meta:
         model = AnalysisCategorySection
@@ -157,7 +179,10 @@ class AnalysisCategorySectionSerializer(serializers.ModelSerializer):
 
 
 class AnalysisOpinionSerializer(serializers.ModelSerializer):
-    analysis_news = AnalysisCategorySectionSerializer(many=True, read_only=True)
+    category_analysis = AnalysisCategorySectionSerializer(many=True, read_only=True)
+    visual_analysis = AnalysisImageSerializer(many=True, read_only=True)
+    author = SiteAuthorSerializer(read_only=True)
+    doc_analysis = AnalysisOpinionFileSerializer(many=True, read_only=True)
 
     class Meta:
         model = AnalysisOpinion
