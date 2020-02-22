@@ -1,4 +1,6 @@
 import io
+import pdb
+
 from django.contrib import messages
 from django.contrib import admin
 from django.db import transaction
@@ -120,6 +122,7 @@ class InsideBusinessFileInline(admin.TabularInline):
 
 class CsvImportForm(forms.Form):
     csv_file = forms.FileField()
+    date_import = forms.Field()
 
 
 @admin.register(PriceList)
@@ -141,6 +144,9 @@ class PriceListAdmin(admin.ModelAdmin):
 
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
+
+            date_import = request.POST['date_import']
+            pdb.set_trace()
             decoded_csv_file = io.StringIO(csv_file.read().decode())
             reader = csv.reader(decoded_csv_file)
             # Create pricelist objects from passed in data
@@ -157,7 +163,7 @@ class PriceListAdmin(admin.ModelAdmin):
                             x_change = float(line[1]) - float(line[6])
                         price_list_object = PriceList.objects.create(
                             sec_code=line[0],
-                            price_date='2019-04-30',  # line[12],
+                            price_date=date_import,  # line[12],
                             price_close=float(line[1].strip()),
                             x_open=float(line[2].strip()),
                             x_high=float(line[3].strip()),
