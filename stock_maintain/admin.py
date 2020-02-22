@@ -146,7 +146,6 @@ class PriceListAdmin(admin.ModelAdmin):
             csv_file = request.FILES["csv_file"]
 
             date_import = request.POST['date_import']
-            pdb.set_trace()
             decoded_csv_file = io.StringIO(csv_file.read().decode())
             reader = csv.reader(decoded_csv_file)
             # Create pricelist objects from passed in data
