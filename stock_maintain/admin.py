@@ -1,16 +1,24 @@
+import io
+from django.contrib import messages
 from django.contrib import admin
+from django.db import transaction
+from django.forms import forms
+
+from django.shortcuts import render, redirect
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
+from psycopg2._psycopg import IntegrityError
 from rest_framework.reverse import reverse
-
+import csv
 from stock_maintain import models
-from stock_setup_info.models import SectionGroup
+from stock_setup_info.models import SectionGroup, Stock
 from .resources import PriceListResource
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, NewsFile, NewsCategorySection,
                      AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusiness, InsideBusinessSection,
                      AnalysisImage, AnalysisFile, InsideBusinessImage, InsideBusinessFile)
 from import_export.admin import ImportExportModelAdmin
+from django.urls import path
 
 
 def get_picture_preview(obj):
@@ -27,7 +35,6 @@ get_picture_preview.short_description = _("Picture Preview")
 
 
 # admin.site.register(PriceList)
-
 
 
 class NewsImageInline(admin.TabularInline):
@@ -111,10 +118,77 @@ class InsideBusinessFileInline(admin.TabularInline):
     fields = ["is_main", "name", "doc_type", "doc_file"]
 
 
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField()
+
+
 @admin.register(PriceList)
-class PriceListAdmin(ImportExportModelAdmin):
+class PriceListAdmin(admin.ModelAdmin):
+    # class PriceListAdmin(ImportExportModelAdmin):
     list_display = ('sec_code', 'price_date', 'price')
-    resource_class = PriceListResource
+    # resource_class = PriceListResource
+    change_list_template = "entities/pricelists_changelist.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+
+            path('import-csv/', self.import_csv),
+        ]
+        return my_urls + urls
+
+    def import_csv(self, request):
+
+        if request.method == "POST":
+            csv_file = request.FILES["csv_file"]
+            decoded_csv_file = io.StringIO(csv_file.read().decode())
+            reader = csv.reader(decoded_csv_file)
+            # Create pricelist objects from passed in data
+            try:
+                with transaction.atomic():
+                    for line in reader:
+                        stock = Stock.objects.get(stock_code=line[0].strip())
+                        x_change = 0.0
+                        sign = ''
+                        if float(line[1].strip()) >= float(line[6].strip()):
+                            sign = '+'
+                        else:
+                            sign = '-'
+                            x_change = float(line[1]) - float(line[6])
+                        price_list_object = PriceList.objects.create(
+                            sec_code=line[0],
+                            price_date='2019-04-30',  # line[12],
+                            price_close=float(line[1].strip()),
+                            x_open=float(line[2].strip()),
+                            x_high=float(line[3].strip()),
+                            x_low=float(line[4].strip()),
+                            price=float(line[6].strip()),
+                            offer_bid_sign=sign,
+                            x_change=x_change,
+                            num_of_deals=float(line[9].strip().replace(',', '')),
+                            volume=float(line[10].strip().replace(',', '')),
+                            x_value=float(line[11].strip().replace(',', '')),
+                            stock_id=stock.id
+                        )
+                        price_list_object.save()
+                self.message_user(request, "Your csv file has been imported")
+                return redirect("..")
+            except Stock.DoesNotExist:
+                self.message_user(
+                    request,
+                    " A stock value does not exist in the database. "
+                    "Pls enter details for this stock or update previous name", level=messages.ERROR)
+            except IntegrityError:
+                self.message_user(
+                    request,
+                    " A stock value does not exist in the database. "
+                    "Pls enter details for this stock or update previous name", level=messages.ERROR)
+
+        form = CsvImportForm()
+        payload = {"form": form}
+        return render(
+            request, "admin/csv_form.html", payload
+        )
 
 
 @admin.register(AsiIndex)
