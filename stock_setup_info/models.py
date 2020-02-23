@@ -150,6 +150,8 @@ class StockManagement(models.Model):
     management_type = models.CharField(
         choices=management_choice, default=management_choice.management, max_length=30)
     is_active = models.BooleanField()
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name='management_stock')
 
     def __str__(self):
         return self.name
