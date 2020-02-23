@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.settings import api_settings
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 from .models import (Industry, Structure, StructureType,
-                     Stock, StockManagement, ManagementType, MainSector, SubSector)
+                     Stock, StockManagement, ManagementType, MainSector, SubSector, SectionGroup)
 from stockman_project import settings
 
 
@@ -53,6 +53,15 @@ class StructureTypeSerializer(serializers.ModelSerializer):
         model = StructureType
         fields = ('id', 'structure_type_name',
                   'is_active', 'description',   'parent_id', 'child_structures')
+        ordering_fields = ('id',)
+        ordering = ['-id']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SectionGroup
+        fields = '__all__'
         ordering_fields = ('id',)
         ordering = ['-id']
 

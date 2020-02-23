@@ -13,6 +13,7 @@ router.register('api/v1/main_sector', views.MainSectorView, basename='main_secto
 router.register('api/v1/sub_sector', views.SubSectorView, basename='sub_sector')
 router.register('api/v1/structures', views.StructureView, basename='structures')
 router.register('api/v1/structuretypes', views.StructureTypeView, basename='structure_types')
+router.register('api/v1/categories', views.CategoryView, basename='categories')
 router.register('api/v1/stocks', views.StockView, basename='stocks')
 router.register('api/v1/stock-management', views.StockManagementView, basename='stock_management')
 router.registry.extend(profile_router.registry)

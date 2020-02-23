@@ -4,10 +4,11 @@ from rest_framework import viewsets, permissions, decorators
 from rest_framework.permissions import AllowAny
 
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
-from .models import (Industry, Structure, StructureType, Stock, StockManagement, MainSector, SubSector)
+from .models import (Industry, Structure, StructureType, Stock, StockManagement, MainSector, SubSector, SectionGroup)
 from .serializers import (
     IndustrySerializer, StructureSerializer, StructureTypeSerializer,
-    StockManagementSerializer, StockSerializer, MainSectorSerializer, SubSectorSerializer, StockMiniSerializer)
+    StockManagementSerializer, StockSerializer, MainSectorSerializer, SubSectorSerializer, StockMiniSerializer,
+    CategorySerializer)
 
 from rest_framework import mixins
 from rest_framework.views import APIView
@@ -57,6 +58,12 @@ class StructureView(viewsets.ModelViewSet):
 class StructureTypeView(viewsets.ModelViewSet):
     queryset = StructureType.objects.get_queryset().order_by('-id')
     serializer_class = StructureTypeSerializer
+    pagination_class = DefaultResultsSetPagination
+
+
+class CategoryView(viewsets.ModelViewSet):
+    queryset = SectionGroup.objects.get_queryset()
+    serializer_class = CategorySerializer
     pagination_class = DefaultResultsSetPagination
 
 
