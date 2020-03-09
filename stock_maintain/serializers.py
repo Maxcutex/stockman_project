@@ -169,7 +169,7 @@ class NewsSerializer(serializers.ModelSerializer):
 
 
 class AnalysisCategorySectionSerializer(serializers.ModelSerializer):
-    category_analysis_structure = SectionGroupSerializer(many=True, read_only=True)
+    section_category = SectionGroupSerializer(read_only=True)
 
     class Meta:
         model = AnalysisCategorySection
