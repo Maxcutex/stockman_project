@@ -10,7 +10,7 @@ from stockman_project.permissions import IsAdminOrReadOnly
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
     AnalysisOpinionSerializer, SiteAuthorSerializer, QuoteSerializer, InsideBusinessSerializer, \
-    CustomPriceListSerializer
+    CustomPriceListSerializer, PriceListMarketAnalysisSerializer
 from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor, Quote, InsideBusiness
 import stock_maintain.services as stock_maintain_services
 # Create your views here.
@@ -218,6 +218,21 @@ class PriceListView(viewsets.ModelViewSet):
         serializer = PriceListSerializer(price_list, many=True)
         return Response(serializer.data)
 
+    @decorators.action(methods=['get'], detail=False, url_path='market-analysis')
+    def market_analysis(self, request, *args, **kwargs):
+        price_list = stock_maintain_services.market_analysis(
+            query_params=request.query_params,
+        )
+        # paginate = kwargs.get('paginate')
+        # if paginate is not None:
+        #     page = self.paginate_queryset(price_list)
+        #     if page is not None:
+        #         serializer = self.get_serializer(page, many=True)
+        #         return self.get_paginated_response(serializer.data)
+        #
+        # serializer = PriceListMarketAnalysisSerializer(price_list, many=True)
+        return Response(price_list)
+
 
 class PriceListAPIView(APIView):
     """ PriceList View using Api View """
@@ -232,6 +247,8 @@ class PriceListAPIView(APIView):
         serializer = CustomPriceListSerializer(price_list, many=True)
 
         return Response(serializer.data)
+
+
 
 
 class QuotesView(viewsets.ModelViewSet):

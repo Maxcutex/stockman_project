@@ -29,6 +29,24 @@ class CustomPriceListSerializer(serializers.Serializer):
     main_sector_name = serializers.CharField(max_length=200)
 
 
+class PriceListMarketAnalysisSerializer(serializers.Serializer):
+    # id = serializers.IntegerField()
+    sec_code = serializers.CharField()
+    price = serializers.DecimalField(18,2)
+    min_year = serializers.DecimalField(18,2)
+    max_year = serializers.DecimalField(18,2)
+    min_six_months = serializers.DecimalField(18,2)
+    max_six_months = serializers.DecimalField(18,2)
+    min_three_months = serializers.DecimalField(18,2)
+    max_three_months = serializers.DecimalField(18,2)
+    min_one_week = serializers.DecimalField(18,2)
+    max_one_week = serializers.DecimalField(18,2)
+    one_week_cent = serializers.DecimalField(18,2)
+    three_months_cent = serializers.DecimalField(18,2)
+    six_months_cent = serializers.DecimalField(18,2)
+    one_year_cent = serializers.DecimalField(18,2)
+
+
 class SectionGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectionGroup

@@ -23,6 +23,7 @@ class MainSectorSerializer(serializers.ModelSerializer):
 
 
 class SubSectorSerializer(serializers.ModelSerializer):
+    main_sector = MainSectorSerializer(read_only=True)
     class Meta:
         model = SubSector
         fields = ('id', 'name', 'main_sector', 'is_active')
@@ -79,6 +80,8 @@ class StockSerializer(serializers.ModelSerializer):
     list_date = serializers.DateField(input_formats=[('%mm-%dd-%yyyy', 'iso-8601')])
     regis_close = serializers.DateField(input_formats=[('%Y-%m-%d', 'iso-8601')])
     filter_fields = ('description', 'stock_code', 'name')
+    industry = IndustrySerializer( read_only=True)
+    sub_sector = SubSectorSerializer(read_only=True)
 
     class Meta:
         model = Stock
@@ -91,7 +94,7 @@ class StockSerializer(serializers.ModelSerializer):
                   'website', 'email', 'gsm',
                   'land_tel', 'fax_no', 'regis_close',
                   'year_end', 'logo', 'shares_in_issue',
-                  'capitalization', 'industry'
+                  'capitalization', 'industry', 'sub_sector'
                   )
         ordering_fields = ('id',)
         ordering = ['-id']

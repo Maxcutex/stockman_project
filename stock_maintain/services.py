@@ -1,7 +1,9 @@
 import pdb
 from datetime import datetime
 
+import django
 import pytz
+from django.db import connection
 from rest_framework.exceptions import APIException
 
 from stock_maintain.models import News, PriceList, AnalysisOpinion, InsideBusiness
@@ -168,6 +170,81 @@ def list_price_date(query_params):
     return PriceList.objects.filter(
         price_date=s_date
     )
+
+
+def search_list(sec_code, listDict):
+    for p in listDict:
+        if p['sec_code'] == sec_code:
+            return p
+
+
+def market_analysis(query_params):
+    """ List prices and their corresponding percentage analysis by month ranges"""
+    date_price = query_params.get('price_date')
+    data_set = {}
+    result_set = None
+    try:
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute("BEGIN")
+                cursor.callproc('get_price_market_analysis', [date_price])
+                result_set = cursor.fetchall()
+                cursor.execute("COMMIT")
+                results = []
+                count = 0
+                for result in result_set:
+                    dict_result = {}
+                    count += 1
+                    dict_result['id'] = count
+                    dict_result['sec_code'] = result[0]
+                    dict_result['price'] = result[1]
+                    dict_result['min_year'] = result[2]
+                    dict_result['max_year'] = result[3]
+                    dict_result['min_six_months'] = result[4]
+                    dict_result['max_six_months'] = result[5]
+                    dict_result['min_three_months'] = result[6]
+                    dict_result['max_three_months'] = result[7]
+                    dict_result['min_one_week'] = result[8]
+                    dict_result['max_one_week'] = result[9]
+                    dict_result['price_one_week'] = result[10]
+                    dict_result['price_three_months'] = result[11]
+                    dict_result['price_six_months'] = result[12]
+                    dict_result['price_one_year'] = result[13]
+                    dict_result['one_week_cent'] = result[14]
+                    dict_result['three_months_cent'] = result[15]
+                    dict_result['six_months_cent'] = result[16]
+                    dict_result['one_year_cent'] = result[17]
+
+                    results.append(dict_result)
+                result_by_main_sector = []
+
+                for rs in results:
+                    stock = Stock.objects.get(stock_code=rs['sec_code'])
+                    final_sub_data = {}
+
+                    if not any(d['main_sector'] == stock.sub_sector.main_sector.name for d in result_by_main_sector):
+                        final_sub_data['main_sector'] = stock.sub_sector.main_sector.name
+                        final_sub_data['sub_sector'] = stock.sub_sector.name
+                        price_analysis = [rs]
+                        final_sub_data['price_analysis'] = price_analysis
+                        result_by_main_sector.append(final_sub_data)
+                    else:
+                        final_sub_data = [d for d in result_by_main_sector
+                                          if d["main_sector"] == stock.sub_sector.main_sector.name][0]
+                        final_sub_data['price_analysis'].append(rs)
+                        result_by_main_sector_temp = [ d for d in result_by_main_sector
+                                                       if d["main_sector"] != stock.sub_sector.main_sector.name]
+                        result_by_main_sector_temp.append(final_sub_data)
+                        result_by_main_sector = result_by_main_sector_temp
+
+                data_set['results'] = result_by_main_sector
+                data_set['count'] = count
+            finally:
+                cursor.close()
+    except:
+        raise APIException(detail='Provide proper date')
+
+    return data_set
 
 
 def list_price_date_by_sectors(query_params):
