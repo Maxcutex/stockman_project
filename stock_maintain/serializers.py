@@ -9,7 +9,8 @@ from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
                      NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusinessSection,
-                     InsideBusiness, InsideBusinessImage, NewsFile, InsideBusinessFile, AnalysisImage)
+                     InsideBusiness, InsideBusinessImage, NewsFile, InsideBusinessFile, AnalysisImage,
+                     NewsLetterMailing)
 
 
 class PriceListSerializer(serializers.ModelSerializer):
@@ -229,6 +230,14 @@ class InsideBusinessSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InsideBusiness
+        fields = '__all__'
+        ordering_fields = ('id',)
+        ordering = ['-id']
+
+
+class NewsLetterMailingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsLetterMailing
         fields = '__all__'
         ordering_fields = ('id',)
         ordering = ['-id']

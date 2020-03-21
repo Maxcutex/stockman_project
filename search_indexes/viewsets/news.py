@@ -59,12 +59,12 @@ class NewsDocumentView(BaseDocumentViewSet):
             ],
         },
         'title': 'title',
-        # 'content': 'content.raw',
+        'content': 'content.raw',
         'news_date': 'news_date',
         'entry_date': 'entry_date',
-        # 'stock': 'stock.raw',
-        # 'sec_code': 'sec_code.raw',
-        # 'author': 'author.raw',
+        'stock': 'stock.raw',
+        'sec_code': 'sec_code.raw',
+        'author': 'author.raw',
 
     }
     # Define ordering fields
@@ -74,6 +74,7 @@ class NewsDocumentView(BaseDocumentViewSet):
         'news_date': 'news_date',
         'entry_date': 'entry_date',
         # 'stock': 'stock.raw',
+        'sec_code': 'sec_code.raw',
     }
     # Specify default ordering
     ordering = ('id', 'title',)

@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl_drf',
     # for uploading
     'storages',
+    'rangefilter',
 
 ]
 SITE_ID = 1
@@ -349,3 +350,11 @@ JWT_AUTH = {
 }
 
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp/email')
+ELASTIC_HOST_NAME = os.environ.get('ELASTIC_HOST_NAME', 'localhost')
+ELASTIC_HOST_PORT = os.environ.get('ELASTIC_HOST_PORT', '9200')
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': ELASTIC_HOST_NAME+':' + ELASTIC_HOST_PORT
+    },
+}

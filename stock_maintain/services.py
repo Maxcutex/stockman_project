@@ -6,7 +6,7 @@ import pytz
 from django.db import connection
 from rest_framework.exceptions import APIException
 
-from stock_maintain.models import News, PriceList, AnalysisOpinion, InsideBusiness
+from stock_maintain.models import News, PriceList, AnalysisOpinion, InsideBusiness, NewsLetterMailing
 from stock_setup_info.models import Stock, MainSector, SubSector, SectionGroup
 
 
@@ -42,6 +42,13 @@ def list_analysis_by_section(query_params):
         category_analysis__section_category__section_name__in=section_list
     )
 
+
+def list_newsletterusers_by_active():
+    ''' List active users of newsletter'''
+
+    return NewsLetterMailing.objects.filter(
+        is_active=True
+    )
 
 def list_news_range(query_params):
     ''' List news   for a given date range'''
@@ -112,7 +119,8 @@ def list_price_range(query_params):
         e_month = int(date_end[1])
         e_day = int(date_end[2])
         s_date = datetime(year=s_year, month=s_month, day=s_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
-        e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
+        e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0, tzinfo=pytz.UTC).replace(tzinfo=pytz.UTC)
+        datetime.date(2011, 1, 1,).replace(tz)
     except:
         raise APIException(detail='Provide proper dates')
     return PriceList.objects.filter(
@@ -125,6 +133,7 @@ def list_inside_business_by_section(query_params):
 
     try:
         section_list = query_params.get('section_list').split(',')
+        News.objects.all().fe
     except:
         raise APIException(detail='Provide section list')
 
@@ -181,8 +190,11 @@ def search_list(sec_code, listDict):
 def market_analysis(query_params):
     """ List prices and their corresponding percentage analysis by month ranges"""
     date_price = query_params.get('price_date')
+    if date_price is None:
+        last_date = PriceList.objects.all()[:1][0]
+        date_price = last_date.price_date
+
     data_set = {}
-    result_set = None
     try:
         with connection.cursor() as cursor:
             try:
@@ -220,6 +232,7 @@ def market_analysis(query_params):
 
                 for rs in results:
                     stock = Stock.objects.get(stock_code=rs['sec_code'])
+
                     final_sub_data = {}
 
                     if not any(d['main_sector'] == stock.sub_sector.main_sector.name for d in result_by_main_sector):
@@ -236,8 +249,9 @@ def market_analysis(query_params):
                                                        if d["main_sector"] != stock.sub_sector.main_sector.name]
                         result_by_main_sector_temp.append(final_sub_data)
                         result_by_main_sector = result_by_main_sector_temp
-
-                data_set['results'] = result_by_main_sector
+                sorted_result = sorted(result_by_main_sector, key=lambda k: k['main_sector'])
+                data_set['results'] = sorted_result
+                data_set['date'] = sorted_result
                 data_set['count'] = count
             finally:
                 cursor.close()

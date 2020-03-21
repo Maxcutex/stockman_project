@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 
 class NewsDocumentSerializer(serializers.Serializer):
-	"""Serializer for the Book document."""
+	"""Serializer for the News document."""
 
 	id = serializers.IntegerField()
 

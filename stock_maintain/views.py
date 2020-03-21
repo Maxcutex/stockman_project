@@ -10,8 +10,9 @@ from stockman_project.permissions import IsAdminOrReadOnly
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
     AnalysisOpinionSerializer, SiteAuthorSerializer, QuoteSerializer, InsideBusinessSerializer, \
-    CustomPriceListSerializer, PriceListMarketAnalysisSerializer
-from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor, Quote, InsideBusiness
+    CustomPriceListSerializer, PriceListMarketAnalysisSerializer, NewsLetterMailingSerializer
+from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor, Quote, InsideBusiness, \
+    NewsLetterMailing
 import stock_maintain.services as stock_maintain_services
 # Create your views here.
 from rest_framework.views import APIView
@@ -249,6 +250,25 @@ class PriceListAPIView(APIView):
         return Response(serializer.data)
 
 
+class NewsLetterMailingView(viewsets.ModelViewSet):
+    queryset = NewsLetterMailing.objects.all()
+    serializer_class = NewsLetterMailingSerializer
+    pagination_class = DefaultResultsSetPagination
+
+    @decorators.action(methods=['get'], detail=False, url_path='by-active')
+    def view_date_range(self, request, *args, **kwargs):
+        active_list = stock_maintain_services.list_newsletterusers_by_active(
+
+        )
+        paginate = kwargs.get('paginate')
+        if paginate is not None:
+            page = self.paginate_queryset(active_list)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = NewsLetterMailingSerializer(active_list, many=False)
+        return Response(serializer.data)
 
 
 class QuotesView(viewsets.ModelViewSet):

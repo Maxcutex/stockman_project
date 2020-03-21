@@ -132,6 +132,18 @@ class Stock(models.Model):
     def __str__(self):
         return self.stock_code
 
+    @property
+    def industry_indexing(self):
+        """industry for indexing.		Used in Elasticsearch indexing.		"""
+        if self.industry is not None:
+            return self.industry.name
+
+    @property
+    def sub_sector_indexing(self):
+        """subsector for indexing. Used in Elasticsearch indexing. """
+        if self.sub_sector is not None:
+            return self.sub_sector.name
+
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:

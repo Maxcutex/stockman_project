@@ -1,5 +1,6 @@
 from django.conf import settings
 from django_elasticsearch_dsl import Document, Index, fields
+from django_elasticsearch_dsl_drf.compat import KeywordField, StringField
 from django_elasticsearch_dsl.registries import registry
 from elasticsearch_dsl import analyzer
 
@@ -17,12 +18,12 @@ INDEX.settings(
 html_strip = analyzer(
     'html_strip',
     tokenizer="standard",
-    filter=["standard", "lowercase", "stop", "snowball"],
+    filter=[ "lowercase", "stop", "snowball"],
     char_filter=["html_strip"]
 )
 
 
-@registry.register_document
+@INDEX.doc_type
 class NewsDocument(Document):
     """News Elasticsearch document."""
 
@@ -33,7 +34,7 @@ class NewsDocument(Document):
         settings = {'number_of_shards': 1,
                     'number_of_replicas': 0}
 
-    class Django:
+    class Django(object):
         model = News  # The model associated with this Document
 
         # The fields of the model you want to be indexed in Elasticsearch
@@ -53,14 +54,14 @@ class NewsDocument(Document):
         # ]
     id = fields.IntegerField(attr='id')
 
-    title = fields.TextField(
+    title = StringField(
         analyzer=html_strip,
         fields={
             'raw': fields.KeywordField(),
         }
     )
 
-    content = fields.TextField(
+    content = StringField(
         analyzer=html_strip,
         fields={
             'raw': fields.KeywordField(),
@@ -69,7 +70,7 @@ class NewsDocument(Document):
     news_date = fields.DateField()
     entry_date = fields.DateField()
 
-    stock = fields.TextField(
+    stock = StringField(
         attr='stock_indexing',
         analyzer=html_strip,
         fields={
@@ -77,7 +78,7 @@ class NewsDocument(Document):
         }
     )
 
-    author = fields.TextField(
+    author = StringField(
         attr='author_indexing',
         analyzer=html_strip,
         fields={
@@ -85,7 +86,7 @@ class NewsDocument(Document):
         }
     )
 
-    sec_code = fields.TextField(
+    sec_code = StringField(
         analyzer=html_strip,
         fields={
             'raw': fields.KeywordField(),
@@ -98,6 +99,8 @@ class NewsDocument(Document):
 
     is_main = fields.BooleanField()
     #
+    class Meta(object):
+        parallel_indexing = True
     # class Meta(object):
     #     """Meta options."""
     #
