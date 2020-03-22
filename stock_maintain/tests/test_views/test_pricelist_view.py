@@ -44,6 +44,7 @@ class TestPriceListApi(APITestCase):
 		This test ensures that all price for a stock and date range is returned
 		:return:
 		"""
+		pdb.set_trace()
 		start_date = self.p_date + timedelta(days=-1)
 		end_date = self.p_date + timedelta(days=1)
 		response = self.client.get(

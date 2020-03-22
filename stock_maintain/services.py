@@ -120,7 +120,7 @@ def list_price_range(query_params):
         e_day = int(date_end[2])
         s_date = datetime(year=s_year, month=s_month, day=s_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
         e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0, tzinfo=pytz.UTC).replace(tzinfo=pytz.UTC)
-        datetime.date(2011, 1, 1,).replace(tz)
+
     except:
         raise APIException(detail='Provide proper dates')
     return PriceList.objects.filter(
