@@ -42,7 +42,7 @@ django-nose==1.4.6
 django-redis==4.10.0
 django-rest-auth==0.9.3
 django-storages==1.8
-djangorestframework==3.9.0
+djangorestframework==3.9.1
 djangorestframework-jwt==1.11.0
 docker==3.7.3
 docker-compose==1.23.2
