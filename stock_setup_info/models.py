@@ -1,3 +1,4 @@
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models, connection
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 from model_utils import Choices
@@ -101,7 +102,7 @@ class Stock(models.Model):
     exchange_code = models.CharField(max_length=50, null=True)
     asset_class_code = models.CharField(max_length=50, blank=True, null=True)
     contact = models.CharField(max_length=300, blank=True, null=True)
-    description = models.CharField(max_length=3000, blank=True, null=True)
+    description  = RichTextUploadingField( blank=True, null=True)
     tier_code = models.CharField(max_length=50, blank=True, null=True)
     par_value = models.CharField(max_length=50, blank=True, null=True)
     list_date = models.DateField(blank=True, null=True)
