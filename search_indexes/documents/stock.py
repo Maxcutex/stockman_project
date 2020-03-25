@@ -78,8 +78,8 @@ class StockDocument(Document):
     registrar = StringField()
     year_end = StringField()
     logo = StringField()
-    shares_in_issue = fields.IntegerField()
-    capitalization = fields.IntegerField()
+    shares_in_issue = fields.LongField()
+    capitalization = fields.LongField()
 
     class Meta(object):
         parallel_indexing = True
