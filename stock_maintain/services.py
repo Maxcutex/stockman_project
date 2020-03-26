@@ -191,19 +191,21 @@ def market_analysis(query_params):
     """ List prices and their corresponding percentage analysis by month ranges"""
     date_price = query_params.get('price_date')
     if date_price is None:
-        last_date = PriceList.objects.all()[:1][0]
-        date_price = last_date.price_date
+        last_date = PriceList.objects.order_by('-price_date')[:1][0]
+        date_price = str(last_date.price_date)
 
     data_set = {}
     try:
         with connection.cursor() as cursor:
             try:
+                # pdb.set_trace()
                 cursor.execute("BEGIN")
                 cursor.callproc('get_price_market_analysis', [date_price])
                 result_set = cursor.fetchall()
                 cursor.execute("COMMIT")
                 results = []
                 count = 0
+                # pdb.set_trace()
                 for result in result_set:
                     dict_result = {}
                     count += 1
@@ -251,7 +253,7 @@ def market_analysis(query_params):
                         result_by_main_sector = result_by_main_sector_temp
                 sorted_result = sorted(result_by_main_sector, key=lambda k: k['main_sector'])
                 data_set['results'] = sorted_result
-                data_set['date'] = sorted_result
+                data_set['date'] = date_price
                 data_set['count'] = count
             finally:
                 cursor.close()

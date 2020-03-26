@@ -256,7 +256,7 @@ class NewsLetterMailingView(viewsets.ModelViewSet):
     pagination_class = DefaultResultsSetPagination
 
     @decorators.action(methods=['get'], detail=False, url_path='by-active')
-    def view_date_range(self, request, *args, **kwargs):
+    def view_by_active(self, request, *args, **kwargs):
         active_list = stock_maintain_services.list_newsletterusers_by_active(
 
         )
