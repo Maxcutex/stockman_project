@@ -381,6 +381,6 @@ class InsideBusinessImage(models.Model):
 
 
 class NewsLetterMailing(models.Model):
-    email = models.TextField()
+    email = models.TextField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField()
