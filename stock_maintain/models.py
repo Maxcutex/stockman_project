@@ -384,3 +384,35 @@ class NewsLetterMailing(models.Model):
     email = models.TextField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField()
+
+
+class GeneratedAnalysisDate(models.Model):
+    date_generated_for = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class PriceAnalysisTemp(models.Model):
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name='temp_analysi_stock', null=True)
+    sec_code = models.CharField(max_length=100)
+    price = models.FloatField()
+    min_year = models.FloatField()
+    max_year = models.FloatField()
+    min_six_months = models.FloatField()
+    max_six_months = models.FloatField()
+    min_three_months = models.FloatField()
+    max_three_months = models.FloatField()
+    min_one_week = models.FloatField()
+    max_one_week = models.FloatField()
+
+    price_one_week = models.FloatField()
+    price_three_months = models.FloatField()
+    price_six_months = models.FloatField()
+    price_one_year = models.FloatField()
+
+    one_week_cent = models.FloatField()
+    three_months_cent = models.FloatField()
+    six_months_cent = models.FloatField()
+    one_year_cent = models.FloatField()
+
+
+

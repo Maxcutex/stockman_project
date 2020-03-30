@@ -1,7 +1,7 @@
 import pdb
 
 from django.shortcuts import render
-from rest_framework import viewsets, decorators
+from rest_framework import viewsets, decorators, status
 from rest_framework.decorators import detail_route, list_route, api_view
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
@@ -17,6 +17,8 @@ import stock_maintain.services as stock_maintain_services
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from .tasks import send_mail_task
 
 
 class AnalysisView(viewsets.ModelViewSet):
@@ -254,6 +256,19 @@ class NewsLetterMailingView(viewsets.ModelViewSet):
     queryset = NewsLetterMailing.objects.all()
     serializer_class = NewsLetterMailingSerializer
     pagination_class = DefaultResultsSetPagination
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        send_mail_task.delay("You have subscribed to our Mailing List",
+                       "You have subscribed to our Mailing List",
+                       "info@stockmannigeria.com", self.request.data.email)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
 
     @decorators.action(methods=['get'], detail=False, url_path='by-active')
     def view_by_active(self, request, *args, **kwargs):

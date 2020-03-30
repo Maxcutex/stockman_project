@@ -313,6 +313,7 @@ EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 1025
 EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
 
 # rest-auth
 # ACCOUNT_ADAPTER = 'api.adapter.DefaultAccountAdapterCustom'
@@ -358,3 +359,17 @@ ELASTICSEARCH_DSL = {
         'hosts': ELASTIC_HOST_NAME+':' + ELASTIC_HOST_PORT
     },
 }
+
+
+# Celery Settings
+
+# Celery settings
+
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'localhost') #'amqp://guest:guest@localhost'
+
+#: Only add pickle to this list if your broker is secured
+#: from unwanted access (see userguide/security.html)
+CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Lagos'
