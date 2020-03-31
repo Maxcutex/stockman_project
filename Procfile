@@ -1,1 +1,3 @@
-web: env > .env; env PYTHONUNBUFFERED=true honcho start -f Procfile.real 2>&1
+web: gunicorn stockman_project.wsgi —-log-file -
+worker: celery worker --loglevel=info -A stockman_project
+beat: celery beat --loglevel=info -A stockman_project
