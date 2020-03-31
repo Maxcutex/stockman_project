@@ -1,1 +1,1 @@
-web: gunicorn stockman_project.wsgi —-log-file -
+web: env > .env; env PYTHONUNBUFFERED=true honcho start -f Procfile.real 2>&1
