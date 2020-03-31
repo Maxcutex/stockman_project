@@ -7,7 +7,7 @@ from celery import Celery
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stockman_project.settings')
 
-app = Celery('stockman_project')
+app = Celery('stockman_project', broker='redis://h:p3d06b19eb8c8ade5acf656efe77b51187bca33d64c51745a686ec2cbbf2adc26@ec2-52-70-214-96.compute-1.amazonaws.com:19769')
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.

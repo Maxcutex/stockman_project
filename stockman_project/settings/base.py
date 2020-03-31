@@ -98,7 +98,8 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl_drf',
     # for uploading
     'storages',
-    'rangefilter',
+    # 'rangefilter',
+    'celery'
 
 ]
 SITE_ID = 1
@@ -365,7 +366,7 @@ ELASTICSEARCH_DSL = {
 
 # Celery settings
 
-CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'localhost') #'amqp://guest:guest@localhost'
+CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'localhost')
 
 #: Only add pickle to this list if your broker is secured
 #: from unwanted access (see userguide/security.html)
