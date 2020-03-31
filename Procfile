@@ -1,3 +1,3 @@
 web: gunicorn stockman_project.wsgi —-log-file -
-worker: celery worker --app=stockman_project
-beat: celery beat --loglevel=info -app=stockman_project
+worker: celery worker --loglevel=info -A stockman_project
+beat: celery beat --loglevel=info -A stockman_project
