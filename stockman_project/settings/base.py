@@ -372,5 +372,6 @@ CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'localhost')
 #: from unwanted access (see userguide/security.html)
 CELERY_ACCEPT_CONTENT = ['json']
 # CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+CELERY_RESULT_BACKEND=os.environ['REDIS_URL']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Lagos'
