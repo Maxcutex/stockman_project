@@ -29,10 +29,7 @@ def update_price_analysis_task():
         with connection.cursor() as cursor:
             try:
                 # pdb.set_trace()
-                cursor.execute("BEGIN")
-                cursor.callproc('process_price_market_analysis', [last_date])
-                result_set = cursor.fetchall()
-                cursor.execute("COMMIT")
+                cursor.execute(f"CALL process_price_market_analysis('{last_date}')")
 
             finally:
                 cursor.close()

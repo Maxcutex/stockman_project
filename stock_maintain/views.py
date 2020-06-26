@@ -1,10 +1,20 @@
+import json
 import pdb
+import zlib
+from distutils.util import strtobool
 
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from rest_framework import viewsets, decorators, status
 from rest_framework.decorators import detail_route, list_route, api_view
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+
+
+from django.core.cache import cache, caches
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.views.decorators.cache import cache_page
 
 from stockman_project.permissions import IsAdminOrReadOnly
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
@@ -20,12 +30,18 @@ from rest_framework.response import Response
 
 from .tasks import send_mail_task
 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
 
 class AnalysisView(viewsets.ModelViewSet):
     queryset = AnalysisOpinion.objects.get_queryset().order_by('-id')
     serializer_class = AnalysisOpinionSerializer
     filter_fields = ('title', 'opinion_date')
     pagination_class = DefaultResultsSetPagination
+
+    @method_decorator(cache_page(CACHE_TTL))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -69,6 +85,10 @@ class NewsView(viewsets.ModelViewSet):
     serializer_class = NewsSerializer
     filter_fields = ('is_featured', 'stock_id', 'news_date', 'sec_code')
     # pagination_class = DefaultResultsSetPagination
+
+    @method_decorator(cache_page(CACHE_TTL))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -119,16 +139,21 @@ class NewsView(viewsets.ModelViewSet):
 
 
 class InsideBusinessView(viewsets.ModelViewSet):
-    queryset = InsideBusiness.objects.get_queryset().order_by('-id')
+    queryset = InsideBusiness.objects.all().order_by('-id')
     serializer_class = InsideBusinessSerializer
     filter_fields = ('title', 'opinion_date','entry_date')
     pagination_class = DefaultResultsSetPagination
+
+    @method_decorator(cache_page(CACHE_TTL))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
         inside_business_list = stock_maintain_services.list_inside_business_range(
             query_params=request.query_params,
         )
+
         paginate = kwargs.get('paginate')
         if paginate is not None:
             page = self.paginate_queryset(inside_business_list)
@@ -168,12 +193,16 @@ class NewsFileView(viewsets.ModelViewSet):
 
 
 class PriceListView(viewsets.ModelViewSet):
-    queryset = PriceList.objects.get_queryset().order_by('-id')
+    queryset = PriceList.objects.all().order_by('-id')
     serializer_class = PriceListSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('price_date', 'stock', 'sec_code')
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = DefaultResultsSetPagination
+
+    @method_decorator(cache_page(CACHE_TTL))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
     def view_date_range(self, request, *args, **kwargs):
@@ -241,7 +270,7 @@ class PriceListAPIView(APIView):
     """ PriceList View using Api View """
     pagination_class = DefaultResultsSetPagination
 
-
+    @method_decorator(cache_page(CACHE_TTL))
     def get(self, request, *args, **kwargs):
         """ Returns a list of pricelist api view """
         price_list = stock_maintain_services.list_price_date_by_sectors(

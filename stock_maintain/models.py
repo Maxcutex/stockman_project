@@ -413,6 +413,7 @@ class PriceAnalysisTemp(models.Model):
     three_months_cent = models.FloatField(null=True)
     six_months_cent = models.FloatField(null=True)
     one_year_cent = models.FloatField(null=True)
+    price_date = models.DateTimeField(null=True)
 
 
 

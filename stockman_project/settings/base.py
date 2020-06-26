@@ -14,6 +14,7 @@ import os
 import pdb
 import platform
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
 from datetime import timedelta
 from pathlib import Path
 #from decouple import config
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'django.contrib.sites',
+    'admin_ordering',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -187,7 +189,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -361,6 +363,23 @@ ELASTICSEARCH_DSL = {
     },
 }
 
+CACHE_TTL = 60 * 1  # 1 minute
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get('REDIS_URL', 'localhost'), #"redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+if 'test' in sys.argv:
+    CACHES = {
+        "default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"},
+    }
 
 # Celery Settings
 

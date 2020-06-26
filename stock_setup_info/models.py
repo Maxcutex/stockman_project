@@ -150,6 +150,9 @@ class Stock(models.Model):
         with connection.cursor() as cursor:
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
+    class Meta(object):
+        ordering = ['stock_code']
+
 
 class ManagementType(ChoiceEnum):
     management = "management"

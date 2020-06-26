@@ -3,10 +3,12 @@ from datetime import datetime
 
 import django
 import pytz
+from django.conf.global_settings import DATE_FORMAT
 from django.db import connection
 from rest_framework.exceptions import APIException
 
-from stock_maintain.models import News, PriceList, AnalysisOpinion, InsideBusiness, NewsLetterMailing
+from stock_maintain.models import News, PriceList, AnalysisOpinion, InsideBusiness, NewsLetterMailing, PriceAnalysisTemp
+from stock_maintain.serializers import PriceListSerializer
 from stock_setup_info.models import Stock, MainSector, SubSector, SectionGroup
 
 
@@ -119,6 +121,7 @@ def list_price_range(query_params):
         e_month = int(date_end[1])
         e_day = int(date_end[2])
         s_date = datetime(year=s_year, month=s_month, day=s_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
+        # s_date = datetime(year=2019, month=1, day=22, hour=0, minute=0, second=0)
         e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0, tzinfo=pytz.UTC).replace(tzinfo=pytz.UTC)
 
     except:
@@ -133,7 +136,7 @@ def list_inside_business_by_section(query_params):
 
     try:
         section_list = query_params.get('section_list').split(',')
-        News.objects.all().fe
+
     except:
         raise APIException(detail='Provide section list')
 
@@ -189,74 +192,64 @@ def search_list(sec_code, listDict):
 
 def market_analysis(query_params):
     """ List prices and their corresponding percentage analysis by month ranges"""
-    date_price = query_params.get('price_date')
-    if date_price is None:
-        last_date = PriceList.objects.order_by('-price_date')[:1][0]
-        date_price = str(last_date.price_date)
 
-    data_set = {}
+
     try:
-        with connection.cursor() as cursor:
-            try:
-                # pdb.set_trace()
-                cursor.execute("BEGIN")
-                cursor.callproc('get_price_market_analysis', [date_price])
-                result_set = cursor.fetchall()
-                cursor.execute("COMMIT")
-                results = []
-                count = 0
-                # pdb.set_trace()
-                for result in result_set:
-                    dict_result = {}
-                    count += 1
-                    dict_result['id'] = count
-                    dict_result['sec_code'] = result[0]
-                    dict_result['price'] = result[1]
-                    dict_result['min_year'] = result[2]
-                    dict_result['max_year'] = result[3]
-                    dict_result['min_six_months'] = result[4]
-                    dict_result['max_six_months'] = result[5]
-                    dict_result['min_three_months'] = result[6]
-                    dict_result['max_three_months'] = result[7]
-                    dict_result['min_one_week'] = result[8]
-                    dict_result['max_one_week'] = result[9]
-                    dict_result['price_one_week'] = result[10]
-                    dict_result['price_three_months'] = result[11]
-                    dict_result['price_six_months'] = result[12]
-                    dict_result['price_one_year'] = result[13]
-                    dict_result['one_week_cent'] = result[14]
-                    dict_result['three_months_cent'] = result[15]
-                    dict_result['six_months_cent'] = result[16]
-                    dict_result['one_year_cent'] = result[17]
+        date_price = query_params.get('price_date')
+        if date_price is None:
+            last_date = PriceList.objects.order_by('-price_date')[:1][0]
+            date_price = str(last_date.price_date)
 
-                    results.append(dict_result)
-                result_by_main_sector = []
+        price_analysis = PriceAnalysisTemp.objects.filter(price_date__date=date_price)
+        results = []
+        # pdb.set_trace()
+        data_set = {}
+        count = 0
+        result_by_main_sector = []
+        for rs in price_analysis:
+            dict_result = {}
+            count += 1
+            dict_result['id'] = count
+            dict_result['sec_code'] = rs.sec_code
+            dict_result['price'] = rs.price
+            dict_result['min_year'] = rs.min_year
+            dict_result['max_year'] = rs.max_year
+            dict_result['min_six_months'] = rs.min_six_months
+            dict_result['max_six_months'] = rs.max_six_months
+            dict_result['min_three_months'] = rs.min_three_months
+            dict_result['max_three_months'] = rs.max_three_months
+            dict_result['min_one_week'] = rs.min_one_week
+            dict_result['max_one_week'] = rs.max_one_week
+            dict_result['price_one_week'] = rs.price_one_week
+            dict_result['price_three_months'] = rs.price_three_months
+            dict_result['price_six_months'] = rs.price_six_months
+            dict_result['price_one_year'] = rs.price_one_year
+            dict_result['one_week_cent'] = rs.one_week_cent
+            dict_result['three_months_cent'] = rs.three_months_cent
+            dict_result['six_months_cent'] = rs.six_months_cent
+            dict_result['one_year_cent'] = rs.one_year_cent
 
-                for rs in results:
-                    stock = Stock.objects.get(stock_code=rs['sec_code'])
+            final_sub_data = {}
 
-                    final_sub_data = {}
+            if not any(d['main_sector'] == rs.stock.sub_sector.main_sector.name for d in result_by_main_sector):
+                final_sub_data['main_sector'] = rs.stock.sub_sector.main_sector.name
+                final_sub_data['sub_sector'] = rs.stock.sub_sector.name
+                price_analysis = [dict_result]
+                final_sub_data['price_analysis'] = price_analysis
+                result_by_main_sector.append(final_sub_data)
+            else:
+                final_sub_data = [d for d in result_by_main_sector
+                                  if d["main_sector"] == rs.stock.sub_sector.main_sector.name][0]
+                final_sub_data['price_analysis'].append(dict_result)
+                result_by_main_sector_temp = [d for d in result_by_main_sector
+                                              if d["main_sector"] != rs.stock.sub_sector.main_sector.name]
+                result_by_main_sector_temp.append(final_sub_data)
+                result_by_main_sector = result_by_main_sector_temp
+        sorted_result = sorted(result_by_main_sector, key=lambda k: k['main_sector'])
+        data_set['results'] = sorted_result
+        data_set['date'] = date_price
+        data_set['count'] = count
 
-                    if not any(d['main_sector'] == stock.sub_sector.main_sector.name for d in result_by_main_sector):
-                        final_sub_data['main_sector'] = stock.sub_sector.main_sector.name
-                        final_sub_data['sub_sector'] = stock.sub_sector.name
-                        price_analysis = [rs]
-                        final_sub_data['price_analysis'] = price_analysis
-                        result_by_main_sector.append(final_sub_data)
-                    else:
-                        final_sub_data = [d for d in result_by_main_sector
-                                          if d["main_sector"] == stock.sub_sector.main_sector.name][0]
-                        final_sub_data['price_analysis'].append(rs)
-                        result_by_main_sector_temp = [ d for d in result_by_main_sector
-                                                       if d["main_sector"] != stock.sub_sector.main_sector.name]
-                        result_by_main_sector_temp.append(final_sub_data)
-                        result_by_main_sector = result_by_main_sector_temp
-                sorted_result = sorted(result_by_main_sector, key=lambda k: k['main_sector'])
-                data_set['results'] = sorted_result
-                data_set['date'] = date_price
-                data_set['count'] = count
-            finally:
-                cursor.close()
     except:
         raise APIException(detail='Provide proper date')
 

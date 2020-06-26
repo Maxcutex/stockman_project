@@ -1,3 +1,4 @@
+from admin_ordering.admin import OrderableAdmin
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
@@ -9,9 +10,12 @@ admin.site.register(Industry)
 
 
 @admin.register(Stock)
-class StockAdmin(ImportExportModelAdmin):
+class StockAdmin(ImportExportModelAdmin, OrderableAdmin, admin.ModelAdmin):
     model = Stock
-    search_fields = ('name', 'stock_code',)
+    search_fields = ('stock_code', )
+    ordering_field = "stock_code"
+    list_display = [ "stock_code"]
+    list_editable = ["stock_code"]
 
 
 admin.site.register(Structure)
