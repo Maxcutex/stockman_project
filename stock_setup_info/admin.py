@@ -14,7 +14,8 @@ class StockAdmin(ImportExportModelAdmin, OrderableAdmin, admin.ModelAdmin):
     model = Stock
     search_fields = ('stock_code', )
     ordering_field = "stock_code"
-    list_display = [ "stock_code"]
+    list_display = ["stock_code"]
+    list_display_links = ('stock_code',)
     list_editable = ["stock_code"]
 
 
