@@ -22,6 +22,7 @@ jobs:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: circle_test
           POSTGRES_PASSWORD: ""
+          POSTGRES_HOST_AUTH_METHOD: trust
 
       - image: redis:5.0.2
       - image: docker.elastic.co/elasticsearch/elasticsearch:7.1.0
