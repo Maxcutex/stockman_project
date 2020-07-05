@@ -243,6 +243,10 @@ class NewsCategorySection(models.Model):
     section_category = models.ForeignKey(
         SectionGroup, on_delete=models.CASCADE, related_name='category_news_section', null=True)
 
+    def __str__(self):
+        return self.section_category.section_name
+
+
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:
