@@ -231,6 +231,10 @@ class SiteAuthorAdmin(ImportExportModelAdmin):
     pass
 
 
+@admin.register(NewsCategorySection)
+class NewsCategorySectionAdmin(ImportExportModelAdmin):
+    pass
+
 @admin.register(News)
 class NewsAdmin(ImportExportModelAdmin):
     model = models.News
