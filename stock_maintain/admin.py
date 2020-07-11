@@ -128,7 +128,15 @@ class CsvImportForm(forms.Form):
 @admin.register(PriceList)
 class PriceListAdmin(admin.ModelAdmin):
     # class PriceListAdmin(ImportExportModelAdmin):
-    list_display = ('sec_code', 'price_date', 'price')
+    list_display = ('sec_code', 'price_date', 'price'
+                    , 'x_open', 'x_high', 'x_low', 'offer_bid_sign', 'offer_bid_sign', 'x_change', )
+    # price_close = models.FloatField()
+    # x_open = models.FloatField()
+    # x_high = models.FloatField()
+    # x_low = models.FloatField()
+    # price = models.FloatField()
+    # offer_bid_sign = models.CharField(max_length=5)
+    # x_change = models.FloatField()
     # resource_class = PriceListResource
     change_list_template = "entities/pricelists_changelist.html"
 
