@@ -2,7 +2,6 @@ from rest_framework import serializers
 from rest_framework.settings import api_settings
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
-from stock_maintain.serializers import PriceListMarketAnalysisSerializer
 from .models import (Industry, Structure, StructureType,
                      Stock, StockManagement, ManagementType, MainSector, SubSector, SectionGroup)
 from stockman_project import settings
@@ -112,6 +111,3 @@ class StockMiniSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
 
-class QuoteAnalysisSerializer(serializers.Serializer):
-    market_analysis = PriceListMarketAnalysisSerializer()
-    stock_details = StockSerializer()

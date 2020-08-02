@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 from stock_setup_info.models import SectionGroup
-from stock_setup_info.serializers import SubSectorSerializer, MainSectorSerializer
+from stock_setup_info.serializers import SubSectorSerializer, MainSectorSerializer, StockSerializer
 from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
                      BonusTracker, DailyMarketIndex, Dividend, News, NewsImage,
@@ -26,6 +26,9 @@ class CustomPriceListSerializer(serializers.Serializer):
     price_list = PriceListSerializer(many=True)
     sub_sector_name = serializers.CharField(max_length=200)
     main_sector_name = serializers.CharField(max_length=200)
+
+
+
 
 
 class PriceListMarketAnalysisSerializer(serializers.Serializer):
@@ -239,3 +242,8 @@ class NewsLetterMailingSerializer(serializers.ModelSerializer):
         fields = '__all__'
         ordering_fields = ('id',)
         ordering = ['-id']
+
+
+class QuoteAnalysisSerializer(serializers.Serializer):
+    market_analysis = PriceListMarketAnalysisSerializer()
+    stock_details = StockSerializer()
