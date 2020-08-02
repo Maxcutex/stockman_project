@@ -16,6 +16,7 @@ from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 
+from stock_setup_info.serializers import QuoteAnalysisSerializer
 from stockman_project.permissions import IsAdminOrReadOnly
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
 from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
@@ -255,14 +256,6 @@ class PriceListView(viewsets.ModelViewSet):
         price_list = stock_maintain_services.market_analysis(
             query_params=request.query_params,
         )
-        # paginate = kwargs.get('paginate')
-        # if paginate is not None:
-        #     page = self.paginate_queryset(price_list)
-        #     if page is not None:
-        #         serializer = self.get_serializer(page, many=True)
-        #         return self.get_paginated_response(serializer.data)
-        #
-        # serializer = PriceListMarketAnalysisSerializer(price_list, many=True)
         return Response(price_list)
 
 
@@ -277,6 +270,16 @@ class PriceListAPIView(APIView):
             query_params=request.query_params,
         )
         serializer = CustomPriceListSerializer(price_list, many=True)
+
+        return Response(serializer.data)
+
+    @decorators.action(methods=['get'], detail=False, url_path='market-analysis-stock')
+    def get_market_analysis(self, request, *args, **kwargs):
+        """ Returns a quote analysis api view """
+        price_list = stock_maintain_services.market_analysis_stock(
+            query_params=request.query_params,
+        )
+        serializer = QuoteAnalysisSerializer(price_list)
 
         return Response(serializer.data)
 

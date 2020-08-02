@@ -1,13 +1,11 @@
-import pdb
-
 from rest_framework import serializers
-from enumchoicefield import ChoiceEnum, EnumChoiceField
+
 
 from stock_setup_info.models import SectionGroup
-from stock_setup_info.serializers import StructureSerializer, SubSectorSerializer, MainSectorSerializer
+from stock_setup_info.serializers import SubSectorSerializer, MainSectorSerializer
 from stockman_project.settings.base import MEDIA_URL
 from .models import (PriceList, AsiIndex, Quote,
-                     BonusTracker, DailyMarketIndex, Dividend, News, NewsImage, OfferIpo, OfferMethod, OfferType,
+                     BonusTracker, DailyMarketIndex, Dividend, News, NewsImage,
                      NewsCategorySection, AnalysisOpinion, AnalysisCategorySection, SiteAuthor, InsideBusinessSection,
                      InsideBusiness, InsideBusinessImage, NewsFile, InsideBusinessFile, AnalysisImage,
                      NewsLetterMailing)

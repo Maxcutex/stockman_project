@@ -52,6 +52,7 @@ def list_newsletterusers_by_active():
         is_active=True
     )
 
+
 def list_news_range(query_params):
     ''' List news   for a given date range'''
     date_start = query_params.get('start_date').split('-')
@@ -122,7 +123,8 @@ def list_price_range(query_params):
         e_day = int(date_end[2])
         s_date = datetime(year=s_year, month=s_month, day=s_day, hour=0, minute=0, second=0).replace(tzinfo=pytz.UTC)
         # s_date = datetime(year=2019, month=1, day=22, hour=0, minute=0, second=0)
-        e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0, tzinfo=pytz.UTC).replace(tzinfo=pytz.UTC)
+        e_date = datetime(year=e_year, month=e_month, day=e_day, hour=0, minute=0, second=0, tzinfo=pytz.UTC).replace(
+            tzinfo=pytz.UTC)
 
     except:
         raise APIException(detail='Provide proper dates')
@@ -190,9 +192,41 @@ def search_list(sec_code, listDict):
             return p
 
 
+def market_analysis_stock(query_params):
+    """
+    List prices and their corresponding percentage analysis by stock
+    """
+
+    try:
+        date_price = query_params.get('price_date')
+        sec_code = query_params.get('sec_code')
+        if date_price is None:
+            last_date = PriceList.objects.order_by('-price_date')[:1][0]
+            date_price = str(last_date.price_date)
+
+        rs = PriceAnalysisTemp.objects.filter(price_date__date=date_price, sec_code=sec_code)
+        data_set = {}
+        dict_result = {'id': rs.id, 'sec_code': rs.sec_code, 'price': rs.price, 'min_year': rs.min_year,
+                       'max_year': rs.max_year, 'min_six_months': rs.min_six_months,
+                       'max_six_months': rs.max_six_months, 'min_three_months': rs.min_three_months,
+                       'max_three_months': rs.max_three_months, 'min_one_week': rs.min_one_week,
+                       'max_one_week': rs.max_one_week, 'price_one_week': rs.price_one_week,
+                       'price_three_months': rs.price_three_months, 'price_six_months': rs.price_six_months,
+                       'price_one_year': rs.price_one_year, 'one_week_cent': rs.one_week_cent,
+                       'three_months_cent': rs.three_months_cent, 'six_months_cent': rs.six_months_cent,
+                       'one_year_cent': rs.one_year_cent}
+
+        data_set['results'] = dict_result
+        data_set['date'] = date_price
+
+    except:
+        raise APIException(detail='Provide proper date or sec code')
+
+    return data_set
+
+
 def market_analysis(query_params):
     """ List prices and their corresponding percentage analysis by month ranges"""
-
 
     try:
         date_price = query_params.get('price_date')

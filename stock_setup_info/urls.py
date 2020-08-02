@@ -23,5 +23,5 @@ router.registry.extend(search_router.registry)
 urlpatterns = [
     path('', include(router.urls)),
     path('stockapiview', views.StockApiView.as_view()),
-    path('api/v1/sectorpricelist', PriceListAPIView.as_view())
+    path('api/v1/sectorpricelist', PriceListAPIView.as_view()),
 ]
