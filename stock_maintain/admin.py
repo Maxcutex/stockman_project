@@ -149,7 +149,7 @@ class PriceListAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def import_csv(self, request):
-
+        error_found = ""
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
 
@@ -161,31 +161,39 @@ class PriceListAdmin(admin.ModelAdmin):
                 with transaction.atomic():
                     for line in reader:
                         stock = Stock.objects.get(stock_code=line[0].strip())
-                        x_change = 0.0
-                        sign = ''
-                        if float(line[1].strip()) >= float(line[6].strip()):
-                            sign = '+'
+                        if stock:
+                            x_change = 0.0
+                            sign = ''
+                            if float(line[1].strip()) >= float(line[6].strip()):
+                                sign = '+'
+                            else:
+                                sign = '-'
+                                x_change = float(line[1]) - float(line[6])
+                            price_list_object = PriceList.objects.create(
+                                sec_code=line[0],
+                                price_date=date_import,  # line[12],
+                                price_close=float(line[1].strip()),
+                                x_open=float(line[2].strip()),
+                                x_high=float(line[3].strip()),
+                                x_low=float(line[4].strip()),
+                                price=float(line[6].strip()),
+                                offer_bid_sign=sign,
+                                x_change=x_change,
+                                num_of_deals=float(line[9].strip().replace(',', '')),
+                                volume=float(line[10].strip().replace(',', '')),
+                                x_value=float(line[11].strip().replace(',', '')),
+                                stock_id=stock.id
+                            )
+                            price_list_object.save()
                         else:
-                            sign = '-'
-                            x_change = float(line[1]) - float(line[6])
-                        price_list_object = PriceList.objects.create(
-                            sec_code=line[0],
-                            price_date=date_import,  # line[12],
-                            price_close=float(line[1].strip()),
-                            x_open=float(line[2].strip()),
-                            x_high=float(line[3].strip()),
-                            x_low=float(line[4].strip()),
-                            price=float(line[6].strip()),
-                            offer_bid_sign=sign,
-                            x_change=x_change,
-                            num_of_deals=float(line[9].strip().replace(',', '')),
-                            volume=float(line[10].strip().replace(',', '')),
-                            x_value=float(line[11].strip().replace(',', '')),
-                            stock_id=stock.id
-                        )
-                        price_list_object.save()
+                            error_found = f"The stock {line[0].strip()} could not be found"
+                            raise ValueError(f"The stock {line[0].strip()} could not be found")
                 self.message_user(request, "Your csv file has been imported")
                 return redirect("..")
+            except ValueError:
+                self.message_user(
+                    request,
+                    error_found, level=messages.ERROR)
             except Stock.DoesNotExist:
                 self.message_user(
                     request,
