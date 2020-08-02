@@ -189,12 +189,12 @@ class PriceListAdmin(admin.ModelAdmin):
             except Stock.DoesNotExist:
                 self.message_user(
                     request,
-                    " A stock value does not exist in the database. "
+                    " Stock Not Exist: A stock value does not exist in the database. "
                     "Pls enter details for this stock or update previous name", level=messages.ERROR)
             except IntegrityError:
                 self.message_user(
                     request,
-                    " A stock value does not exist in the database. "
+                    " Data Integritiy Error: A stock value does not exist in the database. "
                     "Pls enter details for this stock or update previous name", level=messages.ERROR)
 
         form = CsvImportForm()
