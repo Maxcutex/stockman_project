@@ -1,5 +1,5 @@
 import io
-import pdb
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib import admin
@@ -160,7 +160,10 @@ class PriceListAdmin(admin.ModelAdmin):
             try:
                 with transaction.atomic():
                     for line in reader:
+                        # pdb.set_trace()
                         stock = Stock.objects.get(stock_code=line[0].strip())
+
+                        new_date = datetime.strptime(date_import, '%Y-%m-%d')
                         if stock:
                             x_change = 0.0
                             sign = ''
@@ -171,7 +174,7 @@ class PriceListAdmin(admin.ModelAdmin):
                                 x_change = float(line[1]) - float(line[6])
                             price_list_object = PriceList.objects.create(
                                 sec_code=line[0],
-                                price_date=date_import,  # line[12],
+                                price_date= new_date,  # line[12],
                                 price_close=float(line[1].strip()),
                                 x_open=float(line[2].strip()),
                                 x_high=float(line[3].strip()),
