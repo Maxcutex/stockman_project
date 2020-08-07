@@ -1,4 +1,5 @@
 import io
+# import pdb
 from datetime import datetime
 
 from django.contrib import messages
@@ -25,7 +26,8 @@ from django.urls import path
 
 def get_picture_preview(obj):
     if obj.pk:  # if object has already been saved and has a primary key, show picture preview
-        return """<a href="{src}" target="_blank"><img src="{src}" alt="{title}" style="max-width: 200px; max-height: 200px;" /></a>""".format(
+        return """<a href="{src}" target="_blank"><img src="{src}" alt="{title}" 
+        style="max-width: 200px; max-height: 200px;" /></a>""".format(
             src=obj.image_file.url,
             title=obj.name,
         )
@@ -78,7 +80,8 @@ class AnalysisImageInline(admin.TabularInline):
 
     def get_edit_link(self, obj=None):
         if obj.pk:  # if object has already been saved and has a primary key, show link to it
-            url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[force_text(obj.pk)])
+            url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name),
+                          args=[force_text(obj.pk)])
             return """<a href="{url}">{text}</a>""".format(
                 url=url,
                 text=_("Edit this %s separately") % obj._meta.verbose_name,
@@ -103,7 +106,8 @@ class InsideBusinessImageInline(admin.TabularInline):
 
     def get_edit_link(self, obj=None):
         if obj.pk:  # if object has already been saved and has a primary key, show link to it
-            url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[force_text(obj.pk)])
+            url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name),
+                          args=[force_text(obj.pk)])
             return """<a href="{url}">{text}</a>""".format(
                 url=url,
                 text=_("Edit this %s separately") % obj._meta.verbose_name,
@@ -157,21 +161,30 @@ class PriceListAdmin(admin.ModelAdmin):
             decoded_csv_file = io.StringIO(csv_file.read().decode('utf-8'))
             reader = csv.reader(decoded_csv_file)
             # Create pricelist objects from passed in data
+            sec_code_involved  = ""
             try:
                 with transaction.atomic():
                     for line in reader:
                         # pdb.set_trace()
+                        sec_code_involved =line[0].strip()
                         stock = Stock.objects.get(stock_code=line[0].strip())
 
+                        # pdb.set_trace()
                         new_date = datetime.strptime(date_import, '%Y-%m-%d')
                         if stock:
                             x_change = 0.0
                             sign = ''
+                            if line[1].strip() == '' or line[6].strip() == '':
+                                # pdb.set_trace()
+                                error_found = f"The stock {line[0].strip()} has no data in the pricelist. " \
+                                              f"Kindly review your csv and upload correct data"
+                                raise ValueError()
                             if float(line[1].strip()) >= float(line[6].strip()):
                                 sign = '+'
                             else:
                                 sign = '-'
                                 x_change = float(line[1]) - float(line[6])
+
                             price_list_object = PriceList.objects.create(
                                 sec_code=line[0],
                                 price_date= new_date,  # line[12],
@@ -187,17 +200,23 @@ class PriceListAdmin(admin.ModelAdmin):
                                 x_value=float(line[11].strip().replace(',', '')),
                                 stock_id=stock.id
                             )
+                            # pdb.set_trace()
                             price_list_object.save()
                         else:
                             error_found = f"The stock {line[0].strip()} could not be found"
-                            raise ValueError(f"The stock {line[0].strip()} could not be found")
+                            # pdb.set_trace()
+                            raise ValueError()
                 self.message_user(request, "Your csv file has been imported")
                 return redirect("..")
             except ValueError:
+                # pdb.set_trace()
+                # a = "value error"
                 self.message_user(
                     request,
                     error_found, level=messages.ERROR)
             except Stock.DoesNotExist:
+                # pdb.set_trace()
+                # a = "Stockdoes not exit"
                 self.message_user(
                     request,
                     " Stock Not Exist: A stock value does not exist in the database. "
