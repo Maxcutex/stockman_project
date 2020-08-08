@@ -1,5 +1,4 @@
 import io
-# import pdb
 from datetime import datetime
 
 from django.contrib import messages
@@ -210,18 +209,20 @@ class PriceListAdmin(admin.ModelAdmin):
                 return redirect("..")
             except ValueError:
                 # pdb.set_trace()
-                # a = "value error"
+                if error_found =="":
+                    error_found =f"The stock {line[0].strip()} had error in its values. Pls check"
                 self.message_user(
                     request,
                     error_found, level=messages.ERROR)
             except Stock.DoesNotExist:
                 # pdb.set_trace()
-                # a = "Stockdoes not exit"
+                a = "Stockdoes not exit"
                 self.message_user(
                     request,
                     " Stock Not Exist: A stock value does not exist in the database. "
                     "Pls enter details for this stock or update previous name", level=messages.ERROR)
             except IntegrityError:
+
                 self.message_user(
                     request,
                     " Data Integritiy Error: A stock value does not exist in the database. "
