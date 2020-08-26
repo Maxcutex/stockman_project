@@ -168,7 +168,7 @@ class PriceListAdmin(admin.ModelAdmin):
                         sec_code_involved =line[0].strip()
                         stock = Stock.objects.get(stock_code=line[0].strip())
 
-                        # pdb.set_trace()
+                        #pdb.set_trace()
                         new_date = datetime.strptime(date_import, '%Y-%m-%d')
                         if stock:
                             x_change = 0.0
@@ -178,12 +178,12 @@ class PriceListAdmin(admin.ModelAdmin):
                                 error_found = f"The stock {line[0].strip()} has no data in the pricelist. " \
                                               f"Kindly review your csv and upload correct data"
                                 raise ValueError()
-                            if float(line[1].strip()) >= float(line[6].strip()):
+                            if float(line[1].strip()) <= float(line[6].strip()):
                                 sign = '+'
                             else:
                                 sign = '-'
                                 x_change = float(line[1]) - float(line[6])
-
+                            # pdb.set_trace()
                             price_list_object = PriceList.objects.create(
                                 sec_code=line[0],
                                 price_date= new_date,  # line[12],
@@ -208,14 +208,12 @@ class PriceListAdmin(admin.ModelAdmin):
                 self.message_user(request, "Your csv file has been imported")
                 return redirect("..")
             except ValueError:
-                # pdb.set_trace()
                 if error_found =="":
                     error_found =f"The stock {line[0].strip()} had error in its values. Pls check"
                 self.message_user(
                     request,
                     error_found, level=messages.ERROR)
             except Stock.DoesNotExist:
-                # pdb.set_trace()
                 a = "Stockdoes not exit"
                 self.message_user(
                     request,
