@@ -7,7 +7,6 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from rest_framework import viewsets, decorators, status
 from rest_framework.decorators import detail_route, list_route, api_view
-from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 
 
@@ -18,37 +17,58 @@ from django.views.decorators.cache import cache_page
 
 from stockman_project.permissions import IsAdminOrReadOnly
 from stockman_project.settings.pagination_defaults import DefaultResultsSetPagination
-from .serializers import NewsSerializer, NewsImageSerializer, PriceListSerializer, NewsFileSerializer, \
-    AnalysisOpinionSerializer, SiteAuthorSerializer, QuoteSerializer, InsideBusinessSerializer, \
-    CustomPriceListSerializer, PriceListMarketAnalysisSerializer, NewsLetterMailingSerializer
-from .models import News, NewsImage, PriceList, NewsFile, AnalysisOpinion, SiteAuthor, Quote, InsideBusiness, \
-    NewsLetterMailing
+from .serializers import (
+    NewsSerializer,
+    NewsImageSerializer,
+    PriceListSerializer,
+    NewsFileSerializer,
+    AnalysisOpinionSerializer,
+    SiteAuthorSerializer,
+    QuoteSerializer,
+    InsideBusinessSerializer,
+    CustomPriceListSerializer,
+    PriceListMarketAnalysisSerializer,
+    NewsLetterMailingSerializer,
+    QuoteAnalysisSerializer,
+)
+from .models import (
+    News,
+    NewsImage,
+    PriceList,
+    NewsFile,
+    AnalysisOpinion,
+    SiteAuthor,
+    Quote,
+    InsideBusiness,
+    NewsLetterMailing,
+)
 import stock_maintain.services as stock_maintain_services
+
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .tasks import send_mail_task
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
 class AnalysisView(viewsets.ModelViewSet):
-    queryset = AnalysisOpinion.objects.get_queryset().order_by('-id')
+    queryset = AnalysisOpinion.objects.get_queryset().order_by("-id")
     serializer_class = AnalysisOpinionSerializer
-    filter_fields = ('title', 'opinion_date')
+    filter_fields = ("title", "opinion_date")
     pagination_class = DefaultResultsSetPagination
 
     @method_decorator(cache_page(CACHE_TTL))
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
+    @decorators.action(methods=["get"], detail=False, url_path="view-date-range")
     def view_date_range(self, request, *args, **kwargs):
         analysis_list = stock_maintain_services.list_analysis_range(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(analysis_list)
             if page is not None:
@@ -58,12 +78,12 @@ class AnalysisView(viewsets.ModelViewSet):
         serializer = AnalysisOpinionSerializer(analysis_list, many=True)
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='list-by-section')
+    @decorators.action(methods=["get"], detail=False, url_path="list-by-section")
     def list_by_section(self, request, *args, **kwargs):
         analysis_list = stock_maintain_services.list_analysis_by_section(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(analysis_list)
             if page is not None:
@@ -75,27 +95,27 @@ class AnalysisView(viewsets.ModelViewSet):
 
 
 class SiteAuthorView(viewsets.ModelViewSet):
-    queryset = SiteAuthor.objects.get_queryset().order_by('-id')
+    queryset = SiteAuthor.objects.get_queryset().order_by("-id")
     serializer_class = SiteAuthorSerializer
     pagination_class = DefaultResultsSetPagination
 
 
 class NewsView(viewsets.ModelViewSet):
-    queryset = News.objects.get_queryset().order_by('-id')
+    queryset = News.objects.get_queryset().order_by("-id")
     serializer_class = NewsSerializer
-    filter_fields = ('is_featured', 'stock_id', 'news_date', 'sec_code')
+    filter_fields = ("is_featured", "stock_id", "news_date", "sec_code")
     # pagination_class = DefaultResultsSetPagination
 
     @method_decorator(cache_page(CACHE_TTL))
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
+    @decorators.action(methods=["get"], detail=False, url_path="view-date-range")
     def view_date_range(self, request, *args, **kwargs):
         news_list = stock_maintain_services.list_news_range(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(news_list)
             if page is not None:
@@ -105,12 +125,12 @@ class NewsView(viewsets.ModelViewSet):
         serializer = NewsSerializer(news_list, many=True)
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='list-by-section')
+    @decorators.action(methods=["get"], detail=False, url_path="list-by-section")
     def list_by_section(self, request, *args, **kwargs):
         news_list = stock_maintain_services.list_news_by_section(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(news_list)
             if page is not None:
@@ -120,11 +140,11 @@ class NewsView(viewsets.ModelViewSet):
         serializer = NewsSerializer(news_list, many=True)
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='group-by-section')
+    @decorators.action(methods=["get"], detail=False, url_path="group-by-section")
     def group_by_section(self, request, *args, **kwargs):
         news_list = stock_maintain_services.group_news_by_section()
 
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(news_list)
             if page is not None:
@@ -139,22 +159,22 @@ class NewsView(viewsets.ModelViewSet):
 
 
 class InsideBusinessView(viewsets.ModelViewSet):
-    queryset = InsideBusiness.objects.all().order_by('-id')
+    queryset = InsideBusiness.objects.all().order_by("-id")
     serializer_class = InsideBusinessSerializer
-    filter_fields = ('title', 'opinion_date','entry_date')
+    filter_fields = ("title", "opinion_date", "entry_date")
     pagination_class = DefaultResultsSetPagination
 
     @method_decorator(cache_page(CACHE_TTL))
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
+    @decorators.action(methods=["get"], detail=False, url_path="view-date-range")
     def view_date_range(self, request, *args, **kwargs):
         inside_business_list = stock_maintain_services.list_inside_business_range(
             query_params=request.query_params,
         )
 
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(inside_business_list)
             if page is not None:
@@ -164,12 +184,12 @@ class InsideBusinessView(viewsets.ModelViewSet):
         serializer = InsideBusinessSerializer(inside_business_list, many=True)
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='list-by-section')
+    @decorators.action(methods=["get"], detail=False, url_path="list-by-section")
     def list_by_section(self, request, *args, **kwargs):
         inside_business_list = stock_maintain_services.list_inside_business_by_section(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(inside_business_list)
             if page is not None:
@@ -193,10 +213,10 @@ class NewsFileView(viewsets.ModelViewSet):
 
 
 class PriceListView(viewsets.ModelViewSet):
-    queryset = PriceList.objects.all().order_by('-id')
+    queryset = PriceList.objects.all().order_by("-id")
     serializer_class = PriceListSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('price_date', 'stock', 'sec_code')
+    filter_fields = ("price_date", "stock", "sec_code")
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = DefaultResultsSetPagination
 
@@ -204,12 +224,12 @@ class PriceListView(viewsets.ModelViewSet):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    @decorators.action(methods=['get'], detail=False, url_path='view-date-range')
+    @decorators.action(methods=["get"], detail=False, url_path="view-date-range")
     def view_date_range(self, request, *args, **kwargs):
         price_list = stock_maintain_services.list_price_range(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(price_list)
             if page is not None:
@@ -219,12 +239,12 @@ class PriceListView(viewsets.ModelViewSet):
         serializer = PriceListSerializer(price_list, many=True)
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='view-by-date')
+    @decorators.action(methods=["get"], detail=False, url_path="view-by-date")
     def view_by_date(self, request, *args, **kwargs):
         price_list = stock_maintain_services.list_price_date(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(price_list)
             if page is not None:
@@ -234,13 +254,13 @@ class PriceListView(viewsets.ModelViewSet):
         serializer = PriceListSerializer(price_list, many=True)
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='view-by-date-sector')
+    @decorators.action(methods=["get"], detail=False, url_path="view-by-date-sector")
     def view_by_date_sector(self, request, *args, **kwargs):
         pdb.set_trace()
         price_list = stock_maintain_services.list_price_date_by_sectors(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(price_list)
             if page is not None:
@@ -250,7 +270,7 @@ class PriceListView(viewsets.ModelViewSet):
         serializer = PriceListSerializer(price_list, many=True)
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='market-analysis')
+    @decorators.action(methods=["get"], detail=False, url_path="market-analysis")
     def market_analysis(self, request, *args, **kwargs):
         price_list = stock_maintain_services.market_analysis(
             query_params=request.query_params,
@@ -260,6 +280,7 @@ class PriceListView(viewsets.ModelViewSet):
 
 class PriceListAPIView(APIView):
     """ PriceList View using Api View """
+
     pagination_class = DefaultResultsSetPagination
 
     @method_decorator(cache_page(CACHE_TTL))
@@ -272,8 +293,14 @@ class PriceListAPIView(APIView):
 
         return Response(serializer.data)
 
-    @decorators.action(methods=['get'], detail=False, url_path='market-analysis-stock')
-    def get_market_analysis(self, request, *args, **kwargs):
+
+class MarketAnalysisAPIView(APIView):
+    """ Market Analysis View using Api View """
+
+    pagination_class = DefaultResultsSetPagination
+
+    @method_decorator(cache_page(CACHE_TTL))
+    def get(self, request, *args, **kwargs):
         """ Returns a quote analysis api view """
         price_list = stock_maintain_services.market_analysis_stock(
             query_params=request.query_params,
@@ -292,21 +319,24 @@ class NewsLetterMailingView(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        send_mail_task.delay("You have subscribed to our Mailing List",
-                       "You have subscribed to our Mailing List",
-                       "info@stockmannigeria.com", self.request.data.email)
+        send_mail_task.delay(
+            "You have subscribed to our Mailing List",
+            "You have subscribed to our Mailing List",
+            "info@stockmannigeria.com",
+            self.request.data.email,
+        )
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
     def perform_create(self, serializer):
         serializer.save()
 
-    @decorators.action(methods=['get'], detail=False, url_path='by-active')
+    @decorators.action(methods=["get"], detail=False, url_path="by-active")
     def view_by_active(self, request, *args, **kwargs):
-        active_list = stock_maintain_services.list_newsletterusers_by_active(
-
-        )
-        paginate = kwargs.get('paginate')
+        active_list = stock_maintain_services.list_newsletterusers_by_active()
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(active_list)
             if page is not None:
@@ -318,16 +348,16 @@ class NewsLetterMailingView(viewsets.ModelViewSet):
 
 
 class QuotesView(viewsets.ModelViewSet):
-    queryset = Quote.objects.get_queryset().order_by('-id')
+    queryset = Quote.objects.get_queryset().order_by("-id")
     serializer_class = QuoteSerializer
     pagination_class = DefaultResultsSetPagination
 
-    @decorators.action(methods=['get'], detail=False, url_path='by-stock-code')
+    @decorators.action(methods=["get"], detail=False, url_path="by-stock-code")
     def view_date_range(self, request, *args, **kwargs):
         quote = stock_maintain_services.quote_by_stock_code(
             query_params=request.query_params,
         )
-        paginate = kwargs.get('paginate')
+        paginate = kwargs.get("paginate")
         if paginate is not None:
             page = self.paginate_queryset(quote)
             if page is not None:
@@ -336,8 +366,6 @@ class QuotesView(viewsets.ModelViewSet):
 
         serializer = QuoteSerializer(quote, many=False)
         return Response(serializer.data)
-
-
 
 
 # def simple_upload(request):

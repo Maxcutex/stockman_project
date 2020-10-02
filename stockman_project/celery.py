@@ -1,19 +1,22 @@
 from __future__ import absolute_import, unicode_literals
-
+from django.db import connection
 import os
 
 from celery import Celery
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stockman_project.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "stockman_project.settings")
 
-app = Celery('stockman_project', broker='redis://h:p3d06b19eb8c8ade5acf656efe77b51187bca33d64c51745a686ec2cbbf2adc26@ec2-52-70-214-96.compute-1.amazonaws.com:19769')
+app = Celery(
+    "stockman_project",
+    broker="redis://h:p3d06b19eb8c8ade5acf656efe77b51187bca33d64c51745a686ec2cbbf2adc26@ec2-52-70-214-96.compute-1.amazonaws.com:19769",
+)
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
 # - namespace='CELERY' means all celery-related configuration keys
 #   should have a `CELERY_` prefix.
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
@@ -32,6 +35,13 @@ app.autodiscover_tasks()
 #         test.s('Happy Mondays!'),
 #     )
 
+
 @app.task(bind=True)
 def debug_task(self):
-    print('Request: {0!r}'.format(self.request))
+    print("Request: {0!r}".format(self.request))
+
+
+@app.task
+def refresh_analysis_data(date_data):
+    with connection.cursor() as cursor:
+        return cursor.callproc("update_price_analysis", date_data)
