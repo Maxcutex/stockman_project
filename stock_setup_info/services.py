@@ -10,7 +10,7 @@ def get_stock_by_code(query_params):
         stock_code = query_params.get("stock_code")
     except Exception:
         raise APIException(detail="Provide proper stock code")
-    return Stock.objects.filter(stock_code=stock_code).first()
+    return Stock.objects.filter(stock_code=stock_code)[:1][0]
 
 
 def stock_search_like_name(query_params):
