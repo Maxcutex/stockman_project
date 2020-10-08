@@ -1,4 +1,5 @@
 import io
+import pdb
 from datetime import datetime
 from django.db import connection
 from django.contrib import messages
@@ -175,6 +176,7 @@ class PriceListAdmin(admin.ModelAdmin):
         "price_close",
         "offer_bid_sign",
         "x_change",
+        "x_value",
     )
     # price_close = models.FloatField()
     # x_open = models.FloatField()
@@ -229,6 +231,7 @@ class PriceListAdmin(admin.ModelAdmin):
                                 raise ValueError()
                             if float(line[1].strip()) <= float(line[6].strip()):
                                 sign = "+"
+                                x_change = float(line[6]) - float(line[1])
                             else:
                                 sign = "-"
                                 x_change = float(line[1]) - float(line[6])
@@ -236,11 +239,11 @@ class PriceListAdmin(admin.ModelAdmin):
                             price_list_object = PriceList.objects.create(
                                 sec_code=line[0],
                                 price_date=new_date,  # line[12],
-                                price_close=float(line[1].strip()),
+                                price_close=float(line[6].strip()),
                                 x_open=float(line[2].strip()),
                                 x_high=float(line[3].strip()),
                                 x_low=float(line[4].strip()),
-                                price=float(line[6].strip()),
+                                price=float(line[1].strip()),
                                 offer_bid_sign=sign,
                                 x_change=x_change,
                                 num_of_deals=float(line[9].strip().replace(",", "")),

@@ -305,9 +305,9 @@ class MarketAnalysisAPIView(APIView):
         price_list = stock_maintain_services.market_analysis_stock(
             query_params=request.query_params,
         )
-        serializer = QuoteAnalysisSerializer(price_list)
+        # serializer = QuoteAnalysisSerializer(price_list)
 
-        return Response(serializer.data)
+        return Response(price_list)
 
 
 class NewsLetterMailingView(viewsets.ModelViewSet):

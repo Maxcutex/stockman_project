@@ -1,8 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 from django.db import connection
 import os
-
+from datetime import datetime, date
 from celery import Celery
+from utils.utils import get_first_working_day_of_month
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "stockman_project.settings")
@@ -21,20 +22,6 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
-# @app.on_after_configure.connect
-# def setup_periodic_tasks(sender, **kwargs):
-#     # Calls test('hello') every 10 seconds.
-#     sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
-#
-#     # Calls test('world') every 30 seconds
-#     sender.add_periodic_task(30.0, test.s('world'), expires=10)
-#
-#     # Executes every Monday morning at 7:30 a.m.
-#     sender.add_periodic_task(
-#         crontab(hour=7, minute=30, day_of_week=1),
-#         test.s('Happy Mondays!'),
-#     )
-
 
 @app.task(bind=True)
 def debug_task(self):
@@ -43,5 +30,10 @@ def debug_task(self):
 
 @app.task
 def refresh_analysis_data(date_data):
+    first_day_of_year = date(date.today().year, 1, 1)
+    year_to_date = get_first_working_day_of_month(first_day_of_year)
+    print(year_to_date)
     with connection.cursor() as cursor:
-        return cursor.callproc("update_price_analysis", date_data)
+        return cursor.execute(
+            f"call update_price_analysis('{date_data}','{year_to_date}')"
+        )

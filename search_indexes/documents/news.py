@@ -10,16 +10,13 @@ from stock_maintain.models import News
 INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
 
 # See Elasticsearch Indices API reference for available settings
-INDEX.settings(
-    number_of_shards=1,
-    number_of_replicas=1
-)
+INDEX.settings(number_of_shards=1, number_of_replicas=1)
 
 html_strip = analyzer(
-    'html_strip',
+    "html_strip",
     tokenizer="standard",
-    filter=[ "lowercase", "stop", "snowball"],
-    char_filter=["html_strip"]
+    filter=["lowercase", "stop", "snowball"],
+    char_filter=["html_strip"],
 )
 
 
@@ -29,10 +26,9 @@ class NewsDocument(Document):
 
     class Index:
         # Name of the Elasticsearch index
-        name = 'news'
+        name = "news"
         # See Elasticsearch Indices API reference for available settings
-        settings = {'number_of_shards': 1,
-                    'number_of_replicas': 0}
+        settings = {"number_of_shards": 1, "number_of_replicas": 0}
 
     class Django(object):
         model = News  # The model associated with this Document
@@ -52,45 +48,47 @@ class NewsDocument(Document):
         #     'has_downloadable',
         #
         # ]
-    id = fields.IntegerField(attr='id')
+
+    id = fields.IntegerField(attr="id")
 
     title = StringField(
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
+        fielddata=True,
     )
 
     content = StringField(
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
     news_date = fields.DateField()
     entry_date = fields.DateField()
 
     stock = StringField(
-        attr='stock_indexing',
+        attr="stock_indexing",
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
 
     author = StringField(
-        attr='author_indexing',
+        attr="author_indexing",
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
 
     sec_code = StringField(
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
 
     is_featured = fields.BooleanField()
@@ -99,8 +97,10 @@ class NewsDocument(Document):
 
     is_main = fields.BooleanField()
     #
+
     class Meta(object):
         parallel_indexing = True
+
     # class Meta(object):
     #     """Meta options."""
     #
