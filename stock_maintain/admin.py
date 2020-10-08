@@ -178,6 +178,10 @@ class PriceListAdmin(admin.ModelAdmin):
         "x_change",
         "x_value",
     )
+    search_fields = (
+        "sec_code",
+        "price_date",
+    )
     # price_close = models.FloatField()
     # x_open = models.FloatField()
     # x_high = models.FloatField()
