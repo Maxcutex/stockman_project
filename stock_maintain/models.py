@@ -484,3 +484,5 @@ class PriceAnalysisTemp(models.Model):
     one_year_cent = models.FloatField(null=True)
     price_date = models.DateTimeField(null=True)
     price_year_to_date_cent = models.FloatField(null=True)
+    price_52_week_high = models.FloatField(null=True)
+    price_52_week_low = models.FloatField(null=True)

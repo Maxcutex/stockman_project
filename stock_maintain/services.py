@@ -260,6 +260,8 @@ def market_analysis_stock(query_params):
                     "today_change": price_data.x_change,
                     "today_sign": price_data.offer_bid_sign,
                     "today_volume": price_data.volume,
+                    "today_day_range": f"{price_data.x_low} - {price_data.x_high}",
+                    "today_52_week_range": f"{price_data.x_low} - {price_data.x_high}",
                 }
 
         # data_set['results'] = dict_result
