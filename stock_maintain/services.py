@@ -257,7 +257,7 @@ def market_analysis_stock(query_params):
                     "price_year_to_date_cent": rs.price_year_to_date_cent,
                     "previous_price": price_data.price,
                     "current_price": price_data.price_close,
-                    "today_change": price_data.x_change,
+                    "today_change": float(f"{price_data.x_change:.2f}"),
                     "today_sign": price_data.offer_bid_sign,
                     "today_volume": price_data.volume,
                     "today_day_range": f"{price_data.x_low} - {price_data.x_high}",
