@@ -193,7 +193,9 @@ def list_inside_business_range(query_params):
 
 def list_price_date(query_params):
     """ List prices for a given date range"""
-    price_date = query_params.get("price_date").split("-")
+
+    price_date = split_date(query_params.get("price_date"))
+
     try:
         price_year = int(price_date[0])
         price_month = int(price_date[1])
@@ -345,10 +347,15 @@ def market_analysis(query_params):
     return data_set
 
 
+def split_date(date_to_split):
+    return date_to_split.split("-")
+
+
 def list_price_date_by_sectors(query_params):
     """ List prices for a given date range by sectors"""
 
-    price_date = query_params.get("price_date").split("-")
+    price_date = split_date(query_params.get("price_date"))
+
     try:
         price_year = int(price_date[0])
         price_month = int(price_date[1])
@@ -383,6 +390,7 @@ def list_price_date_by_sectors(query_params):
             )
             # pdb.set_trace()
             if price_list_objects:
+                price_list_objects.order_by("sec_code")
                 id += 1
                 date_sector["id"] = id
                 date_sector["sub_sector"] = sub_sector
