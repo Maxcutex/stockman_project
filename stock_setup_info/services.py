@@ -54,7 +54,10 @@ def stock_competitors(query_params):
         stock_details = {
             "stock_code": stock_record.stock_code,
             "price": price_data.price,
-            "change_data": price_data.offer_bid_sign + price_data.x_change + "%",
+            "change_data": str(price_data.offer_bid_sign)
+            + str(price_data.x_change)
+            + "%",
             "market_data": price_data.volume,
         }
         competitors.append(stock_details)
+    return competitors
