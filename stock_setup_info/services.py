@@ -43,6 +43,7 @@ def stock_competitors(query_params):
     except Exception:
         raise APIException(detail="Provide stock code for search")
     stock = Stock.objects.filter(stock_code=stock_code)[:1][0]
+
     stocks = Stock.objects.filter(
         ~Q(stock_code=stock_code) & Q(industry=stock.industry)
     )
@@ -55,7 +56,7 @@ def stock_competitors(query_params):
             "stock_code": stock_record.stock_code,
             "price": price_data.price,
             "change_data": str(price_data.offer_bid_sign)
-            + str(price_data.x_change)
+            + str(f"{price_data.x_change:.2f}")
             + "%",
             "market_data": price_data.volume,
         }
