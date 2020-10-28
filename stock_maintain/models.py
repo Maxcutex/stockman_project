@@ -498,6 +498,10 @@ class QuarterlyFinancial(models.Model):
     turnover = models.FloatField()
     net_assets = models.FloatField()
     total_assets = models.FloatField()
+    previous_profit_after_tax = models.FloatField()
+    previous_turnover = models.FloatField()
+    previous_net_assets = models.FloatField()
+    previous_total_assets = models.FloatField()
     year = models.IntegerField()
     period_number = models.IntegerField(choices=quarterly_period_choices, default=1)
 
