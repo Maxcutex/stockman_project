@@ -408,11 +408,7 @@ class InsideBusinessAdmin(ImportExportModelAdmin):
 @admin.register(QuarterlyFinancial)
 class QuarterlyFinancialAdmin(ImportExportModelAdmin):
     model = models.QuarterlyFinancial
-    inlines = [
-        InsideBusinessInline,
-        InsideBusinessImageInline,
-        InsideBusinessFileInline,
-    ]
+
     search_fields = (
         "sec_code",
         "stock.stock_code",
