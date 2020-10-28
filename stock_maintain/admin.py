@@ -38,6 +38,8 @@ from .models import (
     AnalysisFile,
     InsideBusinessImage,
     InsideBusinessFile,
+    QuarterlyFinancial,
+    DividendInformation,
 )
 from import_export.admin import ImportExportModelAdmin
 from django.urls import path
@@ -401,3 +403,35 @@ class InsideBusinessAdmin(ImportExportModelAdmin):
 
     def titles(self, obj):
         return obj.title
+
+
+@admin.register(QuarterlyFinancial)
+class QuarterlyFinancialAdmin(ImportExportModelAdmin):
+    model = models.QuarterlyFinancial
+    inlines = [
+        InsideBusinessInline,
+        InsideBusinessImageInline,
+        InsideBusinessFileInline,
+    ]
+    search_fields = (
+        "sec_code",
+        "stock.stock_code",
+    )
+    list_display = ("titles",)
+
+    def titles(self, obj):
+        return obj.stock.stock_code
+
+
+@admin.register(DividendInformation)
+class DividendInformationAdmin(ImportExportModelAdmin):
+    model = models.DividendInformation
+
+    search_fields = (
+        "sec_code",
+        "stock.stock_code",
+    )
+    list_display = ("titles",)
+
+    def titles(self, obj):
+        return obj.stock.stock_code
