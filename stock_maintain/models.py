@@ -486,3 +486,27 @@ class PriceAnalysisTemp(models.Model):
     price_year_to_date_cent = models.FloatField(null=True)
     price_52_week_high = models.FloatField(null=True)
     price_52_week_low = models.FloatField(null=True)
+
+
+class QuarterlyFinancial(models.Model):
+    quarterly_period_choices = Choices(1, 2, 3, 4)
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="quarterly_fin_stock", null=True
+    )
+    sec_code = models.CharField(max_length=100)
+    profit_after_tax = models.FloatField()
+    turnover = models.FloatField()
+    net_assets = models.FloatField()
+    total_assets = models.FloatField()
+    year = models.IntegerField()
+    period_number = models.IntegerField(choices=quarterly_period_choices, default=1)
+
+
+class DividendInformation(models.Model):
+    dividend_period_choices = Choices(1, 2, 3, 4)
+    stock = models.ForeignKey(
+        Stock, on_delete=models.CASCADE, related_name="dividend_info_stock", null=True
+    )
+    sec_code = models.CharField(max_length=100)
+    dividend_type = models.IntegerField()
+    period_number = models.IntegerField(choices=dividend_period_choices, default=1)
