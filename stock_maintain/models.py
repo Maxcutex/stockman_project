@@ -517,4 +517,5 @@ class DividendInformation(models.Model):
         choices=dividend_type, default="Final", max_length=50
     )
     year = models.IntegerField()
+    dividend_value = models.FloatField()
     period_number = models.IntegerField(choices=dividend_period_choices, default=1)

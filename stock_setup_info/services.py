@@ -40,9 +40,9 @@ def stock_statistics(query_params):
             raise APIException(detail="Provide stock code for search")
     except Exception:
         raise APIException(detail="Provide stock code for search")
-    # stock = Stock.objects.filter(stock_code=stock_code)[:1][0]
+    stock = Stock.objects.filter(stock_code=stock_code)[:1][0]
     stock_analytics_info = QuarterlyFinancial.objects.filter(sec_code=stock_code)[:1][0]
-    # stock_dividend_info = DividendInformation.objects.filter(sec_code=stock_code)[:1][0]
+    stock_dividend_info = DividendInformation.objects.filter(sec_code=stock_code)[:1][0]
     valuation = {}
     pat_margin = round(
         (stock_analytics_info.profit_after_tax / stock_analytics_info.turnover) * 100, 2
@@ -56,7 +56,7 @@ def stock_statistics(query_params):
     valuation["probability"] = {
         "pat_margin": pat_margin,
         "roe": roe,
-        "dps": dps,
+        "dps": stock_dividend_info.dividend_value,
         "period": period,
     }
     valuation["valuation"] = {
@@ -66,16 +66,16 @@ def stock_statistics(query_params):
         "dividend_yield": period,
     }
     valuation["company_statistics"] = {
-        "pe_ratio": pat_margin,
-        "net_asset_per_share": roe,
-        "eps": dps,
-        "dividend_yield": period,
+        "registrars": stock.registrar,
+        "listing_date": stock.list_date,
+        "year_end": stock.year_end,
+        "share_outstanding": stock.outstanding_shares,
     }
     valuation["kpi"] = {
-        "pe_ratio": pat_margin,
-        "net_asset_per_share": roe,
-        "eps": dps,
-        "dividend_yield": period,
+        "turnover_growth": pat_margin,
+        "pat_growth": roe,
+        "net_assets_growth": dps,
+        "assets_growth": period,
     }
     return valuation
 
