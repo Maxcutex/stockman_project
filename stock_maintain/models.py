@@ -508,9 +508,13 @@ class QuarterlyFinancial(models.Model):
 
 class DividendInformation(models.Model):
     dividend_period_choices = Choices(1, 2, 3, 4)
+    dividend_type = Choices("Interim", "Final")
     stock = models.ForeignKey(
         Stock, on_delete=models.CASCADE, related_name="dividend_info_stock", null=True
     )
     sec_code = models.CharField(max_length=100)
-    dividend_type = models.IntegerField()
+    dividend_type = models.CharField(
+        choices=dividend_type, default="Final", max_length=50
+    )
+    year = models.IntegerField()
     period_number = models.IntegerField(choices=dividend_period_choices, default=1)
