@@ -246,20 +246,27 @@ def market_analysis_stock(query_params):
             if rs:
 
                 f52_week_monday = price_data.price_date - timedelta(
-                    days=price_data.price_date.weekday(), weeks=-52
+                    days=price_data.price_date.weekday(), weeks=52
                 )
-                f52_week_friday = (
-                    price_data.price_date
-                    - timedelta(days=price_data.price_date.weekday())
-                    + timedelta(days=4, weeks=-52)
-                )
+                # f52_week_friday = (
+                #     price_data.price_date
+                #     - timedelta(days=price_data.price_date.weekday())
+                #     - timedelta(days=-4, weeks=52)
+                # )
                 price_group = PriceList.objects.filter(
                     sec_code=sec_code,
                     price_date__gte=f52_week_monday,
-                    price_date__lte=f52_week_friday,
+                    price_date__lte=price_data.price_date,
                 )
-                max_52_week = price_group.aggregate(Max("price"))
-                min_52_week = price_group.aggregate(Min("price"))
+                if len(price_group) != 0:
+                    dict_52_week_max = price_group.aggregate(Max("price"))
+                    dict_52_week_min = price_group.aggregate(Min("price"))
+                    print()
+                    max_52_week = dict_52_week_max["price__max"]
+                    min_52_week = dict_52_week_min["price__min"]
+                else:
+                    max_52_week = 0.0
+                    min_52_week = 0.0
 
                 if rs.price_one_year is None:
                     date_returned = get_x_days_ago(price_data.price_date, 365)
