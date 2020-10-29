@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.db.models import Max, Min
 import pytz
 from django.conf.global_settings import DATE_FORMAT
@@ -15,7 +15,7 @@ from stock_maintain.models import (
 )
 from stock_maintain.serializers import PriceListSerializer
 from stock_setup_info.models import Stock, MainSector, SubSector, SectionGroup
-from utils.utils import get_x_days_ago
+from utils.utils import get_x_days_ago, get_first_working_day_of_month
 
 
 def list_analysis_range(query_params):
@@ -258,16 +258,22 @@ def market_analysis_stock(query_params):
                     price_date__gte=f52_week_monday,
                     price_date__lte=price_data.price_date,
                 )
+                first_day_of_year = date(date.today().year, 1, 1)
+                year_to_date = get_first_working_day_of_month(first_day_of_year)
+                price_year_to_date = get_price_data_period(sec_code, year_to_date)
+                year_change = price_data.price - price_year_to_date
                 if len(price_group) != 0:
                     dict_52_week_max = price_group.aggregate(Max("price"))
                     dict_52_week_min = price_group.aggregate(Min("price"))
-                    print()
                     max_52_week = dict_52_week_max["price__max"]
                     min_52_week = dict_52_week_min["price__min"]
                 else:
                     max_52_week = 0.0
                     min_52_week = 0.0
-
+                if rs.price_year_to_date_cent is None:
+                    rs.price_year_to_date_cent = round(
+                        (year_change / rs.price) * 100, 2
+                    )
                 if rs.price_one_year is None:
                     date_returned = get_x_days_ago(price_data.price_date, 365)
                     rs.price_one_year = get_price_data_period(sec_code, date_returned)
@@ -321,6 +327,7 @@ def market_analysis_stock(query_params):
                     "previous_price": price_data.price,
                     "current_price": price_data.price_close,
                     "today_change": float(f"{price_data.x_change:.2f}"),
+                    "year_change": float(f"{year_change:.2f}"),
                     "today_sign": price_data.offer_bid_sign,
                     "today_volume": price_data.volume,
                     "today_day_range": f"{price_data.x_low} - {price_data.x_high}",
