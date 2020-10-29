@@ -47,3 +47,7 @@ def is_first_working_day_of_month(dt=date.today()):
         return True
     else:
         return False
+
+
+def get_x_days_ago(current_date, n):
+    return current_date - timedelta(days=n)

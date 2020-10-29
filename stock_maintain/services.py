@@ -15,6 +15,7 @@ from stock_maintain.models import (
 )
 from stock_maintain.serializers import PriceListSerializer
 from stock_setup_info.models import Stock, MainSector, SubSector, SectionGroup
+from utils.utils import get_x_days_ago
 
 
 def list_analysis_range(query_params):
@@ -222,6 +223,13 @@ def search_list(sec_code, listDict):
             return p
 
 
+def get_price_data_period(sec_code, date_returned):
+    price_data = PriceList.objects.filter(
+        sec_code=sec_code, price_date__lte=date_returned
+    ).order_by("-price_date")[:1][0]
+    return price_data.price
+
+
 def market_analysis_stock(query_params):
     """
     List prices and their corresponding percentage analysis by stock
@@ -252,6 +260,36 @@ def market_analysis_stock(query_params):
                 )
                 max_52_week = price_group.aggregate(Max("price"))
                 min_52_week = price_group.aggregate(Min("price"))
+
+                if rs.price_one_year is None:
+                    date_returned = get_x_days_ago(price_data.price_date, 365)
+                    rs.price_one_year = get_price_data_period(sec_code, date_returned)
+                    rs.one_year_cent = round(
+                        ((rs.price_one_year - rs.price) / rs.price) * 100, 2
+                    )
+                if rs.price_six_months is None:
+                    date_returned = get_x_days_ago(price_data.price_date, 183)
+                    rs.price_six_months = get_price_data_period(sec_code, date_returned)
+                    rs.six_months_cent = round(
+                        ((rs.price_six_months - rs.price) / rs.price) * 100, 2
+                    )
+
+                if rs.price_three_months is None:
+                    date_returned = get_x_days_ago(price_data.price_date, 92)
+                    rs.price_three_months = get_price_data_period(
+                        sec_code, date_returned
+                    )
+                    rs.three_months_cent = round(
+                        ((rs.price_three_months - rs.price) / rs.price) * 100, 2
+                    )
+
+                if rs.price_one_week is None:
+                    date_returned = get_x_days_ago(price_data.price_date, 7)
+                    rs.price_one_week = get_price_data_period(sec_code, date_returned)
+                    rs.one_week_cent = round(
+                        ((rs.price_one_week - rs.price) / rs.price) * 100, 2
+                    )
+
                 dict_result = {
                     "id": rs.id,
                     "sec_code": rs.sec_code,
