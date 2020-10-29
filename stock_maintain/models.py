@@ -519,3 +519,5 @@ class DividendInformation(models.Model):
     year = models.IntegerField()
     dividend_value = models.FloatField()
     period_number = models.IntegerField(choices=dividend_period_choices, default=1)
+    qualification_date = models.DateField()
+    payment_date = models.DateField()
