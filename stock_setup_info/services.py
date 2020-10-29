@@ -3,7 +3,6 @@ from django.db.models import Q
 
 from stock_maintain.models import PriceList
 from stock_setup_info.models import Stock
-import pdb
 
 
 def get_stock_by_code(query_params):

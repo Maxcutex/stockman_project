@@ -32,7 +32,6 @@ def debug_task(self):
 def refresh_analysis_data(date_data):
     first_day_of_year = date(date.today().year, 1, 1)
     year_to_date = get_first_working_day_of_month(first_day_of_year)
-    print(year_to_date)
     with connection.cursor() as cursor:
         return cursor.execute(
             f"call update_price_analysis('{date_data}','{year_to_date}')"

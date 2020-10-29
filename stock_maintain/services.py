@@ -1,5 +1,5 @@
-from datetime import datetime
-
+from datetime import datetime, timedelta
+from django.db.models import Max, Min
 import pytz
 from django.conf.global_settings import DATE_FORMAT
 from django.db import connection
@@ -236,6 +236,22 @@ def market_analysis_stock(query_params):
             )[:1][0]
 
             if rs:
+
+                f52_week_monday = price_data.price_date - timedelta(
+                    days=price_data.price_date.weekday(), weeks=-52
+                )
+                f52_week_friday = (
+                    price_data.price_date
+                    - timedelta(days=price_data.price_date.weekday())
+                    + timedelta(days=4, weeks=-52)
+                )
+                price_group = PriceList.objects.filter(
+                    sec_code=sec_code,
+                    price_date__gte=f52_week_monday,
+                    price_date__lte=f52_week_friday,
+                )
+                max_52_week = price_group.aggregate(Max("price"))
+                min_52_week = price_group.aggregate(Min("price"))
                 dict_result = {
                     "id": rs.id,
                     "sec_code": rs.sec_code,
@@ -263,7 +279,7 @@ def market_analysis_stock(query_params):
                     "today_sign": price_data.offer_bid_sign,
                     "today_volume": price_data.volume,
                     "today_day_range": f"{price_data.x_low} - {price_data.x_high}",
-                    "today_52_week_range": f"{price_data.x_low} - {price_data.x_high}",
+                    "today_52_week_range": f"{min_52_week} - {max_52_week}",
                 }
 
         # data_set['results'] = dict_result
