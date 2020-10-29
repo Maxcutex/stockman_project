@@ -144,6 +144,14 @@ class StockView(viewsets.ModelViewSet):
 
         return Response(stocks)
 
+    @decorators.action(methods=["get"], detail=False, url_path="statistics")
+    def statistics(self, request, *args, **kwargs):
+        stocks = stock_setup_info_services.stock_statistics(
+            query_params=request.query_params,
+        )
+
+        return Response(stocks)
+
 
 class StockManagementView(viewsets.ModelViewSet):
     queryset = StockManagement.objects.get_queryset().order_by("-id")
