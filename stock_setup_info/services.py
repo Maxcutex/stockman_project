@@ -41,6 +41,9 @@ def stock_statistics(query_params):
     except Exception:
         raise APIException(detail="Provide stock code for search")
     stock = Stock.objects.filter(stock_code=stock_code)[:1][0]
+    stock_in_market = PriceList.objects.filter(sec_code=stock_code).order_by(
+        "-price_date"
+    )[:1][0]
     stock_analytics_info = QuarterlyFinancial.objects.filter(sec_code=stock_code)[:1][0]
     stock_dividend_info = DividendInformation.objects.filter(sec_code=stock_code)[:1][0]
     valuation = {}
@@ -51,18 +54,23 @@ def stock_statistics(query_params):
         (stock_analytics_info.profit_after_tax / stock_analytics_info.net_assets) * 100,
         2,
     )
-    dps = ""
-    period = stock_analytics_info.period_number
+
+    switcher = {1: "1st Quarter", 2: "2nd Quarter", 3: "3rd Quarter", 4: "4th Quarter"}
+
+    period = switcher.get(stock_analytics_info.period_number, "Invalid Quarter")
     valuation["probability"] = {
         "pat_margin": pat_margin,
         "roe": roe,
         "dps": stock_dividend_info.dividend_value,
         "period": period,
     }
+    eps = round(stock_analytics_info.profit_after_tax / stock.outstanding_shares, 2)
+    naps = round(stock_analytics_info.net_assets / stock.outstanding_shares, 2)
+    pe_ratio = round(stock_in_market.price / eps, 2)
     valuation["valuation"] = {
-        "pe_ratio": pat_margin,
-        "net_asset_per_share": roe,
-        "eps": dps,
+        "pe_ratio": pe_ratio,
+        "net_asset_per_share": naps,
+        "eps": eps,
         "dividend_yield": period,
     }
     valuation["company_statistics"] = {
@@ -72,10 +80,47 @@ def stock_statistics(query_params):
         "share_outstanding": stock.outstanding_shares,
     }
     valuation["kpi"] = {
-        "turnover_growth": pat_margin,
-        "pat_growth": roe,
-        "net_assets_growth": dps,
-        "assets_growth": period,
+        "turnover_growth": round(
+            (
+                (stock_analytics_info.turnover - stock_analytics_info.previous_turnover)
+                / stock_analytics_info.previous_turnover
+            )
+            * 100,
+            2,
+        ),
+        "pat_growth": round(
+            (
+                (
+                    stock_analytics_info.profit_after_tax
+                    - stock_analytics_info.previous_profit_after_tax
+                )
+                / stock_analytics_info.previous_profit_after_tax
+            )
+            * 100,
+            2,
+        ),
+        "net_assets_growth": round(
+            (
+                (
+                    stock_analytics_info.net_assets
+                    - stock_analytics_info.previous_net_assets
+                )
+                / stock_analytics_info.previous_net_assets
+            )
+            * 100,
+            2,
+        ),
+        "assets_growth": round(
+            (
+                (
+                    stock_analytics_info.total_assets
+                    - stock_analytics_info.previous_total_assets
+                )
+                / stock_analytics_info.previous_total_assets
+            )
+            * 100,
+            2,
+        ),
     }
     return valuation
 
