@@ -6,18 +6,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0017_auto_20190124_1033'),
+        ("stock_setup_info", "0017_auto_20190124_1033"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='structure',
-            old_name='parent_id',
-            new_name='parent',
+            model_name="structure",
+            old_name="parent_id",
+            new_name="parent",
         ),
         migrations.RenameField(
-            model_name='structuretype',
-            old_name='parent_id',
-            new_name='parent',
+            model_name="structuretype",
+            old_name="parent_id",
+            new_name="parent",
         ),
     ]

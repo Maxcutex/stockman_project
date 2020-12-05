@@ -7,30 +7,49 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0010_auto_20181231_0737'),
-        ('stock_maintain', '0002_auto_20181227_0931'),
+        ("stock_setup_info", "0010_auto_20181231_0737"),
+        ("stock_maintain", "0002_auto_20181227_0931"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NewsImage',
+            name="NewsImage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_main', models.BooleanField()),
-                ('image_file', models.ImageField(blank=True, upload_to='images/news_image')),
-                ('name', models.CharField(max_length=100)),
-                ('news_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='visual_news', to='stock_setup_info.Stock')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_main", models.BooleanField()),
+                (
+                    "image_file",
+                    models.ImageField(blank=True, upload_to="images/news_image"),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "news_id",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="visual_news",
+                        to="stock_setup_info.Stock",
+                    ),
+                ),
             ],
         ),
         migrations.RenameModel(
-            old_name='Quotes',
-            new_name='Quote',
+            old_name="Quotes",
+            new_name="Quote",
         ),
         migrations.RemoveField(
-            model_name='newsimages',
-            name='news_id',
+            model_name="newsimages",
+            name="news_id",
         ),
         migrations.DeleteModel(
-            name='NewsImages',
+            name="NewsImages",
         ),
     ]

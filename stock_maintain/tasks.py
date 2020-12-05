@@ -15,13 +15,15 @@ def send_mail_task(subject, message, from_email, recipient_list):
     send_mail(subject, message, from_email, recipient_list)
     return None
 
+
 @periodic_task(
-    run_every=(crontab(hour=21, minute=10, day_of_week='mon-fri')),
+    run_every=(crontab(hour=21, minute=10, day_of_week="mon-fri")),
     name="update_price_analysis",
-    ignore_result=True)
+    ignore_result=True,
+)
 def update_price_analysis_task():
     # get last date
-    last_date = PriceList.objects.order_by('-price_date')[:1][0]
+    last_date = PriceList.objects.order_by("-price_date")[:1][0]
 
     # check if last date has been processed in processed table
     generated_report = GeneratedAnalysisDate.objects.get(date_price=last_date)

@@ -8,18 +8,33 @@ import stock_setup_info.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0008_auto_20181226_1712'),
+        ("stock_setup_info", "0008_auto_20181226_1712"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='StockManagement',
+            name="StockManagement",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=250)),
-                ('position', models.CharField(max_length=250)),
-                ('management_type', enumchoicefield.fields.EnumChoiceField(default=stock_setup_info.models.ManagementType(1), enum_class=stock_setup_info.models.ManagementType, max_length=10)),
-                ('is_active', models.BooleanField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=250)),
+                ("position", models.CharField(max_length=250)),
+                (
+                    "management_type",
+                    enumchoicefield.fields.EnumChoiceField(
+                        default=stock_setup_info.models.ManagementType(1),
+                        enum_class=stock_setup_info.models.ManagementType,
+                        max_length=10,
+                    ),
+                ),
+                ("is_active", models.BooleanField()),
             ],
         ),
     ]

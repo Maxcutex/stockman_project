@@ -6,23 +6,53 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0037_priceanalysistemp_price_date'),
+        ("stock_maintain", "0037_priceanalysistemp_price_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='analysisimage',
-            name='image_type',
-            field=models.CharField(choices=[('size930x620', 'size930x620'), ('size450x330', 'size450x330'), ('size300x200', 'size300x200'), ('size330x220', 'size330x220'), ('size158x158', 'size158x158')], default='size930x620', max_length=30),
+            model_name="analysisimage",
+            name="image_type",
+            field=models.CharField(
+                choices=[
+                    ("size930x620", "size930x620"),
+                    ("size450x330", "size450x330"),
+                    ("size300x200", "size300x200"),
+                    ("size330x220", "size330x220"),
+                    ("size158x158", "size158x158"),
+                ],
+                default="size930x620",
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='insidebusinessimage',
-            name='image_type',
-            field=models.CharField(choices=[('size930x620', 'size930x620'), ('size450x330', 'size450x330'), ('size300x200', 'size300x200'), ('size330x220', 'size330x220'), ('size158x158', 'size158x158')], default='size930x620', max_length=30),
+            model_name="insidebusinessimage",
+            name="image_type",
+            field=models.CharField(
+                choices=[
+                    ("size930x620", "size930x620"),
+                    ("size450x330", "size450x330"),
+                    ("size300x200", "size300x200"),
+                    ("size330x220", "size330x220"),
+                    ("size158x158", "size158x158"),
+                ],
+                default="size930x620",
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='newsimage',
-            name='image_type',
-            field=models.CharField(choices=[('size930x620', 'size930x620'), ('size450x330', 'size450x330'), ('size300x200', 'size300x200'), ('size330x220', 'size330x220'), ('size158x158', 'size158x158')], default='size930x620', max_length=30),
+            model_name="newsimage",
+            name="image_type",
+            field=models.CharField(
+                choices=[
+                    ("size930x620", "size930x620"),
+                    ("size450x330", "size450x330"),
+                    ("size300x200", "size300x200"),
+                    ("size330x220", "size330x220"),
+                    ("size158x158", "size158x158"),
+                ],
+                default="size930x620",
+                max_length=30,
+            ),
         ),
     ]

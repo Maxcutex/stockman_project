@@ -8,11 +8,10 @@ from .viewsets.stock import StockDocumentView
 
 router = SimpleRouter()
 
-router.register('api/v1/search/news', NewsDocumentView, basename='search_news')
-router.register('api/v1/search/stock', StockDocumentView, basename='search_stock')
-
+router.register("api/v1/search/news", NewsDocumentView, basename="search_news")
+router.register("api/v1/search/stock", StockDocumentView, basename="search_stock")
 
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

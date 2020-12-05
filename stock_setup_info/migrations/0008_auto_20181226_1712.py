@@ -7,56 +7,64 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0007_auto_20181224_1312'),
+        ("stock_setup_info", "0007_auto_20181224_1312"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='structurerelationship',
+            name="structurerelationship",
             unique_together=set(),
         ),
         migrations.RemoveField(
-            model_name='structurerelationship',
-            name='from_structure',
+            model_name="structurerelationship",
+            name="from_structure",
         ),
         migrations.RemoveField(
-            model_name='structurerelationship',
-            name='to_structure',
+            model_name="structurerelationship",
+            name="to_structure",
         ),
         migrations.AlterUniqueTogether(
-            name='structuretyperelationship',
+            name="structuretyperelationship",
             unique_together=set(),
         ),
         migrations.RemoveField(
-            model_name='structuretyperelationship',
-            name='from_structure_type',
+            model_name="structuretyperelationship",
+            name="from_structure_type",
         ),
         migrations.RemoveField(
-            model_name='structuretyperelationship',
-            name='to_structure_type',
+            model_name="structuretyperelationship",
+            name="to_structure_type",
         ),
         migrations.RemoveField(
-            model_name='structure',
-            name='structures',
+            model_name="structure",
+            name="structures",
         ),
         migrations.RemoveField(
-            model_name='structuretype',
-            name='structure_types',
+            model_name="structuretype",
+            name="structure_types",
         ),
         migrations.AddField(
-            model_name='structure',
-            name='parent_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='stock_setup_info.Structure'),
+            model_name="structure",
+            name="parent_id",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="stock_setup_info.Structure",
+            ),
         ),
         migrations.AddField(
-            model_name='structuretype',
-            name='parent_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='stock_setup_info.StructureType'),
+            model_name="structuretype",
+            name="parent_id",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="stock_setup_info.StructureType",
+            ),
         ),
         migrations.DeleteModel(
-            name='StructureRelationship',
+            name="StructureRelationship",
         ),
         migrations.DeleteModel(
-            name='StructureTypeRelationship',
+            name="StructureTypeRelationship",
         ),
     ]

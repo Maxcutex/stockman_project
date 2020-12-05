@@ -7,41 +7,127 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0026_insidebusiness_insidebusinesssection'),
+        ("stock_maintain", "0026_insidebusiness_insidebusinesssection"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AnalysisFile',
+            name="AnalysisFile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_main', models.BooleanField()),
-                ('doc_file', models.FileField(blank=True, upload_to='files/analysis_docs')),
-                ('name', models.CharField(max_length=100)),
-                ('doc_type', models.CharField(choices=[('pdf', 'pdf'), ('word', 'word'), ('excel', 'excel')], default='pdf', max_length=30)),
-                ('analysis', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='doc_analysis', to='stock_maintain.AnalysisOpinion')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_main", models.BooleanField()),
+                (
+                    "doc_file",
+                    models.FileField(blank=True, upload_to="files/analysis_docs"),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "doc_type",
+                    models.CharField(
+                        choices=[("pdf", "pdf"), ("word", "word"), ("excel", "excel")],
+                        default="pdf",
+                        max_length=30,
+                    ),
+                ),
+                (
+                    "analysis",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="doc_analysis",
+                        to="stock_maintain.AnalysisOpinion",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='InsideBusinessFile',
+            name="InsideBusinessFile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_main', models.BooleanField()),
-                ('doc_file', models.FileField(blank=True, upload_to='files/inside_business_docs')),
-                ('name', models.CharField(max_length=100)),
-                ('doc_type', models.CharField(choices=[('pdf', 'pdf'), ('word', 'word'), ('excel', 'excel')], default='pdf', max_length=30)),
-                ('inside_business', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='doc_inside_business', to='stock_maintain.InsideBusiness')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_main", models.BooleanField()),
+                (
+                    "doc_file",
+                    models.FileField(
+                        blank=True, upload_to="files/inside_business_docs"
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "doc_type",
+                    models.CharField(
+                        choices=[("pdf", "pdf"), ("word", "word"), ("excel", "excel")],
+                        default="pdf",
+                        max_length=30,
+                    ),
+                ),
+                (
+                    "inside_business",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="doc_inside_business",
+                        to="stock_maintain.InsideBusiness",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='InsideBusinessImage',
+            name="InsideBusinessImage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_main', models.BooleanField()),
-                ('image_file', models.ImageField(blank=True, upload_to='images/inside_business_image')),
-                ('name', models.CharField(max_length=100)),
-                ('image_type', models.CharField(choices=[('size930x620', 'size930x620'), ('size450x330', 'size450x330'), ('size300x200', 'size300x200')], default='size930x620', max_length=30)),
-                ('inside_business', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='visual_inside_business', to='stock_maintain.InsideBusiness')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_main", models.BooleanField()),
+                (
+                    "image_file",
+                    models.ImageField(
+                        blank=True, upload_to="images/inside_business_image"
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "image_type",
+                    models.CharField(
+                        choices=[
+                            ("size930x620", "size930x620"),
+                            ("size450x330", "size450x330"),
+                            ("size300x200", "size300x200"),
+                        ],
+                        default="size930x620",
+                        max_length=30,
+                    ),
+                ),
+                (
+                    "inside_business",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="visual_inside_business",
+                        to="stock_maintain.InsideBusiness",
+                    ),
+                ),
             ],
         ),
     ]

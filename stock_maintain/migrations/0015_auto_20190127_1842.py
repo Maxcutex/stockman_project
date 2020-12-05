@@ -8,66 +8,108 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0025_auto_20190126_1840'),
-        ('stock_maintain', '0014_auto_20190125_1943'),
+        ("stock_setup_info", "0025_auto_20190126_1840"),
+        ("stock_maintain", "0014_auto_20190125_1943"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AnalysisCategorySection',
+            name="AnalysisCategorySection",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='AnalysisOpinion',
+            name="AnalysisOpinion",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=300)),
-                ('content', ckeditor_uploader.fields.RichTextUploadingField()),
-                ('opinion_date', models.DateField()),
-                ('entry_date', models.DateField()),
-                ('author', models.CharField(max_length=100, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=300)),
+                ("content", ckeditor_uploader.fields.RichTextUploadingField()),
+                ("opinion_date", models.DateField()),
+                ("entry_date", models.DateField()),
+                ("author", models.CharField(max_length=100, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='NewsCategorySection',
+            name="NewsCategorySection",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.RenameField(
-            model_name='newsfile',
-            old_name='news_id',
-            new_name='news',
+            model_name="newsfile",
+            old_name="news_id",
+            new_name="news",
         ),
         migrations.RenameField(
-            model_name='newsimage',
-            old_name='news_id',
-            new_name='news',
+            model_name="newsimage",
+            old_name="news_id",
+            new_name="news",
         ),
         migrations.RemoveField(
-            model_name='news',
-            name='news_section',
+            model_name="news",
+            name="news_section",
         ),
         migrations.AddField(
-            model_name='newscategorysection',
-            name='news',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='category_news', to='stock_maintain.News'),
+            model_name="newscategorysection",
+            name="news",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="category_news",
+                to="stock_maintain.News",
+            ),
         ),
         migrations.AddField(
-            model_name='newscategorysection',
-            name='section',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='category_news_structure', to='stock_setup_info.Structure'),
+            model_name="newscategorysection",
+            name="section",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="category_news_structure",
+                to="stock_setup_info.Structure",
+            ),
         ),
         migrations.AddField(
-            model_name='analysiscategorysection',
-            name='analysis',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='analysis_news', to='stock_maintain.AnalysisOpinion'),
+            model_name="analysiscategorysection",
+            name="analysis",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="analysis_news",
+                to="stock_maintain.AnalysisOpinion",
+            ),
         ),
         migrations.AddField(
-            model_name='analysiscategorysection',
-            name='section',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='category_analysis_structure', to='stock_setup_info.Structure'),
+            model_name="analysiscategorysection",
+            name="section",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="category_analysis_structure",
+                to="stock_setup_info.Structure",
+            ),
         ),
     ]

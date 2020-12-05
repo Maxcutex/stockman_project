@@ -2,7 +2,11 @@ from django.db import models
 
 # Create your models here.
 
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
 
 
 # Create your models here.
@@ -14,11 +18,12 @@ class UserProfileManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
         """ Creates a new user object """
         if not email:
-            raise ValueError('Users must have an email address.')
+            raise ValueError("Users must have an email address.")
         email = self.normalize_email(email)
         # validate if email exists.
-        user = self.model(email=email, first_name=first_name,
-                          last_name=last_name, is_active=True)
+        user = self.model(
+            email=email, first_name=first_name, last_name=last_name, is_active=True
+        )
         user.set_password(password)
 
         user.save(using=self._db)
@@ -36,6 +41,7 @@ class UserProfileManager(BaseUserManager):
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
     """ Represents a 'user profile' inside our system """
+
     username = None
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
@@ -46,8 +52,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     objects = UserProfileManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     def get_full_name(self):
         """ Used to get a users full name. """

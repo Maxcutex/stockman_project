@@ -4,10 +4,8 @@ from rest_framework.routers import SimpleRouter
 
 router = SimpleRouter()
 
-router.register('api/v1/profile', views.UserProfileView, basename='user_profile')
-#router.register('api/v1/login', views.LoginView, basename='login')
+router.register("api/v1/profile", views.UserProfileView, basename="user_profile")
+# router.register('api/v1/login', views.LoginView, basename='login')
 
 
-urlpatterns = [
-    path('', include(router.urls))
-]
+urlpatterns = [path("", include(router.urls))]

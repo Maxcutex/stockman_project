@@ -6,88 +6,88 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0035_generatedanalysisdate_priceanalysistemp'),
+        ("stock_maintain", "0035_generatedanalysisdate_priceanalysistemp"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='max_one_week',
+            model_name="priceanalysistemp",
+            name="max_one_week",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='max_six_months',
+            model_name="priceanalysistemp",
+            name="max_six_months",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='max_three_months',
+            model_name="priceanalysistemp",
+            name="max_three_months",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='max_year',
+            model_name="priceanalysistemp",
+            name="max_year",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='min_one_week',
+            model_name="priceanalysistemp",
+            name="min_one_week",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='min_six_months',
+            model_name="priceanalysistemp",
+            name="min_six_months",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='min_three_months',
+            model_name="priceanalysistemp",
+            name="min_three_months",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='min_year',
+            model_name="priceanalysistemp",
+            name="min_year",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='one_week_cent',
+            model_name="priceanalysistemp",
+            name="one_week_cent",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='one_year_cent',
+            model_name="priceanalysistemp",
+            name="one_year_cent",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='price_one_week',
+            model_name="priceanalysistemp",
+            name="price_one_week",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='price_one_year',
+            model_name="priceanalysistemp",
+            name="price_one_year",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='price_six_months',
+            model_name="priceanalysistemp",
+            name="price_six_months",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='price_three_months',
+            model_name="priceanalysistemp",
+            name="price_three_months",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='six_months_cent',
+            model_name="priceanalysistemp",
+            name="six_months_cent",
             field=models.FloatField(null=True),
         ),
         migrations.AlterField(
-            model_name='priceanalysistemp',
-            name='three_months_cent',
+            model_name="priceanalysistemp",
+            name="three_months_cent",
             field=models.FloatField(null=True),
         ),
     ]

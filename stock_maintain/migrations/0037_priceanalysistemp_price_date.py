@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0036_auto_20200330_1546'),
+        ("stock_maintain", "0036_auto_20200330_1546"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='priceanalysistemp',
-            name='price_date',
+            model_name="priceanalysistemp",
+            name="price_date",
             field=models.DateTimeField(null=True),
         ),
     ]

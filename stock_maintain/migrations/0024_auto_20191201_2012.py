@@ -7,18 +7,23 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0026_sectiongroup'),
-        ('stock_maintain', '0023_auto_20191128_1815'),
+        ("stock_setup_info", "0026_sectiongroup"),
+        ("stock_maintain", "0023_auto_20191128_1815"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='newscategorysection',
-            name='section',
+            model_name="newscategorysection",
+            name="section",
         ),
         migrations.AddField(
-            model_name='newscategorysection',
-            name='section_category',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='category_news_section', to='stock_setup_info.SectionGroup'),
+            model_name="newscategorysection",
+            name="section_category",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="category_news_section",
+                to="stock_setup_info.SectionGroup",
+            ),
         ),
     ]

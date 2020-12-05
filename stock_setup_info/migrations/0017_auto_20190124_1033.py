@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0016_auto_20190124_0929'),
+        ("stock_setup_info", "0016_auto_20190124_0929"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='structure',
-            name='comment',
+            model_name="structure",
+            name="comment",
             field=models.CharField(blank=True, max_length=200, null=True),
         ),
         migrations.AlterField(
-            model_name='structure',
-            name='is_active',
+            model_name="structure",
+            name="is_active",
             field=models.BooleanField(default=True),
         ),
     ]

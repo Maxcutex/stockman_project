@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0028_auto_20191212_1819'),
+        ("stock_setup_info", "0028_auto_20191212_1819"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='stockmanagement',
-            name='stock',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='management_stock', to='stock_setup_info.Stock'),
+            model_name="stockmanagement",
+            name="stock",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="management_stock",
+                to="stock_setup_info.Stock",
+            ),
             preserve_default=False,
         ),
     ]

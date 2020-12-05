@@ -6,13 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0007_auto_20190102_1118'),
+        ("stock_maintain", "0007_auto_20190102_1118"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='newsimage',
-            name='image_type',
-            field=models.CharField(choices=[('size930x620', 'size930x620'), ('size450x330', 'size450x330'), ('size300x200', 'size300x200')], default='size930x620', max_length=30),
+            model_name="newsimage",
+            name="image_type",
+            field=models.CharField(
+                choices=[
+                    ("size930x620", "size930x620"),
+                    ("size450x330", "size450x330"),
+                    ("size300x200", "size300x200"),
+                ],
+                default="size930x620",
+                max_length=30,
+            ),
         ),
     ]

@@ -158,6 +158,21 @@ class StockManagementView(viewsets.ModelViewSet):
     serializer_class = StockManagementSerializer
     pagination_class = DefaultResultsSetPagination
 
+    @decorators.action(methods=["get"], detail=False, url_path="by-management-type")
+    def search_like_name(self, request, *args, **kwargs):
+        stock_mgt = stock_setup_info_services.stock_mgt_search_by_type(
+            query_params=request.query_params,
+        )
+        paginate = kwargs.get("paginate")
+        if paginate is not None:
+            page = self.paginate_queryset(stock_mgt)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = StockManagementSerializer(stock_mgt, many=True)
+        return Response(serializer.data)
+
 
 class StockApiView(APIView):
     """ Stock View using Api View """

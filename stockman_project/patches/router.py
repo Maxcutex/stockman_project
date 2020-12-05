@@ -8,7 +8,7 @@ class DefaultRouter(routers.DefaultRouter):
 
     def extend(self, router):
         """
-        Extend the routes with url routes fo the passed in router 
+        Extend the routes with url routes fo the passed in router
 
         Args:
             router: SimpleRouter instance containing route definitions

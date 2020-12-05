@@ -36,7 +36,8 @@ class SubSector(models.Model):
     name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
     main_sector = models.ForeignKey(
-        MainSector, on_delete=models.CASCADE, related_name='sub_sector_main_sector')
+        MainSector, on_delete=models.CASCADE, related_name="sub_sector_main_sector"
+    )
 
     def __str__(self):
         return self.name
@@ -52,8 +53,11 @@ class StructureType(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     is_active = models.BooleanField(max_length=100)
     parent = models.ForeignKey(
-        'self', blank=True, null=True, on_delete=models.CASCADE,
-        related_name='child_structure_type'
+        "self",
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="child_structure_type",
     )
 
     def __str__(self):
@@ -81,9 +85,15 @@ class Structure(models.Model):
     structure_name = models.CharField(max_length=100)
     structure_code = models.CharField(max_length=50, null=True, blank=True)
     structure_type = models.ForeignKey(
-        StructureType, on_delete=models.CASCADE, related_name='child_structures')
+        StructureType, on_delete=models.CASCADE, related_name="child_structures"
+    )
     parent = models.ForeignKey(
-        'self', blank=True, null=True, on_delete=models.CASCADE, related_name='structures')
+        "self",
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="structures",
+    )
     is_active = models.BooleanField(default=True)
     comment = models.CharField(max_length=200, null=True, blank=True)
 
@@ -102,7 +112,7 @@ class Stock(models.Model):
     exchange_code = models.CharField(max_length=50, null=True)
     asset_class_code = models.CharField(max_length=50, blank=True, null=True)
     contact = models.CharField(max_length=300, blank=True, null=True)
-    description  = RichTextUploadingField( blank=True, null=True)
+    description = RichTextUploadingField(blank=True, null=True)
     tier_code = models.CharField(max_length=50, blank=True, null=True)
     par_value = models.CharField(max_length=50, blank=True, null=True)
     list_date = models.DateField(blank=True, null=True)
@@ -125,9 +135,15 @@ class Stock(models.Model):
     capitalization = models.BigIntegerField(default=0, null=True)
     view_count = models.BigIntegerField(default=0, null=True)
     industry = models.ForeignKey(
-        Industry, on_delete=models.CASCADE, related_name='stocks')
+        Industry, on_delete=models.CASCADE, related_name="stocks"
+    )
     sub_sector = models.ForeignKey(
-        SubSector, on_delete=models.CASCADE, related_name='stock_sub_sector',null=True,default=None)
+        SubSector,
+        on_delete=models.CASCADE,
+        related_name="stock_sub_sector",
+        null=True,
+        default=None,
+    )
     is_active = models.BooleanField(default=True, null=True)
 
     def __str__(self):
@@ -151,7 +167,7 @@ class Stock(models.Model):
             cursor.execute('TRUNCATE TABLE "{0}" CASCADE'.format(cls._meta.db_table))
 
     class Meta(object):
-        ordering = ['stock_code']
+        ordering = ["stock_code"]
 
 
 class ManagementType(ChoiceEnum):
@@ -160,14 +176,16 @@ class ManagementType(ChoiceEnum):
 
 
 class StockManagement(models.Model):
-    management_choice = Choices('management', 'director')
+    management_choice = Choices("management", "director")
     name = models.CharField(max_length=250)
     position = models.CharField(max_length=250)
     management_type = models.CharField(
-        choices=management_choice, default=management_choice.management, max_length=30)
+        choices=management_choice, default=management_choice.management, max_length=30
+    )
     is_active = models.BooleanField()
     stock = models.ForeignKey(
-        Stock, on_delete=models.CASCADE, related_name='management_stock')
+        Stock, on_delete=models.CASCADE, related_name="management_stock"
+    )
 
     def __str__(self):
         return self.name

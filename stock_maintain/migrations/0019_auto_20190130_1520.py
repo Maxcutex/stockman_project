@@ -7,18 +7,24 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0018_auto_20190130_1509'),
+        ("stock_maintain", "0018_auto_20190130_1509"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='author',
-            name='email',
+            model_name="author",
+            name="email",
             field=models.CharField(blank=True, max_length=250, null=True),
         ),
         migrations.AlterField(
-            model_name='news',
-            name='author',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='news_author', to='stock_maintain.Author'),
+            model_name="news",
+            name="author",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="news_author",
+                to="stock_maintain.Author",
+            ),
         ),
     ]

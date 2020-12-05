@@ -6,20 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0027_analysisfile_insidebusinessfile_insidebusinessimage'),
+        ("stock_maintain", "0027_analysisfile_insidebusinessfile_insidebusinessimage"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='pricelist',
-            name='dps',
+            model_name="pricelist",
+            name="dps",
         ),
         migrations.RemoveField(
-            model_name='pricelist',
-            name='eps',
+            model_name="pricelist",
+            name="eps",
         ),
         migrations.RemoveField(
-            model_name='pricelist',
-            name='pe',
+            model_name="pricelist",
+            name="pe",
         ),
     ]

@@ -8,10 +8,11 @@ from stock_profile_mgt.models import UserProfile
 
 
 class BaseViewTest(APITestCase):
-
     def setUp(self):
         self.user = UserProfileFactory()
-        self.user_model = UserProfile.objects.create(first_name="Eno", last_name="Bassey", email="test@example.com")
+        self.user_model = UserProfile.objects.create(
+            first_name="Eno", last_name="Bassey", email="test@example.com"
+        )
 
     def test_user_creation(self):
         assert isinstance(self.user, UserProfile)

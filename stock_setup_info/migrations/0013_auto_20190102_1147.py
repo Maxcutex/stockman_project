@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0012_auto_20181231_0932'),
+        ("stock_setup_info", "0012_auto_20181231_0932"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='stockmanagement',
-            name='management_type',
-            field=models.CharField(choices=[('management', 'management'), ('director', 'director')], default='management', max_length=30),
+            model_name="stockmanagement",
+            name="management_type",
+            field=models.CharField(
+                choices=[("management", "management"), ("director", "director")],
+                default="management",
+                max_length=30,
+            ),
         ),
     ]

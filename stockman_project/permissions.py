@@ -17,20 +17,18 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
 
 class IsGetOrIsAuthenticated(permissions.BasePermission):
-
     def has_permission(self, request, view):
         # allow all POST requests
-        if request.method == 'GET':
+        if request.method == "GET":
             return True
 
         return request.user and request.user.is_authenticated
 
 
 class IsGetOrIsAdmin(permissions.BasePermission):
-
     def has_permission(self, request, view):
         # allow all POST requests
-        if request.method == 'GET':
+        if request.method == "GET":
             return True
 
         return request.user and request.user.is_admin

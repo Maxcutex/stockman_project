@@ -270,10 +270,10 @@ def market_analysis_stock(query_params):
                 else:
                     max_52_week = 0.0
                     min_52_week = 0.0
-                if rs.price_year_to_date_cent is None:
-                    rs.price_year_to_date_cent = -(
-                        round((year_change / price_year_to_date) * 100, 2)
-                    )
+                # if rs.price_year_to_date_cent is None:
+                rs.price_year_to_date_cent = round(
+                    (year_change / price_year_to_date) * 100, 2
+                )
                 if rs.price_one_year is None:
                     date_returned = get_x_days_ago(price_data.price_date, 365)
                     rs.price_one_year = get_price_data_period(sec_code, date_returned)

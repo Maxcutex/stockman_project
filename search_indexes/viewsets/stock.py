@@ -9,7 +9,6 @@ from django_elasticsearch_dsl_drf.constants import (
     LOOKUP_QUERY_LT,
     LOOKUP_QUERY_LTE,
     LOOKUP_QUERY_EXCLUDE,
-
     LOOKUP_QUERY_ISNULL,
 )
 from django_elasticsearch_dsl_drf.filter_backends import (
@@ -32,7 +31,7 @@ class StockDocumentView(BaseDocumentViewSet):
 
     document = StockDocument
     serializer_class = StockDocumentSerializer
-    lookup_field = 'id'
+    lookup_field = "id"
     filter_backends = [
         FilteringFilterBackend,
         OrderingFilterBackend,
@@ -41,17 +40,16 @@ class StockDocumentView(BaseDocumentViewSet):
     ]
     # Define search fields
     search_fields = (
-        'name',
-
-        'stock_code',
-        'industry',
-        'sub_sector',
+        "name",
+        "stock_code",
+        "industry",
+        "sub_sector",
     )
     # Define filtering fields
     filter_fields = {
-        'id': {
-            'field': '_id',
-            'lookups': [
+        "id": {
+            "field": "_id",
+            "lookups": [
                 LOOKUP_FILTER_RANGE,
                 LOOKUP_FILTER_TERMS,
                 LOOKUP_FILTER_RANGE,
@@ -66,11 +64,11 @@ class StockDocumentView(BaseDocumentViewSet):
                 LOOKUP_QUERY_ISNULL,
             ],
         },
-        'name': 'name',
+        "name": "name",
         # 'stock_code': 'stock_code.raw',
-        'stock_code': {
-            'field': 'stock_code',
-            'lookups': [
+        "stock_code": {
+            "field": "stock_code",
+            "lookups": [
                 LOOKUP_FILTER_TERMS,
                 LOOKUP_FILTER_PREFIX,
                 LOOKUP_FILTER_WILDCARD,
@@ -78,9 +76,9 @@ class StockDocumentView(BaseDocumentViewSet):
                 LOOKUP_QUERY_EXCLUDE,
             ],
         },
-        'stock_code.raw': {
-            'field': 'stock_code.raw',
-            'lookups': [
+        "stock_code.raw": {
+            "field": "stock_code.raw",
+            "lookups": [
                 LOOKUP_FILTER_TERMS,
                 LOOKUP_FILTER_PREFIX,
                 LOOKUP_FILTER_WILDCARD,
@@ -88,16 +86,14 @@ class StockDocumentView(BaseDocumentViewSet):
                 LOOKUP_QUERY_EXCLUDE,
             ],
         },
-        'industry': 'industry.raw',
-        'sub_sector': 'sub_sector.raw',
-
+        "industry": "industry.raw",
+        "sub_sector": "sub_sector.raw",
     }
     # Define ordering fields
     ordering_fields = {
-        'id': 'id',
-        'name': 'name',
-
-        'stock_code': 'stock_code.raw',
+        "id": "id",
+        "name": "name",
+        "stock_code": "stock_code.raw",
     }
     # Specify default ordering
-    ordering = ('id', 'stock_code', 'name')
+    ordering = ("id", "stock_code", "name")

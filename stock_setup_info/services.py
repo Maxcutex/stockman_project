@@ -2,7 +2,7 @@ from rest_framework.exceptions import APIException
 from django.db.models import Q
 
 from stock_maintain.models import PriceList, QuarterlyFinancial, DividendInformation
-from stock_setup_info.models import Stock
+from stock_setup_info.models import Stock, StockManagement
 
 
 def get_stock_by_code(query_params):
@@ -198,3 +198,28 @@ def stock_competitors(query_params):
         }
         competitors.append(stock_details)
     return competitors
+
+
+def stock_mgt_search_by_type(query_params):
+    """
+    Return list of all stockmanagement to current stock
+
+    :param query_params: query parameters on the url
+    :return: list of all stock management by type
+    """
+
+    try:
+        stock_code = query_params.get("stock_code")
+        query_type = query_params.get("query_type")
+        if stock_code is None or stock_code == "":
+            raise APIException(detail="Provide stock code for search")
+        if query_type is None or query_type == "":
+            raise APIException(detail="Provide query type for search")
+    except Exception:
+        raise APIException(detail="Provide stock code for search")
+    # stock = Stock.objects.filter(stock_code=stock_code)[:1][0]
+    stock_mgt = StockManagement.objects.filter(
+        stock__stock_code__contains=stock_code, management_type=query_type
+    )
+
+    return stock_mgt

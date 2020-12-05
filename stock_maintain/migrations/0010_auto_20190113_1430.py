@@ -7,28 +7,48 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0009_auto_20190111_0912'),
+        ("stock_maintain", "0009_auto_20190111_0912"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NewsFile',
+            name="NewsFile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_main', models.BooleanField()),
-                ('doc_file', models.FileField(blank=True, upload_to='files/news_docs')),
-                ('name', models.CharField(max_length=100)),
-                ('doc_type', models.CharField(choices=[('pdf', 'pdf'), ('word', 'word'), ('excel', 'excel')], default='pdf', max_length=30)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_main", models.BooleanField()),
+                ("doc_file", models.FileField(blank=True, upload_to="files/news_docs")),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "doc_type",
+                    models.CharField(
+                        choices=[("pdf", "pdf"), ("word", "word"), ("excel", "excel")],
+                        default="pdf",
+                        max_length=30,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='news',
-            name='has_downloadable',
+            model_name="news",
+            name="has_downloadable",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='newsfile',
-            name='news_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='doc_news', to='stock_maintain.News'),
+            model_name="newsfile",
+            name="news_id",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="doc_news",
+                to="stock_maintain.News",
+            ),
         ),
     ]

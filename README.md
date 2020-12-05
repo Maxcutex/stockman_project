@@ -26,7 +26,7 @@ Edit the `env-sample` file with your gmail credentials and save it as `.env`
 
 Change the parameters in there to your own settings e.g SEND GRID KEY
 
-On the prompt execute the following 
+On the prompt execute the following
 ```
 export $(cat .env)
 ```
@@ -57,7 +57,7 @@ http://localhost:8000
 - View industries
 - View News
 - View PriceList
-- View Analysis 
+- View Analysis
 - View Trends over a period
 
 

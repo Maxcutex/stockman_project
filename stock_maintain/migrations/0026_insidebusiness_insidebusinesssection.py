@@ -8,28 +8,68 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0026_sectiongroup'),
-        ('stock_maintain', '0025_auto_20191202_0632'),
+        ("stock_setup_info", "0026_sectiongroup"),
+        ("stock_maintain", "0025_auto_20191202_0632"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='InsideBusiness',
+            name="InsideBusiness",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=300)),
-                ('content', ckeditor_uploader.fields.RichTextUploadingField()),
-                ('opinion_date', models.DateField()),
-                ('entry_date', models.DateField()),
-                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='inside_business_author', to='stock_maintain.SiteAuthor')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=300)),
+                ("content", ckeditor_uploader.fields.RichTextUploadingField()),
+                ("opinion_date", models.DateField()),
+                ("entry_date", models.DateField()),
+                (
+                    "author",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="inside_business_author",
+                        to="stock_maintain.SiteAuthor",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='InsideBusinessSection',
+            name="InsideBusinessSection",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('inside_business', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='category_inside_business', to='stock_maintain.InsideBusiness')),
-                ('section_category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='category_inside_business_section', to='stock_setup_info.SectionGroup')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "inside_business",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="category_inside_business",
+                        to="stock_maintain.InsideBusiness",
+                    ),
+                ),
+                (
+                    "section_category",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="category_inside_business_section",
+                        to="stock_setup_info.SectionGroup",
+                    ),
+                ),
             ],
         ),
     ]

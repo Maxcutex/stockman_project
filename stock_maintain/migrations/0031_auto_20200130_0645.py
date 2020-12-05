@@ -6,25 +6,34 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0030_auto_20200121_0635'),
+        ("stock_maintain", "0030_auto_20200121_0635"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='pricelist',
-            name='rpt',
+            model_name="pricelist",
+            name="rpt",
         ),
         migrations.RemoveField(
-            model_name='pricelist',
-            name='source',
+            model_name="pricelist",
+            name="source",
         ),
         migrations.RemoveField(
-            model_name='pricelist',
-            name='sync_flag',
+            model_name="pricelist",
+            name="sync_flag",
         ),
         migrations.AlterField(
-            model_name='newsimage',
-            name='image_type',
-            field=models.CharField(choices=[('size930x620', 'size930x620'), ('size450x330', 'size450x330'), ('size300x200', 'size300x200'), ('size158x158', 'size158x158')], default='size930x620', max_length=30),
+            model_name="newsimage",
+            name="image_type",
+            field=models.CharField(
+                choices=[
+                    ("size930x620", "size930x620"),
+                    ("size450x330", "size450x330"),
+                    ("size300x200", "size300x200"),
+                    ("size158x158", "size158x158"),
+                ],
+                default="size930x620",
+                max_length=30,
+            ),
         ),
     ]

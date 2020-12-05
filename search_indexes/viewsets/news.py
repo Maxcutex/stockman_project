@@ -30,7 +30,7 @@ class NewsDocumentView(BaseDocumentViewSet):
 
     document = NewsDocument
     serializer_class = NewsDocumentSerializer
-    lookup_field = 'id'
+    lookup_field = "id"
     filter_backends = [
         FilteringFilterBackend,
         OrderingFilterBackend,
@@ -38,18 +38,12 @@ class NewsDocumentView(BaseDocumentViewSet):
         CompoundSearchFilterBackend,
     ]
     # Define search fields
-    search_fields = (
-        'title',
-        'content',
-        'stock',
-        'sec_code',
-        'author'
-    )
+    search_fields = ("title", "content", "stock", "sec_code", "author")
     # Define filtering fields
     filter_fields = {
-        'id': {
-            'field': '_id',
-            'lookups': [
+        "id": {
+            "field": "_id",
+            "lookups": [
                 LOOKUP_FILTER_RANGE,
                 LOOKUP_QUERY_IN,
                 LOOKUP_QUERY_GT,
@@ -58,23 +52,25 @@ class NewsDocumentView(BaseDocumentViewSet):
                 LOOKUP_QUERY_LTE,
             ],
         },
-        'title': 'title',
-        'content': 'content.raw',
-        'news_date': 'news_date',
-        'entry_date': 'entry_date',
-        'stock': 'stock.raw',
-        'sec_code': 'sec_code.raw',
-        'author': 'author.raw',
-
+        "title": "title",
+        "content": "content.raw",
+        "news_date": "news_date",
+        "entry_date": "entry_date",
+        "stock": "stock.raw",
+        "sec_code": "sec_code.raw",
+        "author": "author.raw",
     }
     # Define ordering fields
     ordering_fields = {
-        'id': 'id',
-        'title': 'title',
-        'news_date': 'news_date',
-        'entry_date': 'entry_date',
+        "id": "id",
+        "title": "title",
+        "news_date": "news_date",
+        "entry_date": "entry_date",
         # 'stock': 'stock.raw',
-        'sec_code': 'sec_code.raw',
+        "sec_code": "sec_code.raw",
     }
     # Specify default ordering
-    ordering = ('id', 'title',)
+    ordering = (
+        "id",
+        "title",
+    )

@@ -7,12 +7,12 @@ class Migration(migrations.Migration):
     atomic = False
 
     dependencies = [
-        ('stock_maintain', '0021_auto_20190224_1808'),
+        ("stock_maintain", "0021_auto_20190224_1808"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Author',
-            new_name='SiteAuthor',
+            old_name="Author",
+            new_name="SiteAuthor",
         ),
     ]

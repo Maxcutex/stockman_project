@@ -8,13 +8,17 @@ import stock_maintain.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_maintain', '0004_auto_20181231_0941'),
+        ("stock_maintain", "0004_auto_20181231_0941"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='newsimage',
-            name='image_type',
-            field=enumchoicefield.fields.EnumChoiceField(default=stock_maintain.models.ImageSizeType(1), enum_class=stock_maintain.models.ImageSizeType, max_length=11),
+            model_name="newsimage",
+            name="image_type",
+            field=enumchoicefield.fields.EnumChoiceField(
+                default=stock_maintain.models.ImageSizeType(1),
+                enum_class=stock_maintain.models.ImageSizeType,
+                max_length=11,
+            ),
         ),
     ]

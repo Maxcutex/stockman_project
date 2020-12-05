@@ -6,22 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0005_auto_20181224_1217'),
+        ("stock_setup_info", "0005_auto_20181224_1217"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='structure',
-            name='parent_id',
+            model_name="structure",
+            name="parent_id",
         ),
         migrations.AlterField(
-            model_name='structure',
-            name='structure_code',
+            model_name="structure",
+            name="structure_code",
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
         migrations.AlterField(
-            model_name='structuretype',
-            name='description',
+            model_name="structuretype",
+            name="description",
             field=models.CharField(blank=True, max_length=200, null=True),
         ),
     ]

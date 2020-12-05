@@ -7,35 +7,64 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0026_sectiongroup'),
+        ("stock_setup_info", "0026_sectiongroup"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MainSector',
+            name="MainSector",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('is_active', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("is_active", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='SubSector',
+            name="SubSector",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('is_active', models.BooleanField(default=False)),
-                ('main_sector', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_sector_main_sector', to='stock_setup_info.MainSector')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("is_active", models.BooleanField(default=False)),
+                (
+                    "main_sector",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="sub_sector_main_sector",
+                        to="stock_setup_info.MainSector",
+                    ),
+                ),
             ],
         ),
         migrations.RemoveField(
-            model_name='stock',
-            name='structure',
+            model_name="stock",
+            name="structure",
         ),
         migrations.AddField(
-            model_name='stock',
-            name='sub_sector',
-            field=models.ForeignKey(default=None, null=True,on_delete=django.db.models.deletion.CASCADE, related_name='stock_sub_sector', to='stock_setup_info.SubSector'),
+            model_name="stock",
+            name="sub_sector",
+            field=models.ForeignKey(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="stock_sub_sector",
+                to="stock_setup_info.SubSector",
+            ),
             preserve_default=False,
         ),
     ]

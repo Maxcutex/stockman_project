@@ -10,16 +10,13 @@ from stock_setup_info.models import Stock
 INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
 
 # See Elasticsearch Indices API reference for available settings
-INDEX.settings(
-    number_of_shards=1,
-    number_of_replicas=1
-)
+INDEX.settings(number_of_shards=1, number_of_replicas=1)
 
 html_strip = analyzer(
-    'html_strip',
+    "html_strip",
     tokenizer="standard",
-    filter=[ "lowercase", "stop", "snowball"],
-    char_filter=["html_strip"]
+    filter=["lowercase", "stop", "snowball"],
+    char_filter=["html_strip"],
 )
 
 
@@ -29,45 +26,44 @@ class StockDocument(Document):
 
     class Index:
         # Name of the Elasticsearch index
-        name = 'stock'
+        name = "stock"
         # See Elasticsearch Indices API reference for available settings
-        settings = {'number_of_shards': 1,
-                    'number_of_replicas': 0}
+        settings = {"number_of_shards": 1, "number_of_replicas": 0}
 
     class Django(object):
         model = Stock  # The model associated with this Document
 
         # The fields of the model you want to be indexed in Elasticsearch
 
-    id = fields.IntegerField(attr='id')
+    id = fields.IntegerField(attr="id")
 
     stock_code = StringField(
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
 
     description = StringField(
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
     industry = StringField(
-        attr='industry_indexing',
+        attr="industry_indexing",
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
 
     sub_sector = StringField(
-        attr='sub_sector_indexing',
+        attr="sub_sector_indexing",
         analyzer=html_strip,
         fields={
-            'raw': fields.KeywordField(),
-        }
+            "raw": fields.KeywordField(),
+        },
     )
 
     is_active = fields.BooleanField()
@@ -83,4 +79,3 @@ class StockDocument(Document):
 
     class Meta(object):
         parallel_indexing = True
-

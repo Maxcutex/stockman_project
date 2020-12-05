@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_setup_info', '0006_auto_20181224_1227'),
+        ("stock_setup_info", "0006_auto_20181224_1227"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='structure',
-            name='structure_type',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='structures', to='stock_setup_info.StructureType'),
+            model_name="structure",
+            name="structure_type",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="structures",
+                to="stock_setup_info.StructureType",
+            ),
         ),
     ]

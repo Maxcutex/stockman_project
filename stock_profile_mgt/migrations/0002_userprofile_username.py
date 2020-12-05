@@ -6,14 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('stock_profile_mgt', '0001_initial'),
+        ("stock_profile_mgt", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userprofile',
-            name='username',
-            field=models.CharField(default='username<function now at 0x1048c20d0>', max_length=255, unique=True),
+            model_name="userprofile",
+            name="username",
+            field=models.CharField(
+                default="username<function now at 0x1048c20d0>",
+                max_length=255,
+                unique=True,
+            ),
             preserve_default=False,
         ),
     ]
