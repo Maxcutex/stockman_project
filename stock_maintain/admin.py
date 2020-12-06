@@ -40,6 +40,7 @@ from .models import (
     InsideBusinessFile,
     QuarterlyFinancial,
     DividendInformation,
+    PriceAnalysisTemp,
 )
 from import_export.admin import ImportExportModelAdmin
 from django.urls import path
@@ -417,6 +418,11 @@ class QuarterlyFinancialAdmin(ImportExportModelAdmin):
 
     def titles(self, obj):
         return obj.stock.stock_code
+
+
+@admin.register(PriceAnalysisTemp)
+class PriceAnalysisTempAdmin(ImportExportModelAdmin):
+    pass
 
 
 @admin.register(DividendInformation)
