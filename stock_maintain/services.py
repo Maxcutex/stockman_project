@@ -446,19 +446,20 @@ def list_price_date_by_sectors(query_params):
     id = 0
     for main_sector in main_sector_list:
         sub_sector_list = SubSector.objects.filter(main_sector_id=main_sector.id)
-
         for sub_sector in sub_sector_list:
             date_sector = {}
+
             stocks_involved = Stock.objects.filter(
                 sub_sector_id=sub_sector.id
             ).values_list("stock_code", flat=True)
+            stocks_involved_str = "','".join(stocks_involved)
 
-            price_list_objects = PriceList.objects.filter(
-                price_date=s_date, sec_code__in=stocks_involved
+            query_set = (
+                f"select * from stock_maintain_pricelist where price_date='{s_date}' "
+                f"and trim(sec_code) in ('{stocks_involved_str}') order by sec_code"
             )
-            # pdb.set_trace()
+            price_list_objects = PriceList.objects.raw(query_set)
             if price_list_objects:
-                price_list_objects.order_by("sec_code")
                 id += 1
                 date_sector["id"] = id
                 date_sector["sub_sector"] = sub_sector

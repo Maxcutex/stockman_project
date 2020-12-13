@@ -29,6 +29,17 @@ class PriceList(models.Model):
     def __str__(self):
         return self.sec_code
 
+    def save(self, *args, **kwargs):
+        self.full_clean()  # performs regular validation then clean()
+        super(PriceList, self).save(*args, **kwargs)
+
+    def clean(self):
+        """
+        clean stock code value
+        """
+        if self.sec_code:
+            self.sec_code = self.sec_code.strip()
+
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:
