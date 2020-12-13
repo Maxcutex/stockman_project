@@ -41,6 +41,7 @@ class PriceListSerializer(serializers.ModelSerializer):
 
 class CustomPriceListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    current_date = serializers.DateField()
     sub_sector = SubSectorSerializer()
     main_sector = MainSectorSerializer()
     price_list = PriceListSerializer(many=True)
