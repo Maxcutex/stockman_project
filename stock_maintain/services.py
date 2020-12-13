@@ -423,20 +423,24 @@ def list_price_date_by_sectors(query_params):
     """ List prices for a given date range by sectors"""
 
     price_date = split_date(query_params.get("price_date"))
+    option_search = split_date(query_params.get("option_search"))
 
     try:
         price_year = int(price_date[0])
         price_month = int(price_date[1])
         price_day = int(price_date[2])
-
-        s_date = datetime(
-            year=price_year,
-            month=price_month,
-            day=price_day,
-            hour=0,
-            minute=0,
-            second=0,
-        ).replace(tzinfo=pytz.UTC)
+        if option_search == "default":
+            last_date = PriceList.objects.order_by("-price_date")[:1][0]
+            s_date = last_date.price_date
+        else:
+            s_date = datetime(
+                year=price_year,
+                month=price_month,
+                day=price_day,
+                hour=0,
+                minute=0,
+                second=0,
+            ).replace(tzinfo=pytz.UTC)
 
     except Exception:
         raise APIException(detail="Provide proper date")
