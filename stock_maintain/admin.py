@@ -213,12 +213,14 @@ class PriceListAdmin(admin.ModelAdmin):
         error_found = ""
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
-
+            print("importing file ....")
             date_import = request.POST["date_import"]
             decoded_csv_file = io.StringIO(csv_file.read().decode("utf-8"))
             reader = csv.reader(decoded_csv_file)
+            print("finished reading file....")
             # Create pricelist objects from passed in data
             try:
+                print("entering transaction mode ...")
                 with transaction.atomic():
                     for line in reader:
                         # pdb.set_trace()
@@ -266,8 +268,10 @@ class PriceListAdmin(admin.ModelAdmin):
                             )
                             # pdb.set_trace()
                             raise ValueError()
+                print("finished importing")
                 self.message_user(request, "Your csv file has been imported")
                 # trigger a cron job re-calculate temp table
+                print("about to send delay task")
                 refresh_analysis_data.delay(date_import)
                 return redirect("..")
 
@@ -290,7 +294,7 @@ class PriceListAdmin(admin.ModelAdmin):
                     "Pls enter details for this stock or update previous name",
                     level=messages.ERROR,
                 )
-
+        print("successful")
         form = CsvImportForm()
         payload = {"form": form}
         return render(request, "admin/csv_form.html", payload)

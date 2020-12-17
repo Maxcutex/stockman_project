@@ -178,6 +178,7 @@ class ManagementType(ChoiceEnum):
 class StockManagement(models.Model):
     management_choice = Choices("management", "director")
     name = models.CharField(max_length=250)
+    stock_code = models.CharField(max_length=150)
     position = models.CharField(max_length=250)
     management_type = models.CharField(
         choices=management_choice, default=management_choice.management, max_length=30
