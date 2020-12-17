@@ -1,6 +1,7 @@
 import io
 import pdb
 from datetime import datetime
+import logging
 from django.db import connection
 from django.contrib import messages
 from django.contrib import admin
@@ -44,6 +45,9 @@ from .models import (
 )
 from import_export.admin import ImportExportModelAdmin
 from django.urls import path
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 def get_picture_preview(obj):
@@ -214,16 +218,23 @@ class PriceListAdmin(admin.ModelAdmin):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
             print("importing file ....")
+            logger.info("importing file ....")
             date_import = request.POST["date_import"]
             decoded_csv_file = io.StringIO(csv_file.read().decode("utf-8"))
             reader = csv.reader(decoded_csv_file)
             print("finished reading file....")
+            logger.info("importing file ....")
             # Create pricelist objects from passed in data
             try:
                 print("entering transaction mode ...")
+                logger.info("entering transaction mode ....")
                 with transaction.atomic():
+                    print("PRINT: starting each data")
+                    logger.info("LOG: starting each data")
                     for line in reader:
                         # pdb.set_trace()
+                        print(f"PRINT: getting current stock - {line[0].strip()}")
+                        logger.info(f"LOG: getting current stock - {line[0].strip()}")
                         stock = Stock.objects.get(stock_code=line[0].strip())
 
                         # pdb.set_trace()
@@ -261,6 +272,12 @@ class PriceListAdmin(admin.ModelAdmin):
                                 stock_id=stock.id,
                             )
                             # pdb.set_trace()
+                            print(
+                                f"PRINT: attempting to save current stock pric- {line[0].strip()}"
+                            )
+                            logger.info(
+                                f"LOG: attempting current stock price- {line[0].strip()}"
+                            )
                             price_list_object.save()
                         else:
                             error_found = (
@@ -269,17 +286,23 @@ class PriceListAdmin(admin.ModelAdmin):
                             # pdb.set_trace()
                             raise ValueError()
                 print("finished importing")
+                logger.info(" finishedimporting file ....")
                 self.message_user(request, "Your csv file has been imported")
                 # trigger a cron job re-calculate temp table
                 print("about to send delay task")
+                logger.info("about to send delay task ....")
                 refresh_analysis_data.delay(date_import)
                 return redirect("..")
 
             except ValueError:
                 if error_found == "":
                     error_found = f"The stock {line[0].strip()} had error in its values. Pls check"
+                logger.info(error_found)
                 self.message_user(request, error_found, level=messages.ERROR)
             except Stock.DoesNotExist:
+                logger.error(
+                    "Stock Not Exist: A stock value does not exist in the database ...."
+                )
                 self.message_user(
                     request,
                     " Stock Not Exist: A stock value does not exist in the database. "
@@ -287,7 +310,9 @@ class PriceListAdmin(admin.ModelAdmin):
                     level=messages.ERROR,
                 )
             except IntegrityError:
-
+                logger.error(
+                    "Data Integritiy Error: A stock value does not exist in the database. ...."
+                )
                 self.message_user(
                     request,
                     " Data Integritiy Error: A stock value does not exist in the database. "
@@ -295,6 +320,7 @@ class PriceListAdmin(admin.ModelAdmin):
                     level=messages.ERROR,
                 )
         print("successful")
+        logger.info("successful importing file ....")
         form = CsvImportForm()
         payload = {"form": form}
         return render(request, "admin/csv_form.html", payload)
