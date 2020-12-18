@@ -215,6 +215,7 @@ class PriceListAdmin(admin.ModelAdmin):
         :rtype:
         """
         error_found = ""
+
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
             print("importing file ....")
@@ -222,30 +223,38 @@ class PriceListAdmin(admin.ModelAdmin):
             date_import = request.POST["date_import"]
             decoded_csv_file = io.StringIO(csv_file.read().decode("utf-8"))
             reader = csv.reader(decoded_csv_file)
-            print("finished reading file....")
-            logger.info("importing file ....")
+            new_date = datetime.strptime(date_import, "%Y-%m-%d")
+            print(f"PRINT: finished reading file....for date {new_date}")
+            logger.info(f"LOG: importing file....for date {new_date}")
             # Create pricelist objects from passed in data
             try:
                 print("entering transaction mode ...")
                 logger.info("entering transaction mode ....")
-                with transaction.atomic():
-                    print("PRINT: starting each data")
-                    logger.info("LOG: starting each data")
-                    for line in reader:
-                        # pdb.set_trace()
-                        print(f"PRINT: getting current stock - {line[0].strip()}")
-                        logger.info(f"LOG: getting current stock - {line[0].strip()}")
-                        stock = Stock.objects.get(stock_code=line[0].strip())
+                # with transaction.atomic():
+                print("PRINT: starting each data")
+                logger.info("LOG: starting each data")
+
+                for line in reader:
+                    # pdb.set_trace()
+
+                    stock_code = line[0].strip()
+
+                    print(f"PRINT: getting current stock - {stock_code}")
+                    logger.info(f"LOG: getting current stock - {stock_code}")
+                    uploaded_stock = PriceList.objects.filter(
+                        sec_code=stock_code, price_date=new_date
+                    )
+                    if uploaded_stock:
+                        stock = Stock.objects.get(stock_code=stock_code)
 
                         # pdb.set_trace()
-                        new_date = datetime.strptime(date_import, "%Y-%m-%d")
                         if stock:
                             x_change = 0.0
                             sign = ""
                             if line[1].strip() == "" or line[6].strip() == "":
                                 # pdb.set_trace()
                                 error_found = (
-                                    f"The stock {line[0].strip()} has no data in the pricelist. "
+                                    f"The stock {stock_code} has no data in the pricelist. "
                                     f"Kindly review your csv and upload correct data"
                                 )
                                 raise ValueError()
@@ -273,18 +282,18 @@ class PriceListAdmin(admin.ModelAdmin):
                             )
                             # pdb.set_trace()
                             print(
-                                f"PRINT: attempting to save current stock pric- {line[0].strip()}"
+                                f"PRINT: attempting to save current stock pric- {stock_code}"
                             )
                             logger.info(
-                                f"LOG: attempting current stock price- {line[0].strip()}"
+                                f"LOG: attempting current stock price- {stock_code}"
                             )
                             price_list_object.save()
                         else:
-                            error_found = (
-                                f"The stock {line[0].strip()} could not be found"
-                            )
+                            error_found = f"The stock {stock_code} could not be found"
                             # pdb.set_trace()
                             raise ValueError()
+                    else:
+                        continue
                 print("finished importing")
                 logger.info(" finishedimporting file ....")
                 self.message_user(request, "Your csv file has been imported")
