@@ -57,16 +57,16 @@ def process_csv_upload(date_import):
     import boto3
 
     s3 = boto3.resource("s3")
-    # s3.meta.client.download_file("csv_uploads", f"{date_import}.csv", download_location)
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
     PUBLIC_CSV_LOCATION = "csv_uploads"
     file_name = f"{date_import}.csv"
     object_name = "{}/{}".format(PUBLIC_CSV_LOCATION, file_name)
+
     result = s3.meta.client.get_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=object_name)
-    # content = result["Body"].read()
     decoded_csv_file = io.StringIO(result["Body"].read().decode("utf-8"))
     reader = csv.reader(decoded_csv_file)
     new_date = datetime.strptime(date_import, "%Y-%m-%d")
+
     print(f"PRINT: finished reading file....for date {new_date}")
     logger.info(f"LOG: importing file....for date {new_date}")
     # Create pricelist objects from passed in data
