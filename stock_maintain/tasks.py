@@ -87,7 +87,7 @@ def process_csv_upload(date_import):
             uploaded_stock = PriceList.objects.filter(
                 sec_code=stock_code, price_date=new_date
             )
-            if uploaded_stock:
+            if len(uploaded_stock) == 0:
                 stock = Stock.objects.get(stock_code=stock_code)
 
                 # pdb.set_trace()

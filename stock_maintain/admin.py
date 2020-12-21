@@ -288,11 +288,6 @@ class PriceListAdmin(admin.ModelAdmin):
                 ExtraArgs={"ACL": "public-read", "ContentType": "text/csv"},
             )
 
-            print("file :", csv_file)
-            # print("file_object :", csv_file.__dir__)
-            # print("file name: ", csv_file.filename)
-            # If successful, returns HTTP status code 204
-            # print(f'File upload HTTP status code: {http_response1}')
             print(f"File upload HTTP status code: {http_response}")
             logging.info(f"File upload HTTP status code: {http_response}")
 
