@@ -1,7 +1,16 @@
+import base64
+import hashlib
 import io
+import os
 import pdb
 from datetime import datetime
+import boto3
+from boto3.dynamodb.conditions import Key
+from django.conf import settings
 import logging
+
+import requests
+from botocore.exceptions import ClientError
 from django.db import connection
 from django.contrib import messages
 from django.contrib import admin
@@ -14,9 +23,10 @@ from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 from psycopg2._psycopg import IntegrityError
 from rest_framework.reverse import reverse
-import csv
+from .tasks import process_csv_upload
 from stock_maintain import models
 from stock_setup_info.models import SectionGroup, Stock
+
 from .resources import PriceListResource
 from .models import (
     PriceList,
@@ -170,6 +180,40 @@ class CsvImportForm(forms.Form):
     date_import = forms.Field()
 
 
+def create_presigned_post(
+    bucket_name, object_name, fields=None, conditions=None, expiration=3600
+):
+    """Generate a presigned URL S3 POST request to upload a file
+
+    :param bucket_name: string
+    :param object_name: string
+    :param fields: Dictionary of prefilled form fields
+    :param conditions: List of conditions to include in the policy
+    :param expiration: Time in seconds for the presigned URL to remain valid
+    :return: Dictionary with the following keys:
+        url: URL to post to
+        fields: Dictionary of form fields and values to submit with the POST
+    :return: None if error.
+    """
+
+    # Generate a presigned S3 POST URL
+    s3_client = boto3.client("s3")
+    try:
+        response = s3_client.generate_presigned_post(
+            bucket_name,
+            object_name,
+            Fields=fields,
+            Conditions=conditions,
+            ExpiresIn=expiration,
+        )
+    except ClientError as e:
+        logging.error(e)
+        return None
+
+    # The response contains the presigned URL and required fields
+    return response
+
+
 @admin.register(PriceList)
 class PriceListAdmin(admin.ModelAdmin):
     # class PriceListAdmin(ImportExportModelAdmin):
@@ -214,18 +258,48 @@ class PriceListAdmin(admin.ModelAdmin):
         :return:
         :rtype:
         """
-
+        print(request)
         if request.method == "POST":
-            csv_file = request.FILES["csv_file"]
+            csv_file = request.FILES.get("csv_file")
+
             print("importing file ....")
             logger.info("importing file ....")
             date_import = request.POST["date_import"]
-            import boto3
+            PUBLIC_CSV_LOCATION = "csv_uploads"
+            file_name = f"{date_import}.csv"
+            object_name = "{}/{}".format(PUBLIC_CSV_LOCATION, file_name)
 
+            # boto3.set_stream_logger('')
+            AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+            AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+            AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
             s3 = boto3.resource("s3")
-            s3.meta.client.upload_file(csv_file, "csv_uploads", f"{date_import}.csv")
 
-            # process_csv_upload_task.delay(date_import)
+            session = boto3.Session(
+                aws_access_key_id=AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            )
+            s3 = session.resource("s3")
+
+            http_response = s3.meta.client.upload_fileobj(
+                csv_file,
+                f"{AWS_STORAGE_BUCKET_NAME}",
+                object_name,
+                ExtraArgs={"ACL": "public-read", "ContentType": "text/csv"},
+            )
+
+            print("file :", csv_file)
+            # print("file_object :", csv_file.__dir__)
+            # print("file name: ", csv_file.filename)
+            # If successful, returns HTTP status code 204
+            # print(f'File upload HTTP status code: {http_response1}')
+            print(f"File upload HTTP status code: {http_response}")
+            logging.info(f"File upload HTTP status code: {http_response}")
+
+            # s3 = boto3.resource("s3")
+            # s3.meta.client.upload_file(csv_file, "csv_uploads", f"{date_import}.csv")
+
+            process_csv_upload.delay(date_import)
             self.message_user(
                 request,
                 "Your csv file is imported and currently being processed. You will be notified when its done",

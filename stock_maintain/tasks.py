@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import csv
 import io
 import logging
+import os
 from datetime import datetime
 
 from celery.schedules import crontab
@@ -13,6 +14,7 @@ from celery import shared_task
 from django.db import connection
 from django.shortcuts import redirect
 from psycopg2._psycopg import IntegrityError
+from stockman_project.celery import refresh_analysis_data
 
 from stock_maintain.models import PriceList, GeneratedAnalysisDate
 from stock_setup_info.models import Stock
@@ -47,16 +49,22 @@ def update_price_analysis_task():
                 cursor.close()
 
 
+@shared_task
 def process_csv_upload(date_import):
-    download_location = f"/tmp/{date_import}.csv"
+    # download_location = f"/tmp/{date_import}.csv"
     error_found = ""
 
     import boto3
 
     s3 = boto3.resource("s3")
-    s3.meta.client.download_file("csv_uploads", f"{date_import}.csv", download_location)
-    # print(open('/tmp/hello.txt').read())
-    decoded_csv_file = io.StringIO(download_location.read().decode("utf-8"))
+    # s3.meta.client.download_file("csv_uploads", f"{date_import}.csv", download_location)
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    PUBLIC_CSV_LOCATION = "csv_uploads"
+    file_name = f"{date_import}.csv"
+    object_name = "{}/{}".format(PUBLIC_CSV_LOCATION, file_name)
+    result = s3.meta.client.get_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=object_name)
+    # content = result["Body"].read()
+    decoded_csv_file = io.StringIO(result["Body"].read().decode("utf-8"))
     reader = csv.reader(decoded_csv_file)
     new_date = datetime.strptime(date_import, "%Y-%m-%d")
     print(f"PRINT: finished reading file....for date {new_date}")
@@ -130,6 +138,7 @@ def process_csv_upload(date_import):
         # trigger a cron job re-calculate temp table
         print("about to send delay task")
         logger.info("about to send delay task ....")
+        refresh_analysis_data.delay(date_import)
 
     except ValueError:
         if error_found == "":
