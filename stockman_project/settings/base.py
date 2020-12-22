@@ -239,7 +239,6 @@ if USE_S3:
     PUBLIC_CSV_LOCATION = "csv_uploads"
     # MEDIA_ROOT = '..' + os.path.join(CHECK_DIR, 'media')
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_CSV_LOCATION}/"
     DEFAULT_FILE_STORAGE = "stockman_project.storage_backends.PublicMediaStorage"
 else:
     STATIC_URL = "/static/"
