@@ -230,6 +230,34 @@ def get_price_data_period(sec_code, date_returned):
     return price_data.price
 
 
+def recent_articles():
+    news_list = News.objects.filter().order_by("-news_date")[:5]
+    articles_list = AnalysisOpinion.objects.filter().order_by("-opinion_date")[:5]
+    recent_articles_list = []
+    for news in news_list:
+        recent_article = {
+            "article_type": "news",
+            "author": news.author,
+            "title": news.title,
+            "id": news.id,
+            "date": news.news_date,
+            "stock": news.stock.stock_code,
+        }
+        recent_articles_list.append(recent_article)
+
+    for article in articles_list:
+        recent_article = {
+            "article_type": "article",
+            "author": article.author,
+            "title": article.title,
+            "id": article.id,
+            "date": article.news_date,
+            "stock": article.stock.stock_code,
+        }
+        recent_articles_list.append(recent_article)
+    return recent_articles_list
+
+
 def market_analysis_stock(query_params):
     """
     List prices and their corresponding percentage analysis by stock

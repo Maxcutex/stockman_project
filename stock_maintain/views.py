@@ -310,6 +310,19 @@ class MarketAnalysisAPIView(APIView):
         return Response(price_list)
 
 
+class RecentArticlesAPIView(APIView):
+    """ Recent Articles View using Api View """
+
+    pagination_class = DefaultResultsSetPagination
+
+    @method_decorator(cache_page(CACHE_TTL))
+    def get(self, request, *args, **kwargs):
+        """ Returns a quote analysis api view """
+        recent_articles = stock_maintain_services.recent_articles()
+
+        return Response(recent_articles)
+
+
 class NewsLetterMailingView(viewsets.ModelViewSet):
     queryset = NewsLetterMailing.objects.all()
     serializer_class = NewsLetterMailingSerializer

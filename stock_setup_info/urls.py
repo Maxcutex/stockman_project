@@ -1,6 +1,10 @@
 from django.urls import path, include
 
-from stock_maintain.views import PriceListAPIView, MarketAnalysisAPIView
+from stock_maintain.views import (
+    PriceListAPIView,
+    MarketAnalysisAPIView,
+    RecentArticlesAPIView,
+)
 from . import views
 from rest_framework import routers
 from stock_profile_mgt.urls import router as profile_router
@@ -29,4 +33,5 @@ urlpatterns = [
     path("stockapiview", views.StockApiView.as_view()),
     path("api/v1/sectorpricelist", PriceListAPIView.as_view()),
     path("api/v1/marketanalysisstock", MarketAnalysisAPIView.as_view()),
+    path("api/v1/recent_articles", RecentArticlesAPIView.as_view()),
 ]
