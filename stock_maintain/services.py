@@ -251,7 +251,7 @@ def recent_articles():
             "author": article.author,
             "title": article.title,
             "id": article.id,
-            "date": article.news_date,
+            "date": article.opinion_date,
             "stock": article.stock.stock_code,
         }
         recent_articles_list.append(recent_article)
