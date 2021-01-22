@@ -237,7 +237,7 @@ def recent_articles():
     for news in news_list:
         recent_article = {
             "article_type": "news",
-            "author": news.author,
+            "author": f"{news.author.first_name} {news.author.last_name}",
             "title": news.title,
             "id": news.id,
             "date": news.news_date,
@@ -248,7 +248,7 @@ def recent_articles():
     for article in articles_list:
         recent_article = {
             "article_type": "article",
-            "author": article.author,
+            "author": f"{article.author.first_name} {article.author.last_name}",
             "title": article.title,
             "id": article.id,
             "date": article.opinion_date,
