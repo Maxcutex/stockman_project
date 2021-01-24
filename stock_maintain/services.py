@@ -231,8 +231,8 @@ def get_price_data_period(sec_code, date_returned):
 
 
 def recent_articles():
-    news_list = News.objects.filter().order_by("-news_date")[:5]
-    articles_list = AnalysisOpinion.objects.filter().order_by("-opinion_date")[:5]
+    news_list = News.objects.filter().order_by("-news_date")[5:3]
+    articles_list = AnalysisOpinion.objects.filter().order_by("-opinion_date")[5:3]
     recent_articles_list = []
     for news in news_list:
         recent_article = {
